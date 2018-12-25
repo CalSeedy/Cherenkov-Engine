@@ -1,3 +1,4 @@
+#include "ckpch.h"
 #include "Cherenkov.h"
 
 class Sandbox : public Cherenkov::Application {

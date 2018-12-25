@@ -2,8 +2,6 @@
 
 #include "Event.h"
 
-#include <sstream>
-
 namespace Cherenkov {
 
 	//Mouse Movement Events

@@ -1,11 +1,5 @@
 #pragma once
 
-#include <iostream>
-#include <string>
-#include <functional>
-#include <sstream>
-
-
 #include "Cherenkov/Core.h"
 
 namespace Cherenkov {

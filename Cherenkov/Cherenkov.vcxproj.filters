@@ -7,6 +7,12 @@
     <Filter Include="Cherenkov\Events">
       <UniqueIdentifier>{4E24697F-3A1D-88D1-634F-6D564FA767DD}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Cherenkov\Platform">
+      <UniqueIdentifier>{3E77611A-2A5B-2270-93BB-1CC37FBE0CF2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Cherenkov\Platform\Windows">
+      <UniqueIdentifier>{787F1980-648F-C550-CD48-2A6FB977B4E9}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Cherenkov.h" />
@@ -34,6 +40,13 @@
     <ClInclude Include="src\Cherenkov\Log.h">
       <Filter>Cherenkov</Filter>
     </ClInclude>
+    <ClInclude Include="src\Cherenkov\Platform\Windows\WindowsWindow.h">
+      <Filter>Cherenkov\Platform\Windows</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Cherenkov\Window.h">
+      <Filter>Cherenkov</Filter>
+    </ClInclude>
+    <ClInclude Include="src\ckpch.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Cherenkov\Application.cpp">
@@ -42,5 +55,9 @@
     <ClCompile Include="src\Cherenkov\Log.cpp">
       <Filter>Cherenkov</Filter>
     </ClCompile>
+    <ClCompile Include="src\Cherenkov\Platform\Windows\WindowsWindow.cpp">
+      <Filter>Cherenkov\Platform\Windows</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ckpch.cpp" />
   </ItemGroup>
 </Project>

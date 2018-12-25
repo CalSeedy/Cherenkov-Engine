@@ -1,11 +1,9 @@
 #pragma once
 
-#include <string>
-
 #include "Cherenkov/Core.h"
 #include "Events/Event.h"
-#include "Events/ApplicationEvent.h"
 #include "Log.h"
+#include "Window.h"
 
 namespace Cherenkov {
 
@@ -16,6 +14,11 @@ namespace Cherenkov {
 		virtual ~Application();
 
 		void Run();
+
+	private:
+		std::unique_ptr<Window> m_Window;
+		bool m_Running = true;
+
 	};
 
 	Application* createApplication();
