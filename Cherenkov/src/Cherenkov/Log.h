@@ -1,8 +1,8 @@
 #pragma once
 
+#include "Cherenkov/Core.h"
 #include "spdlog/spdlog.h"
 #include "spdlog/fmt/ostr.h"
-#include "Cherenkov/Core.h"
 
 
 namespace Cherenkov {

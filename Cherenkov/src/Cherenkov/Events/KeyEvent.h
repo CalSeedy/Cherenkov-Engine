@@ -17,7 +17,8 @@ namespace Cherenkov {
 	};
 
 	class CK_API KeyPressedEvent : public KeyEvent {
-
+	
+	public:
 		KeyPressedEvent(int code, int repeats) 
 			: KeyEvent(code), m_Repeats(repeats) {}
 
