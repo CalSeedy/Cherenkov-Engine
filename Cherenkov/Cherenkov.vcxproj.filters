@@ -4,19 +4,34 @@
     <Filter Include="Cherenkov">
       <UniqueIdentifier>{AA7B74D9-16E6-2850-5F24-DAF5CBCD06A5}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Cherenkov\Events">
+      <UniqueIdentifier>{4E24697F-3A1D-88D1-634F-6D564FA767DD}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Cherenkov.h" />
     <ClInclude Include="src\Cherenkov\Application.h">
       <Filter>Cherenkov</Filter>
     </ClInclude>
+    <ClInclude Include="src\Cherenkov\Core.h">
+      <Filter>Cherenkov</Filter>
+    </ClInclude>
     <ClInclude Include="src\Cherenkov\EntryPoint.h">
       <Filter>Cherenkov</Filter>
     </ClInclude>
-    <ClInclude Include="src\Cherenkov\Log.h">
-      <Filter>Cherenkov</Filter>
+    <ClInclude Include="src\Cherenkov\Events\ApplicationEvent.h">
+      <Filter>Cherenkov\Events</Filter>
     </ClInclude>
-    <ClInclude Include="src\Cherenkov\core.h">
+    <ClInclude Include="src\Cherenkov\Events\Event.h">
+      <Filter>Cherenkov\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Cherenkov\Events\KeyEvent.h">
+      <Filter>Cherenkov\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Cherenkov\Events\MouseEvent.h">
+      <Filter>Cherenkov\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Cherenkov\Log.h">
       <Filter>Cherenkov</Filter>
     </ClInclude>
   </ItemGroup>

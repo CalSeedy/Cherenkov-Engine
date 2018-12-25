@@ -61,7 +61,8 @@ project "Cherenkov"
 
 	includedirs
 	{
-		"%{prj.name}/vendor/spdlog/include"
+		"%{prj.name}/vendor/spdlog/include",
+		"%{prj.name}/src"		
 	}
 
 	filter "system:windows"

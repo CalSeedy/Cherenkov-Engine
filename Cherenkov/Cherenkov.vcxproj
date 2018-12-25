@@ -79,7 +79,7 @@
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>CK_PLATFORM_WINDOWS;CK_BUILD_DLL;_WINDLL;CK_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>vendor\spdlog\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>vendor\spdlog\include;src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <Optimization>Disabled</Optimization>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
@@ -99,7 +99,7 @@
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>CK_PLATFORM_WINDOWS;CK_BUILD_DLL;_WINDLL;CK_RELEASE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>vendor\spdlog\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>vendor\spdlog\include;src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
@@ -123,7 +123,7 @@
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>CK_PLATFORM_WINDOWS;CK_BUILD_DLL;_WINDLL;CK_DISTRIBUTION;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>vendor\spdlog\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>vendor\spdlog\include;src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
@@ -145,9 +145,13 @@
   <ItemGroup>
     <ClInclude Include="src\Cherenkov.h" />
     <ClInclude Include="src\Cherenkov\Application.h" />
+    <ClInclude Include="src\Cherenkov\Core.h" />
     <ClInclude Include="src\Cherenkov\EntryPoint.h" />
+    <ClInclude Include="src\Cherenkov\Events\ApplicationEvent.h" />
+    <ClInclude Include="src\Cherenkov\Events\Event.h" />
+    <ClInclude Include="src\Cherenkov\Events\KeyEvent.h" />
+    <ClInclude Include="src\Cherenkov\Events\MouseEvent.h" />
     <ClInclude Include="src\Cherenkov\Log.h" />
-    <ClInclude Include="src\Cherenkov\core.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Cherenkov\Application.cpp" />
