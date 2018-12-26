@@ -7,11 +7,11 @@
     <Filter Include="Cherenkov\Events">
       <UniqueIdentifier>{4E24697F-3A1D-88D1-634F-6D564FA767DD}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Cherenkov\Platform">
-      <UniqueIdentifier>{3E77611A-2A5B-2270-93BB-1CC37FBE0CF2}</UniqueIdentifier>
+    <Filter Include="Platform">
+      <UniqueIdentifier>{2AC788B4-1694-E3BF-3FAD-D1672BD9184E}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Cherenkov\Platform\Windows">
-      <UniqueIdentifier>{787F1980-648F-C550-CD48-2A6FB977B4E9}</UniqueIdentifier>
+    <Filter Include="Platform\Windows">
+      <UniqueIdentifier>{64FBD71A-50F4-F66C-7926-DCF1657ED678}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -37,14 +37,20 @@
     <ClInclude Include="src\Cherenkov\Events\MouseEvent.h">
       <Filter>Cherenkov\Events</Filter>
     </ClInclude>
+    <ClInclude Include="src\Cherenkov\Layer.h">
+      <Filter>Cherenkov</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Cherenkov\LayerStack.h">
+      <Filter>Cherenkov</Filter>
+    </ClInclude>
     <ClInclude Include="src\Cherenkov\Log.h">
       <Filter>Cherenkov</Filter>
     </ClInclude>
-    <ClInclude Include="src\Cherenkov\Platform\Windows\WindowsWindow.h">
-      <Filter>Cherenkov\Platform\Windows</Filter>
-    </ClInclude>
     <ClInclude Include="src\Cherenkov\Window.h">
       <Filter>Cherenkov</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Platform\Windows\WindowsWindow.h">
+      <Filter>Platform\Windows</Filter>
     </ClInclude>
     <ClInclude Include="src\ckpch.h" />
   </ItemGroup>
@@ -52,11 +58,17 @@
     <ClCompile Include="src\Cherenkov\Application.cpp">
       <Filter>Cherenkov</Filter>
     </ClCompile>
+    <ClCompile Include="src\Cherenkov\Layer.cpp">
+      <Filter>Cherenkov</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Cherenkov\LayerStack.cpp">
+      <Filter>Cherenkov</Filter>
+    </ClCompile>
     <ClCompile Include="src\Cherenkov\Log.cpp">
       <Filter>Cherenkov</Filter>
     </ClCompile>
-    <ClCompile Include="src\Cherenkov\Platform\Windows\WindowsWindow.cpp">
-      <Filter>Cherenkov\Platform\Windows</Filter>
+    <ClCompile Include="src\Platform\Windows\WindowsWindow.cpp">
+      <Filter>Platform\Windows</Filter>
     </ClCompile>
     <ClCompile Include="src\ckpch.cpp" />
   </ItemGroup>

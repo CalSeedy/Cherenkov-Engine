@@ -43,7 +43,6 @@ namespace Cherenkov {
 			return getCategoryFlags() & category;
 		}
 
-	protected:
 		bool m_Handled = false;
 	};
 
@@ -53,6 +52,7 @@ namespace Cherenkov {
 		using EventFn = std::function<bool(T&)>;
 
 	public:
+
 		EventDispatcher(Event& event) : m_Event(event) {
 		}
 

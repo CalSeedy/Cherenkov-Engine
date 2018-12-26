@@ -1,7 +1,5 @@
 #pragma once
 
-#include "ckpch.h"
-
 #include "Cherenkov/Core.h"
 #include "Cherenkov/Events/Event.h"
 

@@ -1,5 +1,7 @@
 #pragma once
 
+#include "ckpch.h"
+
 #ifdef CK_PLATFORM_WINDOWS
 	#ifdef CK_BUILD_DLL
 		#define CK_API __declspec(dllexport)

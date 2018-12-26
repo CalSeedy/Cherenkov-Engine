@@ -50,6 +50,21 @@ project "Sandbox"
 			"CK_PLATFORM_WINDOWS"
 		}
 
+	filter "configurations:Debug"
+		defines "CK_DEBUG"
+		buildoptions "/MDd"
+		symbols "On"
+
+	filter "configurations:Release"
+		defines "CK_RELEASE"
+		buildoptions "/MD"
+		optimize "On"
+
+	filter "configurations:Distribution"
+		defines "CK_DISTRIBUTION"
+		buildoptions "/MD"
+		optimize "On"
+
 project "Cherenkov"
 	location "Cherenkov"
 	kind "SharedLib"
@@ -99,13 +114,16 @@ project "Cherenkov"
 
 	filter "configurations:Debug"
 		defines "CK_DEBUG"
+		buildoptions "/MDd"
 		symbols "On"
 
 	filter "configurations:Release"
 		defines "CK_RELEASE"
+		buildoptions "/MD"
 		optimize "On"
 
 	filter "configurations:Distribution"
 		defines "CK_DISTRIBUTION"
+		buildoptions "/MD"
 		optimize "On"
 
