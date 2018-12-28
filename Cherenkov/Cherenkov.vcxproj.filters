@@ -46,9 +46,6 @@
     <ClInclude Include="src\Cherenkov\Log.h">
       <Filter>Cherenkov</Filter>
     </ClInclude>
-    <ClInclude Include="src\Cherenkov\Maths.h">
-      <Filter>Cherenkov</Filter>
-    </ClInclude>
     <ClInclude Include="src\Cherenkov\Window.h">
       <Filter>Cherenkov</Filter>
     </ClInclude>
@@ -68,9 +65,6 @@
       <Filter>Cherenkov</Filter>
     </ClCompile>
     <ClCompile Include="src\Cherenkov\Log.cpp">
-      <Filter>Cherenkov</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Cherenkov\Maths.cpp">
       <Filter>Cherenkov</Filter>
     </ClCompile>
     <ClCompile Include="src\Platform\Windows\WindowsWindow.cpp">

@@ -16,9 +16,6 @@ public:
 	}
 };
 
-
-
-
 class Sandbox : public Cherenkov::Application {
 
 public:

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Cherenkov/Core.h"
+#include "Core.h"
 
 #include "Window.h"
 #include "LayerStack.h"
