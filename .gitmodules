@@ -4,3 +4,6 @@
 [submodule "glfw"]
 	path = glfw
 	url = https://github.com/TheCherno/glfw.git
+[submodule "Cherenkov/vendor/GLFW"]
+	path = Cherenkov/vendor/GLFW
+	url = https://www.github.com/TheCherno/glfw
