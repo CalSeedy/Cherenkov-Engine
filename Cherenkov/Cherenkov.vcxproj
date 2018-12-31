@@ -163,6 +163,7 @@
     <ClInclude Include="src\Cherenkov\Layer.h" />
     <ClInclude Include="src\Cherenkov\LayerStack.h" />
     <ClInclude Include="src\Cherenkov\Log.h" />
+    <ClInclude Include="src\Cherenkov\Maths.h" />
     <ClInclude Include="src\Cherenkov\Window.h" />
     <ClInclude Include="src\Platform\Windows\WindowsWindow.h" />
     <ClInclude Include="src\ckpch.h" />
@@ -172,6 +173,7 @@
     <ClCompile Include="src\Cherenkov\Layer.cpp" />
     <ClCompile Include="src\Cherenkov\LayerStack.cpp" />
     <ClCompile Include="src\Cherenkov\Log.cpp" />
+    <ClCompile Include="src\Cherenkov\Maths.cpp" />
     <ClCompile Include="src\Platform\Windows\WindowsWindow.cpp" />
     <ClCompile Include="src\ckpch.cpp">
       <PrecompiledHeader>Create</PrecompiledHeader>

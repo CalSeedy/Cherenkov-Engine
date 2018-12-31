@@ -43,7 +43,7 @@ namespace Cherenkov {
 			return getCategoryFlags() & category;
 		}
 
-		bool m_Handled = false;
+		bool Handled = false;
 	};
 
 	class EventDispatcher {
@@ -61,7 +61,7 @@ namespace Cherenkov {
 		
 			if (m_Event.getEventType() == T::getStaticType()) {
 			
-				m_Event.m_Handled = func(*(T*)&m_Event);
+				m_Event.Handled = func(*(T*)&m_Event);
 				return true;
 			}
 			return false;

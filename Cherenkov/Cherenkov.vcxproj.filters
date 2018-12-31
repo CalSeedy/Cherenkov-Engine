@@ -53,6 +53,7 @@
       <Filter>Platform\Windows</Filter>
     </ClInclude>
     <ClInclude Include="src\ckpch.h" />
+    <ClInclude Include="src\Cherenkov\Maths.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Cherenkov\Application.cpp">
@@ -71,5 +72,6 @@
       <Filter>Platform\Windows</Filter>
     </ClCompile>
     <ClCompile Include="src\ckpch.cpp" />
+    <ClCompile Include="src\Cherenkov\Maths.cpp" />
   </ItemGroup>
 </Project>

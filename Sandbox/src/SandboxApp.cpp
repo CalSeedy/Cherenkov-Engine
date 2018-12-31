@@ -21,6 +21,25 @@ class Sandbox : public Cherenkov::Application {
 public:
 	Sandbox()
 	{
+		float val1[2] = {
+					1.0f, 2.0f
+		};
+		Cherenkov::Maths::Matrix mat1 = Cherenkov::Maths::Matrix(1, 2, val1);
+
+		float val2[4] = {
+							1.0f, 2.0f,
+							-1.0f, 3.0f
+		};
+		Cherenkov::Maths::Matrix mat2 = Cherenkov::Maths::Matrix(2, 2, val2);
+
+		Cherenkov::Maths::Matrix mat3 = mat1 + mat2;
+		Cherenkov::Maths::Matrix mat4 = mat1 * mat2;
+		
+		std::cout << mat1 << std::endl;
+		std::cout << mat2 << std::endl;
+		std::cout << mat3 << std::endl;
+		std::cout << mat4 << std::endl;
+
 		PushLayer(new ExampleLayer());
 	}
 

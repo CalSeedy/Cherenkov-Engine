@@ -4,6 +4,6 @@
 #include "Cherenkov/Application.h"
 #include "Cherenkov/Layer.h"
 #include "Cherenkov/Log.h"
-
+#include "Cherenkov/Maths.h"
 
 #include "Cherenkov/EntryPoint.h"
