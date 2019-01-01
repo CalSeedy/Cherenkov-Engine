@@ -3,7 +3,6 @@
 #include "Core.h"
 
 namespace Cherenkov {
-
 	namespace Maths {
 	
 		#define ADD 0
@@ -22,10 +21,9 @@ namespace Cherenkov {
 
 			Matrix(int rows, int cols, float diagonal);
 
+			Matrix(std::vector<std::vector<float> >& values);
+
 			~Matrix();
-
-
-			static Matrix Identity(int rows, int cols);
 
 			Matrix& Add(float constant);
 			Matrix& Add(const Matrix& mat);
@@ -57,6 +55,15 @@ namespace Cherenkov {
 			friend CK_API Matrix operator/(Matrix& mat, float scalar);
 			friend CK_API Matrix operator/(float scalar, Matrix& mat);
 			Matrix& operator/=(float scalar);
+
+			Matrix& Transpose();
+			Matrix& Cross(const Matrix& mat);
+			float Magnitude();
+			float Dot(Matrix& mat);
+			float Det();
+			static Matrix Identity(int rows, int cols);
+			bool Compatible(const Matrix& mat, int operation);
+
 
 			friend CK_API std::ostream& operator<<(std::ostream& os, Matrix& mat);
 		};
