@@ -1,3 +1,4 @@
+
 #include "ckpch.h"
 #include "Maths.h"
 #include "Log.h"
@@ -8,19 +9,28 @@ namespace Cherenkov {
 		Matrix::Matrix(int rows, int cols) {
 			Rows = rows;
 			Cols = cols;
+			
+			this->data = std::vector<std::vector<float> > (rows, std::vector<float>(cols));
 
-			data.resize(rows, std::vector<float>(cols));
-
+			for (int i = 0; i < this->data.size(); ++i)
+			{
+				for (int j = 0; j < this->data[i].size(); ++j)
+				{
+					data[i][j] = 0.0f;
+				}
+			}
 		}
 
 		Matrix::Matrix(int rows, int cols, float* values) {
-
 			Rows = rows;
 			Cols = cols;
-			data.resize(rows, std::vector<float>(cols));
-			for (int i = 0; i < rows; i++) {
-				for (int j = 0; j < cols; j++) {
-					data[i][j] = values[j + i * cols];
+			this->data = std::vector<std::vector<float> >(rows, std::vector<float>(cols));
+
+			for (int i = 0; i < this->data.size(); ++i)
+			{
+				for (int j = 0; j < this->data[i].size(); ++j)
+				{
+					data[i][j] = values[j + i*cols];
 				}
 			}
 
@@ -29,157 +39,126 @@ namespace Cherenkov {
 		Matrix::Matrix(int rows, int cols, float diagonal) {
 			Rows = rows;
 			Cols = cols;
-			data.resize(rows, std::vector<float>(cols));
+			
+			this->data = std::vector<std::vector<float> >(rows, std::vector<float>(cols));
 
-			for (int i = 0; i < rows; i++) {
-				for (int j = 0; j < cols; j++) {
-					if (i == j) {
+			for (int i = 0; i < this->data.size(); ++i)
+			{
+				for (int j = 0; j < this->data[i].size(); ++j)
+				{
+					if (i == j)
 						data[i][j] = diagonal;
-					}
+					else
+						data[i][j] = 0.0f;
 				}
 			}
 		}
 
 		Matrix::~Matrix() {
-			data.clear();
-
-		}
-
-
-		bool Matrix::Compatible(const Matrix& mat, int operation) {
-			switch (operation) {
-			case ADD:
-				if (Cols == mat.Cols && Rows == mat.Rows) {
-					return true;
-				}
-				else { 
-					CK_WARN("Matrix dimensions aren't equal for both matricies! ({0}x{1} =/= {2}x{3})", Rows, Cols, mat.Rows, mat.Cols);
-					return false; }
-				break;
-
-			case SUBTRACT:
-				if (Cols == mat.Cols && Rows == mat.Rows) {
-					return true;
-				}
-				else {
-					CK_WARN("Matrix dimensions aren't equal for both matricies! ({0}x{1} =/= {2}x{3})", Rows, Cols, mat.Rows, mat.Cols);
-					return false;
-				}
-				break;
-
-			case MULTIPLY:
-				if (Cols == mat.Rows) {
-					return true;
-				}
-				else {
-					CK_WARN("Matrix 1 Column and Matrix 2 Row dimension mismatch! ({0} =/= {1})", Cols, mat.Rows);
-					return false;
-				}
-				break;
+			for (auto row : this->data) {
+				row.clear();
 			}
-
-			return false;
+			data.clear();
 		}
+
+
 
 		Matrix Matrix::Identity(int rows, int cols) {
 			return Matrix(rows, cols, 1.0f);
 		}
 
-		Matrix Matrix::Add(const Matrix& mat){
+		Matrix& Matrix::Add(const Matrix& mat) {
 		
-			if (this->Compatible(mat, ADD)) {
-				Matrix out = Matrix(this->Rows, this->Cols);
+			if (Cols == mat.Cols && Rows == mat.Rows) {
+				Matrix* out = new Matrix(Rows,Cols);
 
-				for (int i = 0; i < this->Rows; i++) {
-					for (int j = 0; j < this->Cols; j++) {
-						out.data[i][j] = this->data[i][j] + mat.data[i][j];
+				for (int i = 0; i < this->data.size(); ++i) {
+					for (int j = 0; j < this->data[i].size(); ++j) {
+						out->data[i][j] = this->data[i][j] + mat.data[i][j];
 					}
 				}
-				return out;
+				return *out;
 			} else {
+				CK_WARN("Matrix dimensions aren't equal for both matricies! ({0}x{1} =/= {2}x{3})\nReturned left matrix...", Rows, Cols, mat.Rows, mat.Cols);
 				return *this;
 			}
 		}
 
-		Matrix Matrix::Add(float constant) {
-			Matrix out = Matrix(this->Rows, this->Cols);
-			for (int i = 0; i < this->Rows; i++) {
-				for (int j = 0; j < this->Cols; j++) {
-					out.data[i][j] = this->data[i][j] + constant;
+		Matrix& Matrix::Add(float constant) {
+			Matrix* out = new Matrix(Rows, Cols);
+
+			for (int i = 0; i < this->data.size(); ++i) {
+				for (int j = 0; j < this->data[i].size(); ++j) {
+					out->data[i][j] = this->data[i][j] + constant;
 				}
 			}
-			return out;
+			return *out;
 		}
 
-		Matrix Matrix::Sub(const Matrix& mat){
-			if (this->Compatible(mat, SUBTRACT)) {
-				Matrix out = Matrix(this->Rows, this->Cols);
-				for (int i = 0; i < this->Rows; i++) {
-					for (int j = 0; j < this->Cols; j++) {
-						out.data[i][j] = this->data[i][j] - mat.data[i][j];
+		Matrix& Matrix::Sub(const Matrix& mat) {
+			if (Cols == mat.Cols && Rows == mat.Rows) {
+				Matrix* out = new Matrix(Rows, Cols);
+
+				for (int i = 0; i < this->data.size(); ++i) {
+					for (int j = 0; j < this->data[i].size(); ++j) {
+						out->data[i][j] = this->data[i][j] - mat.data[i][j];
 					}
 				}
-				return out;
-			} else {
-				return *this;
-			}
-		}
-		
-		Matrix Matrix::Sub(float constant) {
-			Matrix out = Matrix(this->Rows, this->Cols);
-			for (int i = 0; i < this->Rows; i++) {
-				for (int j = 0; j < this->Cols; j++) {
-					out.data[i][j] = this->data[i][j] - constant;
-				}
-			}
-			return out;
-		}
-
-		Matrix Matrix::Divide(float scalar) {
-			Matrix out = Matrix(this->Rows, this->Cols);
-			for (int i = 0; i < this->Rows; i++) {
-				for (int j = 0; j < this->Cols; j++) {
-					out.data[i][j] = this->data[i][j] / scalar;
-				}
-			}
-			return out;
-		}
-
-		Matrix Matrix::Multiply(float scalar){
-			Matrix out = Matrix(this->Rows, this->Cols);
-			for (int i = 0; i < this->Rows; i++) {
-				for (int j = 0; j < this->Cols; j++) {
-					out.data[i][j] = this->data[i][j] * scalar;
-				}
-			}
-			return out;
-		}
-
-		Matrix Matrix::Multiply(const Matrix& mat) {
-			int inR1 = this->Rows;
-			int inR2 = mat.Rows;
-			int inC1 = this->Cols;
-			int inC2 = mat.Cols;
-
-			int outR = mat.Cols;
-			int outC = this->Rows;
-
-			Matrix outMat = Matrix(outR, outC);
-
-			if (inC1 == inR2) {
-				for (int i = 0; i < inR1; i++) {
-					for (int j = 0; j < inC2; j++) {
-						float sum = 0.0f;
-						for (int off = 0; off < inC1; off++) {
-							sum += this->data[i][off] * mat.data[off][j];
-						}
-						outMat.data[i][j] = sum;
-					}
-				}
-				return outMat;
+				return *out;
 			}
 			else {
-				CK_ERROR("Matrix 1 Column and Matrix 2 Row dimension mismatch! ({0} =/= {1})", this->Cols, mat.Rows);
+				CK_WARN("Matrix dimensions aren't equal for both matricies! ({0}x{1} =/= {2}x{3})\nReturned left matrix...", Rows, Cols, mat.Rows, mat.Cols);
+
+				return *this;
+			}
+		}
+		
+		Matrix& Matrix::Sub(float constant) {
+			Matrix* out = new Matrix(Rows, Cols);
+			for (int i = 0; i < this->data.size(); ++i) {
+				for (int j = 0; j < this->data[i].size(); ++j) {
+					out->data[i][j] = this->data[i][j] + constant;
+				}
+			}
+			return *out;
+		}
+
+		Matrix& Matrix::Divide(float scalar) {
+			Matrix* out = new Matrix(Rows, Cols);
+			for (int i = 0; i < this->data.size(); ++i) {
+				for (int j = 0; j < this->data[i].size(); ++j) {
+					out->data[i][j] = this->data[i][j] / scalar;
+				}
+			}
+			return *out;
+		}
+
+		Matrix& Matrix::Multiply(float scalar) {
+			Matrix* out = new Matrix(Rows, Cols);
+			for (int i = 0; i < this->data.size(); ++i) {
+				for (int j = 0; j < this->data[i].size(); ++j) {
+					out->data[i][j] = this->data[i][j] * scalar;
+				}
+			}
+			return *out;
+		}
+
+		Matrix& Matrix::Multiply(const Matrix& mat) {
+
+			if (Cols == mat.Rows) {
+				Matrix* out = new Matrix(Rows, mat.Cols);
+				for (int i = 0; i < this->data.size(); ++i) {
+					for (int j = 0; j < this->data[i].size(); ++j) {
+						float sum = 0.0f;
+						for (int offset = 0; offset < Cols; ++offset) {
+							sum += this->data[i][offset] * mat.data[offset][j];
+						}
+						out->data[i][j] = sum;
+					}
+				}
+				return *out;
+			} else {
+				CK_WARN("Matrix 1 Column and Matrix 2 Row dimension mismatch! ({0} =/= {1})\nReturned left matrix...", Cols, mat.Rows);
 				return *this;
 			}
 		}
@@ -206,13 +185,18 @@ namespace Cherenkov {
 		Matrix operator/(float scalar, Matrix& mat){ return mat.Multiply((1/scalar)); }
 		Matrix& Matrix::operator/=(float scalar) { return this->Multiply((1/scalar)); }
 		
-		std::ostream& operator<<(std::ostream& os, const Matrix& mat){
+		std::ostream& operator<<(std::ostream& os, Matrix& mat){
 			
 			os << mat.Rows << " x " << mat.Cols << " - Matrix: " << std::endl;
 
-			for (int i = 0; i < mat.Rows; i++) {
-				for (int j = 0; j < mat.Cols; j++) {
-					os << mat.data[i][j] << ", ";
+			for (int i = 0; i < mat.data.size(); ++i) {
+				for (int j = 0; j < mat.data[i].size(); ++j) {
+					if (i == mat.Rows - 1 && j == mat.Cols -1) {
+						os << mat.data[i][j] << " ";
+					}
+					else {
+						os << mat.data[i][j] << ", ";
+					}
 				}
 				os << std::endl;
 			}

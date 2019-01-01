@@ -53,7 +53,9 @@
       <Filter>Platform\Windows</Filter>
     </ClInclude>
     <ClInclude Include="src\ckpch.h" />
-    <ClInclude Include="src\Cherenkov\Maths.h" />
+    <ClInclude Include="src\Cherenkov\Maths.h">
+      <Filter>Cherenkov</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Cherenkov\Application.cpp">
@@ -72,6 +74,8 @@
       <Filter>Platform\Windows</Filter>
     </ClCompile>
     <ClCompile Include="src\ckpch.cpp" />
-    <ClCompile Include="src\Cherenkov\Maths.cpp" />
+    <ClCompile Include="src\Cherenkov\Maths.cpp">
+      <Filter>Cherenkov</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>
