@@ -23,28 +23,12 @@ public:
 	Sandbox()
 	{
 		
-		float data[9];
-		for (int i = 0; i < 9;  ++i) {
-			data[i] = i + 1;
-		}
+		float data1[9] = { 1.0f, 0.0f, 2.0f, 1.0f, 3.0f, 4.0f, 0.0f, 6.0f, 0.0f};
 
-		Cherenkov::Maths::Matrix mat1 = Cherenkov::Maths::Matrix(3, 3, data);
+		Cherenkov::Maths::Matrix mat1 = Cherenkov::Maths::Matrix(3, 3, data1);
+		float det = mat1.Det();
+		std::cout << mat1 << std::endl << "Determinant: " << det << std::endl;
 
-
-		float data2[3] = { 1, 2, 3 };
-		Cherenkov::Maths::Matrix mat2 = Cherenkov::Maths::Matrix(1, 3, data2);
-		
-		
-		Cherenkov::Maths::Matrix mat3 = mat2 * mat1;
-
-
-		float dotpro = mat2.Dot(mat1);
-
-		std::cout << mat1 << std::endl;
-		std::cout << mat2 << std::endl;
-		std::cout << mat3 << std::endl;
-
-		std::cout << "^mat1^ dot ^mat2^ = " << dotpro << std::endl;
 		PushLayer(new ExampleLayer());
 
 	}

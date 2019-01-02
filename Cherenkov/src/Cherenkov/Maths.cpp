@@ -187,7 +187,6 @@ namespace Cherenkov {
 		Matrix& Matrix::operator*=(float scalar) { return this->Multiply(scalar); }
 
 		Matrix operator/(Matrix& mat, float scalar){ return mat.Multiply((1/scalar)); }
-		Matrix operator/(float scalar, Matrix& mat){ return mat.Multiply((1/scalar)); }
 		Matrix& Matrix::operator/=(float scalar) { return this->Multiply((1/scalar)); }
 		
 
@@ -206,50 +205,78 @@ namespace Cherenkov {
 		}
 
 
-		Matrix& Matrix::Cross(const Matrix& mat) {
-			return *this;
-		}
-
-		float Matrix::Dot(Matrix& mat){
-			int a, b;
+		float Matrix::Det(){
 			
-			float result = 0.0f;
-
-			if (this->Compatible(mat, MULTIPLY)) {
-				Matrix& matrix = this->Multiply(mat);
-				a = matrix.Rows;
-				b = matrix.Cols;
-
-				if (a == 1 || b == 1) {
-					result = matrix.Magnitude();
+			float result;
+			int row, col;
+			if (Cols == Rows) {
+				switch (Rows) {
+				case 1:
+				{
+					result = this->data[0][0];
+					break;
 				}
-				else {
-					CK_WARN("Dot product results in Matrix, not a scalar, consider using Multiply()!");
-					result = std::nanf("1");
+				case 2:
+				{
+					result = (this->data[0][0] * this->data[1][1]) - (this->data[0][1] * this->data[1][0]);
+					break;
+				}
+				case 3:
+				{
+					float temp1 = this->data[0][0] * ((this->data[1][1] * this->data[2][2]) - (this->data[1][2] * this->data[2][1]));
+					float temp2 = this->data[0][1] * ((this->data[1][0] * this->data[2][2]) - (this->data[1][2] * this->data[2][0]));
+					float temp3 = this->data[0][2] * ((this->data[1][0] * this->data[2][1]) - (this->data[1][1] * this->data[2][0]));
+
+					result = temp1 - temp2 + temp3;
+					break;
+				}
+				case 4:
+				{
+					/*
+					
+						00 01 02 03
+						10 11 12 13
+						20 21 22 23
+						30 31 32 33
+
+					*/
+					//cols 123
+					float temp11 = this->data[1][1] * ((this->data[2][2] * this->data[3][3]) - (this->data[2][3] * this->data[3][2]));
+					float temp12 = this->data[1][2] * ((this->data[2][1] * this->data[3][3]) - (this->data[2][3] * this->data[3][1]));
+					float temp13 = this->data[1][3] * ((this->data[2][1] * this->data[3][2]) - (this->data[2][2] * this->data[3][1]));
+					float temp1 = this->data[0][0] * (temp11 - temp12 + temp13);
+
+					
+					//cols 023
+					float temp21 = this->data[1][0] * ((this->data[2][2] * this->data[3][3]) - (this->data[2][3] * this->data[3][2]));
+					float temp22 = this->data[1][2] * ((this->data[2][0] * this->data[3][3]) - (this->data[2][3] * this->data[3][0]));
+					float temp23 = this->data[1][3] * ((this->data[2][0] * this->data[3][2]) - (this->data[2][2] * this->data[3][0]));
+					float temp2 = this->data[0][1] * (temp21 - temp22 + temp23);
+					
+
+
+					//cols 013
+					float temp31 = this->data[1][0] * ((this->data[2][1] * this->data[3][3]) - (this->data[2][3] * this->data[3][1]));
+					float temp32 = this->data[1][1] * ((this->data[2][0] * this->data[3][3]) - (this->data[2][3] * this->data[3][0]));
+					float temp33 = this->data[1][3] * ((this->data[2][0] * this->data[3][1]) - (this->data[2][1] * this->data[3][0]));
+					float temp3 = this->data[0][2] * (temp31 - temp32 + temp33);
+					
+					//cols 012
+					float temp41 = this->data[1][0] * ((this->data[2][1] * this->data[3][2]) - (this->data[2][2] * this->data[3][1]));
+					float temp42 = this->data[1][1] * ((this->data[2][0] * this->data[3][2]) - (this->data[2][2] * this->data[3][0]));
+					float temp43 = this->data[1][2] * ((this->data[2][0] * this->data[3][1]) - (this->data[2][1] * this->data[3][0]));
+					float temp4 = this->data[0][3] * (temp41 - temp42 + temp43);
+
+					result = temp1 - temp2 + temp3 - temp4;
+					break;
+				}
 				}
 			}
 			else {
-				CK_WARN("Matricies cannot be multiplied (aren't compatible)!");
+				CK_WARN("Not a square matrix, det of a {0} by {1} matrix is undefined!", Rows, Cols);
 				result = std::nanf("1");
 			}
-
 			return result;
-		}
-
-		float Matrix::Magnitude() {
-			if (this->Cols == 1 || this->Rows == 1) {
-				float result = 0.0f;
-				for (int i = 0; i < this->Rows; ++i) {
-					for (int j = 0; j < this->Cols; ++j) {
-						result += this->data[i][j] * this->data[i][j];
-					}
-				}
-				return sqrt(result);
-			}
-		}
-
-		float Matrix::Det(){
-			return 0.0f;
 		}
 
 
@@ -295,6 +322,221 @@ namespace Cherenkov {
 			}
 			return os;
 		}
+
+
+		Vector::Vector(int dim){
+			Dim = dim;
+			this->data = std::vector<float> (dim);
+
+			for (int i = 0; i < this->data.size(); ++i)
+			{
+					data[i] = 0.0f;
+			}
+		}
+
+		Vector::Vector(int dim, float *values){
+			Dim = dim;
+			data = std::vector<float>(dim);
+
+			for (int i = 0; i < data.size(); ++i)
+			{
+				data[i] = values[i];
+			}
+		}
+
+		Vector::Vector(std::vector<float> values) {
+			Dim = values.size();
+			this->data = values;
+		}
+
+		Vector::~Vector(){
+			data.clear();
+		}
+
+		Vector& Vector::Add(float constant){
+			Vector* out = new Vector(Dim);
+
+			for (int i = 0; i < this->data.size(); ++i) {
+				out->data[i] = this->data[i] + constant;
+				
+			}
+			return *out;
+		}
+
+		Vector& Vector::Add(const Vector& vec){
+			if (this->Compatible(vec, ADD)) {
+				Vector* out = new Vector(Dim);
+
+				for (int i = 0; i < this->data.size(); ++i) {
+					out->data[i] = this->data[i] + vec.data[i];
+				}
+
+				return *out;
+			}
+			else {
+				CK_WARN("Vector dimensions aren't equal! (1x{0} =/= 1x{1})\nReturned left vector...", Dim, vec.Dim);
+				return *this;
+			}
+		}
+
+		Vector operator+(Vector& left, const Vector& right) { return left.Add(right); }
+		Vector operator+(Vector& vec, float constant) { return vec.Add(constant); }
+		Vector operator+(float constant, Vector& vec){ return vec.Add(constant); }
+		Vector& Vector::operator+=(const Vector& vec) { return this->Add(vec); }
+		Vector& Vector::operator+=(float constant) { return this->Add(constant); }
+
+
+		Vector& Vector::Sub(float constant) {
+			Vector* out = new Vector(Dim);
+
+			for (int i = 0; i < this->data.size(); ++i) {
+				out->data[i] = this->data[i] - constant;
+
+			}
+			return *out;
+		}
+
+		Vector& Vector::Sub(const Vector& vec) {
+			if (this->Compatible(vec, SUBTRACT)) {
+
+				Vector* out = new Vector(Dim);
+
+				for (int i = 0; i < this->data.size(); ++i) {
+					out->data[i] = this->data[i] - vec.data[i];
+				}
+				return *out;
+			}
+			else {
+				CK_WARN("Vector dimensions aren't equal! (1x{0} =/= 1x{1})\nReturned left vector...", Dim, vec.Dim);
+				return *this;
+			}
+		}
+
+		Vector operator-(Vector& left, const Vector& right) { return left.Sub(right); }
+		Vector operator-(Vector& vec, float constant) { return vec.Sub(constant); }
+		Vector operator-(float constant, Vector& vec) { return vec.Sub(constant); }
+		Vector& Vector::operator-=(const Vector& vec) { return this->Sub(vec); }
+		Vector& Vector::operator-=(float constant) {return this->Sub(constant); }
+
+
+		Vector& Vector::Multiply(float scalar) {
+			Vector* out = new Vector(Dim);
+
+			for (int i = 0; i < this->data.size(); ++i) {
+				out->data[i] = this->data[i] * scalar;
+
+			}
+			return *out;
+		}
+
+		Vector& Vector::Multiply(const Vector& vec) { 
+			if (this->Compatible(vec, MULTIPLY)) {
+
+				Vector* out = new Vector(Dim);
+				for (int i = 0; i < this->data.size(); ++i) {
+						float sum = 0.0f;
+							sum += this->data[i] * vec.data[i];
+						out->data[i] = sum;
+				}
+				return *out;
+			}
+			else {
+				CK_WARN("Vector dimensions aren't equal! (1x{0} =/= 1x{1})\nReturned left vector...", Dim, vec.Dim);
+				return *this;
+			}
+		}
+		Vector operator*(Vector& left, const Vector& right) { return left.Multiply(right); }
+		Vector operator*(Vector& vec, float scalar) { return vec.Multiply(scalar); }
+		Vector operator*(float scalar, Vector& vec) { return vec.Multiply(scalar); }
+		Vector& Vector::operator*=(const Vector& vec) { return this->Multiply(vec); }
+		Vector& Vector::operator*=(float scalar) { return this->Multiply(scalar); }
+
+		Vector& Vector::Divide(float scalar) {
+			Vector* out = new Vector(Dim);
+
+			for (int i = 0; i < this->data.size(); ++i) {
+				out->data[i] = this->data[i] / scalar;
+
+			}
+			return *out;
+		}
+
+		Vector operator/(Vector& vec, float scalar) { return vec.Divide(scalar); }
+		Vector& Vector::operator/=(float scalar) { return this->Divide(scalar); }
+
+		std::ostream& operator<<(std::ostream& os, Vector& vec) {
+			os << "1 x " << vec.Dim << " - Vector: " << std::endl;
+
+			for (int i = 0; i < vec.data.size(); ++i) {
+					if (i == vec.Dim - 1) {
+						os << vec.data[i] << " ";
+					}
+					else {
+						os << vec.data[i] << ", ";
+					}
+			}
+			os << std::endl;
+
+			return os;
+		}
+
+
+
+
+
+		float Vector::Dot(Vector& vec) {
+
+			float result = 0.0f;
+
+			if (this->Compatible(vec, MULTIPLY)) {
+				
+					result = vec.Magnitude();
+			}
+			else {
+				CK_WARN("Vectors cannot be multiplied (aren't compatible)!");
+				result = std::nanf("1");
+			}
+
+			return result;
+		}
+
+		float Vector::Magnitude() {
+			
+			float result = 0.0f;
+			for (int i = 0; i < this->Dim; ++i) {
+				result += this->data[i] * this->data[i];
+				
+			}
+			return sqrt(result);
+			
+		}
+
+		bool Vector::Compatible(const Vector& vec, int operation) {
+			switch (operation) {
+			case ADD:
+				if (Dim == vec.Dim) {
+					return true;
+				}
+				else {
+					return false;
+				}
+			case SUBTRACT:
+				if (Dim == vec.Dim) {
+					return true;
+				}
+				else {
+					return false;
+				}
+			case MULTIPLY:
+				if (Dim == vec.Dim) {
+					return true;
+				}
+				else {
+					return false;
+				}
+			}
+		}
+
 
 	}
 
