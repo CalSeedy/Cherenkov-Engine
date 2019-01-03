@@ -14,7 +14,7 @@ namespace Cherenkov {
 			Rows = rows;
 			Cols = cols;
 			
-			this->data = std::vector<std::vector<float> > (rows, std::vector<float>(cols));
+			this->data = std::vector<std::vector<double> > (rows, std::vector<double>(cols));
 
 			for (int i = 0; i < this->data.size(); ++i)
 			{
@@ -25,26 +25,26 @@ namespace Cherenkov {
 			}
 		}
 
-		Matrix::Matrix(int rows, int cols, float* values) {
+		Matrix::Matrix(int rows, int cols, double* values) {
 			Rows = rows;
 			Cols = cols;
-			this->data = std::vector<std::vector<float> >(rows, std::vector<float>(cols));
+			this->data = std::vector<std::vector<double> >(rows, std::vector<double>(cols));
 
 			for (int i = 0; i < this->data.size(); ++i)
 			{
 				for (int j = 0; j < this->data[i].size(); ++j)
 				{
-					data[i][j] = values[j + i*cols];
+					data[i][j] = values[i + j*rows];
 				}
 			}
 
 		}
 
-		Matrix::Matrix(int rows, int cols, float diagonal) {
+		Matrix::Matrix(int rows, int cols, double diagonal) {
 			Rows = rows;
 			Cols = cols;
 			
-			this->data = std::vector<std::vector<float> >(rows, std::vector<float>(cols));
+			this->data = std::vector<std::vector<double> >(rows, std::vector<double>(cols));
 
 			for (int i = 0; i < this->data.size(); ++i)
 			{
@@ -58,7 +58,7 @@ namespace Cherenkov {
 			}
 		}
 
-		Matrix::Matrix(std::vector<std::vector<float> >& values) {
+		Matrix::Matrix(std::vector<std::vector<double> >& values) {
 			Rows = values.size();
 			Cols = values[0].size();
 
@@ -90,7 +90,7 @@ namespace Cherenkov {
 			}
 		}
 
-		Matrix& Matrix::Add(float constant) {
+		Matrix& Matrix::Add(double constant) {
 			Matrix* out = new Matrix(Rows, Cols);
 
 			for (int i = 0; i < this->data.size(); ++i) {
@@ -118,7 +118,7 @@ namespace Cherenkov {
 			}
 		}
 		
-		Matrix& Matrix::Sub(float constant) {
+		Matrix& Matrix::Sub(double constant) {
 			Matrix* out = new Matrix(Rows, Cols);
 			for (int i = 0; i < this->data.size(); ++i) {
 				for (int j = 0; j < this->data[i].size(); ++j) {
@@ -128,7 +128,7 @@ namespace Cherenkov {
 			return *out;
 		}
 
-		Matrix& Matrix::Divide(float scalar) {
+		Matrix& Matrix::Divide(double scalar) {
 			Matrix* out = new Matrix(Rows, Cols);
 			for (int i = 0; i < this->data.size(); ++i) {
 				for (int j = 0; j < this->data[i].size(); ++j) {
@@ -138,7 +138,7 @@ namespace Cherenkov {
 			return *out;
 		}
 
-		Matrix& Matrix::Multiply(float scalar) {
+		Matrix& Matrix::Multiply(double scalar) {
 			Matrix* out = new Matrix(Rows, Cols);
 			for (int i = 0; i < this->data.size(); ++i) {
 				for (int j = 0; j < this->data[i].size(); ++j) {
@@ -154,7 +154,7 @@ namespace Cherenkov {
 				Matrix* out = new Matrix(Rows, mat.Cols);
 				for (int i = 0; i < this->data.size(); ++i) {
 					for (int j = 0; j < this->data[i].size(); ++j) {
-						float sum = 0.0f;
+						double sum = 0.0f;
 						for (int offset = 0; offset < Cols; ++offset) {
 							sum += this->data[i][offset] * mat.data[offset][j];
 						}
@@ -169,25 +169,25 @@ namespace Cherenkov {
 		}
 
 		Matrix operator+(Matrix& left, const Matrix& right) { return left.Add(right); }
-		Matrix operator+(Matrix& mat, float constant){ return mat.Add(constant); }
-		Matrix operator+(float constant, Matrix& mat){ return mat.Add(constant); }
+		Matrix operator+(Matrix& mat, double constant){ return mat.Add(constant); }
+		Matrix operator+(double constant, Matrix& mat){ return mat.Add(constant); }
 		Matrix& Matrix::operator+=(const Matrix& mat) { return this->Add(mat); }
-		Matrix& Matrix::operator+=(float constant) { return this->Add(constant); }
+		Matrix& Matrix::operator+=(double constant) { return this->Add(constant); }
 
 		Matrix operator-(Matrix& left, const Matrix& right) { return left.Sub(right); }
-		Matrix operator-(Matrix& mat, float constant) { return mat.Sub(constant); }
-		Matrix operator-(float constant, Matrix& mat) { return mat.Sub(constant); }
+		Matrix operator-(Matrix& mat, double constant) { return mat.Sub(constant); }
+		Matrix operator-(double constant, Matrix& mat) { return mat.Sub(constant); }
 		Matrix& Matrix::operator-=(const Matrix& mat) { return this->Sub(mat); }
-		Matrix& Matrix::operator-=(float constant) { return this->Sub(constant); }
+		Matrix& Matrix::operator-=(double constant) { return this->Sub(constant); }
 
 		Matrix operator*(Matrix& left, const Matrix& right) { return left.Multiply(right); }
-		Matrix operator*(Matrix& mat, float scalar) { return mat.Multiply(scalar); }
-		Matrix operator*(float scalar, Matrix& mat) { return mat.Multiply(scalar); }
+		Matrix operator*(Matrix& mat, double scalar) { return mat.Multiply(scalar); }
+		Matrix operator*(double scalar, Matrix& mat) { return mat.Multiply(scalar); }
 		Matrix& Matrix::operator*=(const Matrix& mat) { return this->Multiply(mat); }
-		Matrix& Matrix::operator*=(float scalar) { return this->Multiply(scalar); }
+		Matrix& Matrix::operator*=(double scalar) { return this->Multiply(scalar); }
 
-		Matrix operator/(Matrix& mat, float scalar){ return mat.Multiply((1/scalar)); }
-		Matrix& Matrix::operator/=(float scalar) { return this->Multiply((1/scalar)); }
+		Matrix operator/(Matrix& mat, double scalar){ return mat.Multiply((1/scalar)); }
+		Matrix& Matrix::operator/=(double scalar) { return this->Multiply((1/scalar)); }
 		
 
 		Matrix Matrix::Identity(int rows, int cols) {
@@ -205,9 +205,94 @@ namespace Cherenkov {
 		}
 
 
-		float Matrix::Det(){
+		//Created by Martin Thoma: https://martin-thoma.com/inverting-matrices/
+		//Adapted to handle an n by n Matrix
+		Matrix& Matrix::Inverse() {
+			Matrix* temp = new Matrix(this->data);
+			for (int i = 0; i < this->data.size(); ++i) {
+				for (int j = 0; j < this->data.size(); ++j) {
+					if (i == j) {
+						temp->data[i].push_back(1);
+					}
+					else {
+						temp->data[i].push_back(0);
+					}
+				}
+			}
+
+			int n = temp->data.size();
+
+			for (int i = 0; i < n; i++) {
+				// Search for maximum in temp column
+				double maxEl = abs(temp->data[i][i]);
+				int maxRow = i;
+				for (int k = i + 1; k < n; k++) {
+					if (abs(temp->data[k][i]) > maxEl) {
+						maxEl = temp->data[k][i];
+						maxRow = k;
+					}
+				}
+
+				// Swap maximum row with current row (column by column)
+				for (int k = i; k < 2 * n; k++) {
+					double tmp = temp->data[maxRow][k];
+					temp->data[maxRow][k] = temp->data[i][k];
+					temp->data[i][k] = tmp;
+				}
+
+				// Make all rows below temp one 0 in current column
+				for (int k = i + 1; k < n; k++) {
+					double c = -temp->data[k][i] / temp->data[i][i];
+					for (int j = i; j < 2 * n; j++) {
+						if (i == j) {
+							temp->data[k][j] = 0;
+						}
+						else {
+							temp->data[k][j] += c * temp->data[i][j];
+						}
+					}
+				}
+			}
+
+			// Solve equation Ax=b for an upper triangular matrix temp->data
+			for (int i = n - 1; i >= 0; i--) {
+				for (int k = n; k < 2 * n; k++) {
+					temp->data[i][k] /= temp->data[i][i];
+				}
+				// temp is not necessary, but the output looks nicer:
+				temp->data[i][i] = 1;
+
+				for (int rowModify = i - 1; rowModify >= 0; rowModify--) {
+					for (int columModify = n; columModify < 2 * n; columModify++) {
+						temp->data[rowModify][columModify] -= temp->data[i][columModify]
+							* temp->data[rowModify][i];
+					}
+					// temp is not necessary, but the output looks nicer:
+					temp->data[rowModify][i] = 0;
+				}
+			}
+
+
+			Matrix* out = new Matrix(this->data.size(), this->data.size());
 			
-			float result;
+
+			for (int i = 0; i < this->data.size(); ++i) {
+				for (int j = 0; j < this->data[i].size(); ++j) {
+
+					out->data[i][j] = temp->data[i][j + (this->data.size())];
+
+				}
+			}
+
+			temp->~Matrix();
+
+			return *out;
+		}
+
+
+		double Matrix::Det(){
+			
+			double result;
 			int row, col;
 			if (Cols == Rows) {
 				switch (Rows) {
@@ -223,9 +308,9 @@ namespace Cherenkov {
 				}
 				case 3:
 				{
-					float temp1 = this->data[0][0] * ((this->data[1][1] * this->data[2][2]) - (this->data[1][2] * this->data[2][1]));
-					float temp2 = this->data[0][1] * ((this->data[1][0] * this->data[2][2]) - (this->data[1][2] * this->data[2][0]));
-					float temp3 = this->data[0][2] * ((this->data[1][0] * this->data[2][1]) - (this->data[1][1] * this->data[2][0]));
+					double temp1 = this->data[0][0] * ((this->data[1][1] * this->data[2][2]) - (this->data[1][2] * this->data[2][1]));
+					double temp2 = this->data[0][1] * ((this->data[1][0] * this->data[2][2]) - (this->data[1][2] * this->data[2][0]));
+					double temp3 = this->data[0][2] * ((this->data[1][0] * this->data[2][1]) - (this->data[1][1] * this->data[2][0]));
 
 					result = temp1 - temp2 + temp3;
 					break;
@@ -241,31 +326,31 @@ namespace Cherenkov {
 
 					*/
 					//cols 123
-					float temp11 = this->data[1][1] * ((this->data[2][2] * this->data[3][3]) - (this->data[2][3] * this->data[3][2]));
-					float temp12 = this->data[1][2] * ((this->data[2][1] * this->data[3][3]) - (this->data[2][3] * this->data[3][1]));
-					float temp13 = this->data[1][3] * ((this->data[2][1] * this->data[3][2]) - (this->data[2][2] * this->data[3][1]));
-					float temp1 = this->data[0][0] * (temp11 - temp12 + temp13);
+					double temp11 = this->data[1][1] * ((this->data[2][2] * this->data[3][3]) - (this->data[2][3] * this->data[3][2]));
+					double temp12 = this->data[1][2] * ((this->data[2][1] * this->data[3][3]) - (this->data[2][3] * this->data[3][1]));
+					double temp13 = this->data[1][3] * ((this->data[2][1] * this->data[3][2]) - (this->data[2][2] * this->data[3][1]));
+					double temp1 = this->data[0][0] * (temp11 - temp12 + temp13);
 
 					
 					//cols 023
-					float temp21 = this->data[1][0] * ((this->data[2][2] * this->data[3][3]) - (this->data[2][3] * this->data[3][2]));
-					float temp22 = this->data[1][2] * ((this->data[2][0] * this->data[3][3]) - (this->data[2][3] * this->data[3][0]));
-					float temp23 = this->data[1][3] * ((this->data[2][0] * this->data[3][2]) - (this->data[2][2] * this->data[3][0]));
-					float temp2 = this->data[0][1] * (temp21 - temp22 + temp23);
+					double temp21 = this->data[1][0] * ((this->data[2][2] * this->data[3][3]) - (this->data[2][3] * this->data[3][2]));
+					double temp22 = this->data[1][2] * ((this->data[2][0] * this->data[3][3]) - (this->data[2][3] * this->data[3][0]));
+					double temp23 = this->data[1][3] * ((this->data[2][0] * this->data[3][2]) - (this->data[2][2] * this->data[3][0]));
+					double temp2 = this->data[0][1] * (temp21 - temp22 + temp23);
 					
 
 
 					//cols 013
-					float temp31 = this->data[1][0] * ((this->data[2][1] * this->data[3][3]) - (this->data[2][3] * this->data[3][1]));
-					float temp32 = this->data[1][1] * ((this->data[2][0] * this->data[3][3]) - (this->data[2][3] * this->data[3][0]));
-					float temp33 = this->data[1][3] * ((this->data[2][0] * this->data[3][1]) - (this->data[2][1] * this->data[3][0]));
-					float temp3 = this->data[0][2] * (temp31 - temp32 + temp33);
+					double temp31 = this->data[1][0] * ((this->data[2][1] * this->data[3][3]) - (this->data[2][3] * this->data[3][1]));
+					double temp32 = this->data[1][1] * ((this->data[2][0] * this->data[3][3]) - (this->data[2][3] * this->data[3][0]));
+					double temp33 = this->data[1][3] * ((this->data[2][0] * this->data[3][1]) - (this->data[2][1] * this->data[3][0]));
+					double temp3 = this->data[0][2] * (temp31 - temp32 + temp33);
 					
 					//cols 012
-					float temp41 = this->data[1][0] * ((this->data[2][1] * this->data[3][2]) - (this->data[2][2] * this->data[3][1]));
-					float temp42 = this->data[1][1] * ((this->data[2][0] * this->data[3][2]) - (this->data[2][2] * this->data[3][0]));
-					float temp43 = this->data[1][2] * ((this->data[2][0] * this->data[3][1]) - (this->data[2][1] * this->data[3][0]));
-					float temp4 = this->data[0][3] * (temp41 - temp42 + temp43);
+					double temp41 = this->data[1][0] * ((this->data[2][1] * this->data[3][2]) - (this->data[2][2] * this->data[3][1]));
+					double temp42 = this->data[1][1] * ((this->data[2][0] * this->data[3][2]) - (this->data[2][2] * this->data[3][0]));
+					double temp43 = this->data[1][2] * ((this->data[2][0] * this->data[3][1]) - (this->data[2][1] * this->data[3][0]));
+					double temp4 = this->data[0][3] * (temp41 - temp42 + temp43);
 
 					result = temp1 - temp2 + temp3 - temp4;
 					break;
@@ -326,7 +411,7 @@ namespace Cherenkov {
 
 		Vector::Vector(int dim){
 			Dim = dim;
-			this->data = std::vector<float> (dim);
+			this->data = std::vector<double> (dim);
 
 			for (int i = 0; i < this->data.size(); ++i)
 			{
@@ -334,9 +419,9 @@ namespace Cherenkov {
 			}
 		}
 
-		Vector::Vector(int dim, float *values){
+		Vector::Vector(int dim, double *values){
 			Dim = dim;
-			data = std::vector<float>(dim);
+			data = std::vector<double>(dim);
 
 			for (int i = 0; i < data.size(); ++i)
 			{
@@ -344,7 +429,7 @@ namespace Cherenkov {
 			}
 		}
 
-		Vector::Vector(std::vector<float> values) {
+		Vector::Vector(std::vector<double> values) {
 			Dim = values.size();
 			this->data = values;
 		}
@@ -353,7 +438,7 @@ namespace Cherenkov {
 			data.clear();
 		}
 
-		Vector& Vector::Add(float constant){
+		Vector& Vector::Add(double constant){
 			Vector* out = new Vector(Dim);
 
 			for (int i = 0; i < this->data.size(); ++i) {
@@ -380,13 +465,13 @@ namespace Cherenkov {
 		}
 
 		Vector operator+(Vector& left, const Vector& right) { return left.Add(right); }
-		Vector operator+(Vector& vec, float constant) { return vec.Add(constant); }
-		Vector operator+(float constant, Vector& vec){ return vec.Add(constant); }
+		Vector operator+(Vector& vec, double constant) { return vec.Add(constant); }
+		Vector operator+(double constant, Vector& vec){ return vec.Add(constant); }
 		Vector& Vector::operator+=(const Vector& vec) { return this->Add(vec); }
-		Vector& Vector::operator+=(float constant) { return this->Add(constant); }
+		Vector& Vector::operator+=(double constant) { return this->Add(constant); }
 
 
-		Vector& Vector::Sub(float constant) {
+		Vector& Vector::Sub(double constant) {
 			Vector* out = new Vector(Dim);
 
 			for (int i = 0; i < this->data.size(); ++i) {
@@ -413,13 +498,13 @@ namespace Cherenkov {
 		}
 
 		Vector operator-(Vector& left, const Vector& right) { return left.Sub(right); }
-		Vector operator-(Vector& vec, float constant) { return vec.Sub(constant); }
-		Vector operator-(float constant, Vector& vec) { return vec.Sub(constant); }
+		Vector operator-(Vector& vec, double constant) { return vec.Sub(constant); }
+		Vector operator-(double constant, Vector& vec) { return vec.Sub(constant); }
 		Vector& Vector::operator-=(const Vector& vec) { return this->Sub(vec); }
-		Vector& Vector::operator-=(float constant) {return this->Sub(constant); }
+		Vector& Vector::operator-=(double constant) {return this->Sub(constant); }
 
 
-		Vector& Vector::Multiply(float scalar) {
+		Vector& Vector::Multiply(double scalar) {
 			Vector* out = new Vector(Dim);
 
 			for (int i = 0; i < this->data.size(); ++i) {
@@ -434,7 +519,7 @@ namespace Cherenkov {
 
 				Vector* out = new Vector(Dim);
 				for (int i = 0; i < this->data.size(); ++i) {
-						float sum = 0.0f;
+						double sum = 0.0f;
 							sum += this->data[i] * vec.data[i];
 						out->data[i] = sum;
 				}
@@ -446,12 +531,12 @@ namespace Cherenkov {
 			}
 		}
 		Vector operator*(Vector& left, const Vector& right) { return left.Multiply(right); }
-		Vector operator*(Vector& vec, float scalar) { return vec.Multiply(scalar); }
-		Vector operator*(float scalar, Vector& vec) { return vec.Multiply(scalar); }
+		Vector operator*(Vector& vec, double scalar) { return vec.Multiply(scalar); }
+		Vector operator*(double scalar, Vector& vec) { return vec.Multiply(scalar); }
 		Vector& Vector::operator*=(const Vector& vec) { return this->Multiply(vec); }
-		Vector& Vector::operator*=(float scalar) { return this->Multiply(scalar); }
+		Vector& Vector::operator*=(double scalar) { return this->Multiply(scalar); }
 
-		Vector& Vector::Divide(float scalar) {
+		Vector& Vector::Divide(double scalar) {
 			Vector* out = new Vector(Dim);
 
 			for (int i = 0; i < this->data.size(); ++i) {
@@ -461,8 +546,8 @@ namespace Cherenkov {
 			return *out;
 		}
 
-		Vector operator/(Vector& vec, float scalar) { return vec.Divide(scalar); }
-		Vector& Vector::operator/=(float scalar) { return this->Divide(scalar); }
+		Vector operator/(Vector& vec, double scalar) { return vec.Divide(scalar); }
+		Vector& Vector::operator/=(double scalar) { return this->Divide(scalar); }
 
 		std::ostream& operator<<(std::ostream& os, Vector& vec) {
 			os << "1 x " << vec.Dim << " - Vector: " << std::endl;
@@ -481,12 +566,28 @@ namespace Cherenkov {
 		}
 
 
+		Vector& Vector::Cross(Vector& vec) {
+			if (this->Compatible(vec, MULTIPLY)) {
+				if (this->Dim == 3) {
+					double outX = (this->data[1] * vec.data[2]) - (this->data[2] * vec.data[1]);
+					double outY = (this->data[2] * vec.data[0]) - (this->data[0] * vec.data[2]);
+					double outZ = (this->data[0] * vec.data[1]) - (this->data[1] * vec.data[0]);
+					double values[3] = { outX, outY, outZ};
+
+					Vector* out = new Vector(3, values);
+					return *out;
+				}
+				else {
+					CK_WARN("Cross product operation only valid for 3 dimensions (7 actually, but cba to code that)!\nReturned left vector...");
+					return *this;
+				}
+			}
+		}
 
 
+		double Vector::Dot(Vector& vec) {
 
-		float Vector::Dot(Vector& vec) {
-
-			float result = 0.0f;
+			double result = 0.0f;
 
 			if (this->Compatible(vec, MULTIPLY)) {
 				
@@ -500,9 +601,9 @@ namespace Cherenkov {
 			return result;
 		}
 
-		float Vector::Magnitude() {
+		double Vector::Magnitude() {
 			
-			float result = 0.0f;
+			double result = 0.0f;
 			for (int i = 0; i < this->Dim; ++i) {
 				result += this->data[i] * this->data[i];
 				

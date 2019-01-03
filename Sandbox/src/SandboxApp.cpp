@@ -16,20 +16,25 @@ public:
 	}
 };
 
-
 class Sandbox : public Cherenkov::Application {
 
 public:
 	Sandbox()
 	{
-		
-		float data1[9] = { 1.0f, 0.0f, 2.0f, 1.0f, 3.0f, 4.0f, 0.0f, 6.0f, 0.0f};
 
-		Cherenkov::Maths::Matrix mat1 = Cherenkov::Maths::Matrix(3, 3, data1);
-		float det = mat1.Det();
-		std::cout << mat1 << std::endl << "Determinant: " << det << std::endl;
+		double data1[16] = {1, 1, 1, -1, 1, 1, -1, 1, 1, -1, 1, 1, -1, 1, 1, 1};
+
+		Cherenkov::Maths::Matrix mat1 = Cherenkov::Maths::Matrix(4, 4, data1);
+
+		Cherenkov::Maths::Matrix mat1Inv = mat1.Inverse();
+
+		std::cout << mat1 << std::endl;
+		std::cout << mat1Inv << std::endl;
+
 
 		PushLayer(new ExampleLayer());
+
+
 
 	}
 
@@ -38,6 +43,8 @@ public:
 	}
 };
 
+
+	
 
 Cherenkov::Application* Cherenkov::createApplication() {
 	return new Sandbox();

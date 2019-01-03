@@ -15,53 +15,54 @@ namespace Cherenkov {
 
 			int Rows, Cols;
 
-			std::vector<std::vector<float>> data;
+			std::vector<std::vector<double>> data;
 				
 			
-
+			//Data given in column major order
 			Matrix(int rows, int cols);
 
-			Matrix(int rows, int cols, float *values);
+			Matrix(int rows, int cols, double *values);
 
-			Matrix(int rows, int cols, float diagonal);
+			Matrix(int rows, int cols, double diagonal);
 
-			Matrix(std::vector<std::vector<float> >& values);
+			Matrix(std::vector<std::vector<double> >& values);
 
 
 			~Matrix();
 
-			Matrix& Add(float constant);
+			Matrix& Add(double constant);
 			Matrix& Add(const Matrix& mat);
 			friend CK_API Matrix operator+(Matrix& left, const Matrix& right);
-			friend CK_API Matrix operator+(Matrix& mat, float constant);
-			friend CK_API Matrix operator+(float constant, Matrix& mat);
+			friend CK_API Matrix operator+(Matrix& mat, double constant);
+			friend CK_API Matrix operator+(double constant, Matrix& mat);
 			Matrix& operator+=(const Matrix& mat);
-			Matrix& operator+=(float constant);
+			Matrix& operator+=(double constant);
 
 
-			Matrix& Sub(float constant);
+			Matrix& Sub(double constant);
 			Matrix& Sub(const Matrix& mat);
 			friend CK_API Matrix operator-(Matrix& left, const Matrix& right);
-			friend CK_API Matrix operator-(Matrix& mat, float constant);
-			friend CK_API Matrix operator-(float constant, Matrix& mat);
+			friend CK_API Matrix operator-(Matrix& mat, double constant);
+			friend CK_API Matrix operator-(double constant, Matrix& mat);
 			Matrix& operator-=(const Matrix& mat);
-			Matrix& operator-=(float constant);
+			Matrix& operator-=(double constant);
 
 
-			Matrix& Multiply(float scalar);
+			Matrix& Multiply(double scalar);
 			Matrix& Multiply(const Matrix& mat);
 			friend CK_API Matrix operator*(Matrix& left, const Matrix& right);
-			friend CK_API Matrix operator*(Matrix& mat, float scalar);
-			friend CK_API Matrix operator*(float scalar, Matrix& mat);
+			friend CK_API Matrix operator*(Matrix& mat, double scalar);
+			friend CK_API Matrix operator*(double scalar, Matrix& mat);
 			Matrix& operator*=(const Matrix& mat);
-			Matrix& operator*=(float scalar);
+			Matrix& operator*=(double scalar);
 
-			Matrix& Divide(float scalar);
-			friend CK_API Matrix operator/(Matrix& mat, float scalar);
-			Matrix& operator/=(float scalar);
+			Matrix& Divide(double scalar);
+			friend CK_API Matrix operator/(Matrix& mat, double scalar);
+			Matrix& operator/=(double scalar);
 
+			Matrix& Inverse();
 			Matrix& Transpose();
-			float Det();
+			double Det();
 			static Matrix Identity(int rows, int cols);
 			bool Compatible(const Matrix& mat, int operation);
 
@@ -74,49 +75,50 @@ namespace Cherenkov {
 
 			int Dim;
 
-			std::vector<float> data;
+			std::vector<double> data;
 
 			Vector(int dim);
 
-			Vector(int dim, float *values);
+			Vector(int dim, double *values);
 			
-			Vector(std::vector<float> values);
+			Vector(std::vector<double> values);
 
 			~Vector();
 
-			Vector& Add(float constant);
+			Vector& Add(double constant);
 			Vector& Add(const Vector& vec);
 			friend CK_API Vector operator+(Vector& left, const Vector& right);
-			friend CK_API Vector operator+(Vector& vec, float constant);
-			friend CK_API Vector operator+(float constant, Vector& vec);
+			friend CK_API Vector operator+(Vector& vec, double constant);
+			friend CK_API Vector operator+(double constant, Vector& vec);
 			Vector& operator+=(const Vector& vec);
-			Vector& operator+=(float constant);
+			Vector& operator+=(double constant);
 
 
-			Vector& Sub(float constant);
+			Vector& Sub(double constant);
 			Vector& Sub(const Vector& vec);
 			friend CK_API Vector operator-(Vector& left, const Vector& right);
-			friend CK_API Vector operator-(Vector& vec, float constant);
-			friend CK_API Vector operator-(float constant, Vector& vec);
+			friend CK_API Vector operator-(Vector& vec, double constant);
+			friend CK_API Vector operator-(double constant, Vector& vec);
 			Vector& operator-=(const Vector& vec);
-			Vector& operator-=(float constant);
+			Vector& operator-=(double constant);
 
 
-			Vector& Multiply(float scalar);
+			Vector& Multiply(double scalar);
 			Vector& Multiply(const Vector& vec);
 			friend CK_API Vector operator*(Vector& left, const Vector& right);
-			friend CK_API Vector operator*(Vector& vec, float scalar);
-			friend CK_API Vector operator*(float scalar, Vector& vec);
+			friend CK_API Vector operator*(Vector& vec, double scalar);
+			friend CK_API Vector operator*(double scalar, Vector& vec);
 			Vector& operator*=(const Vector& vec);
-			Vector& operator*=(float scalar);
+			Vector& operator*=(double scalar);
 
-			Vector& Divide(float scalar);
-			friend CK_API Vector operator/(Vector& vec, float scalar);
-			Vector& operator/=(float scalar);
+			Vector& Divide(double scalar);
+			friend CK_API Vector operator/(Vector& vec, double scalar);
+			Vector& operator/=(double scalar);
 
+			Vector& Cross(Vector& vec);
 			bool Compatible(const Vector& vec, int operation);
-			float Magnitude();
-			float Dot(Vector& vec);
+			double Magnitude();
+			double Dot(Vector& vec);
 			friend CK_API std::ostream& operator<<(std::ostream& os, Vector& vec);
 
 		};
