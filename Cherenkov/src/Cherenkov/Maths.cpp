@@ -13,8 +13,8 @@ namespace Cherenkov {
 		Matrix::Matrix(int rows, int cols) {
 			Rows = rows;
 			Cols = cols;
-			
-			this->data = std::vector<std::vector<double> > (rows, std::vector<double>(cols));
+
+			this->data = std::vector<std::vector<double> >(rows, std::vector<double>(cols));
 
 			for (int i = 0; i < this->data.size(); ++i)
 			{
@@ -34,7 +34,7 @@ namespace Cherenkov {
 			{
 				for (int j = 0; j < this->data[i].size(); ++j)
 				{
-					data[i][j] = values[i + j*rows];
+					data[i][j] = values[i + j * rows];
 				}
 			}
 
@@ -43,7 +43,7 @@ namespace Cherenkov {
 		Matrix::Matrix(int rows, int cols, double diagonal) {
 			Rows = rows;
 			Cols = cols;
-			
+
 			this->data = std::vector<std::vector<double> >(rows, std::vector<double>(cols));
 
 			for (int i = 0; i < this->data.size(); ++i)
@@ -74,9 +74,9 @@ namespace Cherenkov {
 
 
 		Matrix& Matrix::Add(const Matrix& mat) {
-		
+
 			if (this->Compatible(mat, ADD)) {
-				Matrix* out = new Matrix(Rows,Cols);
+				Matrix* out = new Matrix(Rows, Cols);
 
 				for (int i = 0; i < this->data.size(); ++i) {
 					for (int j = 0; j < this->data[i].size(); ++j) {
@@ -84,7 +84,8 @@ namespace Cherenkov {
 					}
 				}
 				return *out;
-			} else {
+			}
+			else {
 				CK_WARN("Matrix dimensions aren't equal for both matricies! ({0}x{1} =/= {2}x{3})\nReturned left matrix...", Rows, Cols, mat.Rows, mat.Cols);
 				return *this;
 			}
@@ -117,7 +118,7 @@ namespace Cherenkov {
 				return *this;
 			}
 		}
-		
+
 		Matrix& Matrix::Sub(double constant) {
 			Matrix* out = new Matrix(Rows, Cols);
 			for (int i = 0; i < this->data.size(); ++i) {
@@ -162,15 +163,16 @@ namespace Cherenkov {
 					}
 				}
 				return *out;
-			} else {
+			}
+			else {
 				CK_WARN("Matrix 1 Column and Matrix 2 Row dimension mismatch! ({0} =/= {1})\n\tReturned left matrix...", Cols, mat.Rows);
 				return *this;
 			}
 		}
 
 		Matrix operator+(Matrix& left, const Matrix& right) { return left.Add(right); }
-		Matrix operator+(Matrix& mat, double constant){ return mat.Add(constant); }
-		Matrix operator+(double constant, Matrix& mat){ return mat.Add(constant); }
+		Matrix operator+(Matrix& mat, double constant) { return mat.Add(constant); }
+		Matrix operator+(double constant, Matrix& mat) { return mat.Add(constant); }
 		Matrix& Matrix::operator+=(const Matrix& mat) { return this->Add(mat); }
 		Matrix& Matrix::operator+=(double constant) { return this->Add(constant); }
 
@@ -186,9 +188,9 @@ namespace Cherenkov {
 		Matrix& Matrix::operator*=(const Matrix& mat) { return this->Multiply(mat); }
 		Matrix& Matrix::operator*=(double scalar) { return this->Multiply(scalar); }
 
-		Matrix operator/(Matrix& mat, double scalar){ return mat.Multiply((1/scalar)); }
-		Matrix& Matrix::operator/=(double scalar) { return this->Multiply((1/scalar)); }
-		
+		Matrix operator/(Matrix& mat, double scalar) { return mat.Multiply((1 / scalar)); }
+		Matrix& Matrix::operator/=(double scalar) { return this->Multiply((1 / scalar)); }
+
 
 		Matrix Matrix::Identity(int rows, int cols) {
 			return Matrix(rows, cols, 1.0f);
@@ -274,7 +276,7 @@ namespace Cherenkov {
 
 
 			Matrix* out = new Matrix(this->data.size(), this->data.size());
-			
+
 
 			for (int i = 0; i < this->data.size(); ++i) {
 				for (int j = 0; j < this->data[i].size(); ++j) {
@@ -290,8 +292,8 @@ namespace Cherenkov {
 		}
 
 
-		double Matrix::Det(){
-			
+		double Matrix::Det() {
+
 			double result;
 			int row, col;
 			if (Cols == Rows) {
@@ -318,7 +320,7 @@ namespace Cherenkov {
 				case 4:
 				{
 					/*
-					
+
 						00 01 02 03
 						10 11 12 13
 						20 21 22 23
@@ -331,13 +333,13 @@ namespace Cherenkov {
 					double temp13 = this->data[1][3] * ((this->data[2][1] * this->data[3][2]) - (this->data[2][2] * this->data[3][1]));
 					double temp1 = this->data[0][0] * (temp11 - temp12 + temp13);
 
-					
+
 					//cols 023
 					double temp21 = this->data[1][0] * ((this->data[2][2] * this->data[3][3]) - (this->data[2][3] * this->data[3][2]));
 					double temp22 = this->data[1][2] * ((this->data[2][0] * this->data[3][3]) - (this->data[2][3] * this->data[3][0]));
 					double temp23 = this->data[1][3] * ((this->data[2][0] * this->data[3][2]) - (this->data[2][2] * this->data[3][0]));
 					double temp2 = this->data[0][1] * (temp21 - temp22 + temp23);
-					
+
 
 
 					//cols 013
@@ -345,7 +347,7 @@ namespace Cherenkov {
 					double temp32 = this->data[1][1] * ((this->data[2][0] * this->data[3][3]) - (this->data[2][3] * this->data[3][0]));
 					double temp33 = this->data[1][3] * ((this->data[2][0] * this->data[3][1]) - (this->data[2][1] * this->data[3][0]));
 					double temp3 = this->data[0][2] * (temp31 - temp32 + temp33);
-					
+
 					//cols 012
 					double temp41 = this->data[1][0] * ((this->data[2][1] * this->data[3][2]) - (this->data[2][2] * this->data[3][1]));
 					double temp42 = this->data[1][1] * ((this->data[2][0] * this->data[3][2]) - (this->data[2][2] * this->data[3][0]));
@@ -370,7 +372,8 @@ namespace Cherenkov {
 			case ADD:
 				if (Cols == mat.Cols && Rows == mat.Rows) {
 					return true;
-				} else {
+				}
+				else {
 					return false;
 				}
 			case SUBTRACT:
@@ -390,13 +393,78 @@ namespace Cherenkov {
 			}
 		}
 
-		std::ostream& operator<<(std::ostream& os, Matrix& mat){
-			
+#undef near
+#undef far
+
+		Matrix Matrix::Orthographic(float left, float right, float bottom, float top, float near, float far) {
+
+			Matrix out = Identity(4, 4);
+
+			out.data[0][0] = 2.0 / (right - left);
+			out.data[1][1] = 2.0 / (top - bottom);
+			out.data[2][2] = -2.0 / (far - near);
+			out.data[0][3] = -(right + left) / (right - left);
+			out.data[1][3] = -(top + bottom) / (top - bottom);
+			out.data[2][3] = -(far + near) / (far - near);
+
+			return out;
+
+		}
+
+
+		Matrix Matrix::Perspective(float fov, float aspectRatio, float near, float far) {
+
+			Matrix out = Matrix(4, 4);
+
+			out.data[0][0] = 1.0 / (atan(fov / 2));
+			out.data[1][1] = 1.0 / (atan(fov / 2));
+			out.data[2][2] = -(near + far) / (near - far);
+			out.data[2][3] = (2 * near * far) / (near - far);
+			out.data[3][2] = 1.0;
+
+			return out;
+		}
+
+		Vector Matrix::getRow(int row) {
+			Vector out = Vector(this->data[0].size());
+
+			for (int i = 0; i < this->data.size(); ++i) {
+				out.data[i] = this->data[row][i];
+			}
+
+			return out;
+		}
+
+
+		void Matrix::setRow(int row, Vector rowVec) {
+			this->data[row] = rowVec.data;
+		}
+
+		Vector Matrix::getColumn(int column) {
+			Vector out = Vector(this->data.size());
+
+			for (int i = 0; i < this->data.size(); ++i) {
+				out.data[i] = this->data[i][column];
+			}
+
+			return out;
+		}
+
+		void Matrix::setColumn(int column, Vector columnVec) {
+
+			for (int i = 0; i < this->data.size(); ++i) {
+				this->data[i][column] = columnVec.data[i];
+			}
+		}
+
+
+		std::ostream& operator<<(std::ostream& os, Matrix& mat) {
+
 			os << mat.Rows << " x " << mat.Cols << " - Matrix: " << std::endl;
 
 			for (int i = 0; i < mat.data.size(); ++i) {
 				for (int j = 0; j < mat.data[i].size(); ++j) {
-					if (i == mat.Rows - 1 && j == mat.Cols -1) {
+					if (i == mat.Rows - 1 && j == mat.Cols - 1) {
 						os << mat.data[i][j] << " ";
 					}
 					else {
@@ -409,17 +477,17 @@ namespace Cherenkov {
 		}
 
 
-		Vector::Vector(int dim){
+		Vector::Vector(int dim) {
 			Dim = dim;
-			this->data = std::vector<double> (dim);
+			this->data = std::vector<double>(dim);
 
 			for (int i = 0; i < this->data.size(); ++i)
 			{
-					data[i] = 0.0f;
+				data[i] = 0.0f;
 			}
 		}
 
-		Vector::Vector(int dim, double *values){
+		Vector::Vector(int dim, double *values) {
 			Dim = dim;
 			data = std::vector<double>(dim);
 
@@ -434,21 +502,21 @@ namespace Cherenkov {
 			this->data = values;
 		}
 
-		Vector::~Vector(){
+		Vector::~Vector() {
 			data.clear();
 		}
 
-		Vector& Vector::Add(double constant){
+		Vector& Vector::Add(double constant) {
 			Vector* out = new Vector(Dim);
 
 			for (int i = 0; i < this->data.size(); ++i) {
 				out->data[i] = this->data[i] + constant;
-				
+
 			}
 			return *out;
 		}
 
-		Vector& Vector::Add(const Vector& vec){
+		Vector& Vector::Add(const Vector& vec) {
 			if (this->Compatible(vec, ADD)) {
 				Vector* out = new Vector(Dim);
 
@@ -466,7 +534,7 @@ namespace Cherenkov {
 
 		Vector operator+(Vector& left, const Vector& right) { return left.Add(right); }
 		Vector operator+(Vector& vec, double constant) { return vec.Add(constant); }
-		Vector operator+(double constant, Vector& vec){ return vec.Add(constant); }
+		Vector operator+(double constant, Vector& vec) { return vec.Add(constant); }
 		Vector& Vector::operator+=(const Vector& vec) { return this->Add(vec); }
 		Vector& Vector::operator+=(double constant) { return this->Add(constant); }
 
@@ -501,7 +569,7 @@ namespace Cherenkov {
 		Vector operator-(Vector& vec, double constant) { return vec.Sub(constant); }
 		Vector operator-(double constant, Vector& vec) { return vec.Sub(constant); }
 		Vector& Vector::operator-=(const Vector& vec) { return this->Sub(vec); }
-		Vector& Vector::operator-=(double constant) {return this->Sub(constant); }
+		Vector& Vector::operator-=(double constant) { return this->Sub(constant); }
 
 
 		Vector& Vector::Multiply(double scalar) {
@@ -514,14 +582,14 @@ namespace Cherenkov {
 			return *out;
 		}
 
-		Vector& Vector::Multiply(const Vector& vec) { 
+		Vector& Vector::Multiply(const Vector& vec) {
 			if (this->Compatible(vec, MULTIPLY)) {
 
 				Vector* out = new Vector(Dim);
 				for (int i = 0; i < this->data.size(); ++i) {
-						double sum = 0.0f;
-							sum += this->data[i] * vec.data[i];
-						out->data[i] = sum;
+					double sum = 0.0f;
+					sum += this->data[i] * vec.data[i];
+					out->data[i] = sum;
 				}
 				return *out;
 			}
@@ -553,12 +621,12 @@ namespace Cherenkov {
 			os << "1 x " << vec.Dim << " - Vector: " << std::endl;
 
 			for (int i = 0; i < vec.data.size(); ++i) {
-					if (i == vec.Dim - 1) {
-						os << vec.data[i] << " ";
-					}
-					else {
-						os << vec.data[i] << ", ";
-					}
+				if (i == vec.Dim - 1) {
+					os << vec.data[i] << " ";
+				}
+				else {
+					os << vec.data[i] << ", ";
+				}
 			}
 			os << std::endl;
 
@@ -572,7 +640,7 @@ namespace Cherenkov {
 					double outX = (this->data[1] * vec.data[2]) - (this->data[2] * vec.data[1]);
 					double outY = (this->data[2] * vec.data[0]) - (this->data[0] * vec.data[2]);
 					double outZ = (this->data[0] * vec.data[1]) - (this->data[1] * vec.data[0]);
-					double values[3] = { outX, outY, outZ};
+					double values[3] = { outX, outY, outZ };
 
 					Vector* out = new Vector(3, values);
 					return *out;
@@ -590,8 +658,8 @@ namespace Cherenkov {
 			double result = 0.0f;
 
 			if (this->Compatible(vec, MULTIPLY)) {
-				
-					result = vec.Magnitude();
+
+				result = vec.Magnitude();
 			}
 			else {
 				CK_WARN("Vectors cannot be multiplied (aren't compatible)!");
@@ -602,14 +670,14 @@ namespace Cherenkov {
 		}
 
 		double Vector::Magnitude() {
-			
+
 			double result = 0.0f;
 			for (int i = 0; i < this->Dim; ++i) {
 				result += this->data[i] * this->data[i];
-				
+
 			}
 			return sqrt(result);
-			
+
 		}
 
 		bool Vector::Compatible(const Vector& vec, int operation) {

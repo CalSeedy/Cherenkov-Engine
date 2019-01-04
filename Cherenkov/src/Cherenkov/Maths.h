@@ -3,73 +3,13 @@
 #include "Core.h"
 #include <type_traits>
 
-
 namespace Cherenkov {
 	namespace Maths {
-	
-		#define ADD 0
-		#define SUBTRACT 1
-		#define MULTIPLY 2
 
-		struct CK_API Matrix {
+#define ADD 0
+#define SUBTRACT 1
+#define MULTIPLY 2
 
-			int Rows, Cols;
-
-			std::vector<std::vector<double>> data;
-				
-			
-			//Data given in column major order
-			Matrix(int rows, int cols);
-
-			Matrix(int rows, int cols, double *values);
-
-			Matrix(int rows, int cols, double diagonal);
-
-			Matrix(std::vector<std::vector<double> >& values);
-
-
-			~Matrix();
-
-			Matrix& Add(double constant);
-			Matrix& Add(const Matrix& mat);
-			friend CK_API Matrix operator+(Matrix& left, const Matrix& right);
-			friend CK_API Matrix operator+(Matrix& mat, double constant);
-			friend CK_API Matrix operator+(double constant, Matrix& mat);
-			Matrix& operator+=(const Matrix& mat);
-			Matrix& operator+=(double constant);
-
-
-			Matrix& Sub(double constant);
-			Matrix& Sub(const Matrix& mat);
-			friend CK_API Matrix operator-(Matrix& left, const Matrix& right);
-			friend CK_API Matrix operator-(Matrix& mat, double constant);
-			friend CK_API Matrix operator-(double constant, Matrix& mat);
-			Matrix& operator-=(const Matrix& mat);
-			Matrix& operator-=(double constant);
-
-
-			Matrix& Multiply(double scalar);
-			Matrix& Multiply(const Matrix& mat);
-			friend CK_API Matrix operator*(Matrix& left, const Matrix& right);
-			friend CK_API Matrix operator*(Matrix& mat, double scalar);
-			friend CK_API Matrix operator*(double scalar, Matrix& mat);
-			Matrix& operator*=(const Matrix& mat);
-			Matrix& operator*=(double scalar);
-
-			Matrix& Divide(double scalar);
-			friend CK_API Matrix operator/(Matrix& mat, double scalar);
-			Matrix& operator/=(double scalar);
-
-			Matrix& Inverse();
-			Matrix& Transpose();
-			double Det();
-			static Matrix Identity(int rows, int cols);
-			bool Compatible(const Matrix& mat, int operation);
-
-
-			friend CK_API std::ostream& operator<<(std::ostream& os, Matrix& mat);
-
-		};
 
 		struct CK_API Vector {
 
@@ -80,7 +20,7 @@ namespace Cherenkov {
 			Vector(int dim);
 
 			Vector(int dim, double *values);
-			
+
 			Vector(std::vector<double> values);
 
 			~Vector();
@@ -120,6 +60,73 @@ namespace Cherenkov {
 			double Magnitude();
 			double Dot(Vector& vec);
 			friend CK_API std::ostream& operator<<(std::ostream& os, Vector& vec);
+
+		};
+
+
+		struct CK_API Matrix {
+
+			int Rows, Cols;
+
+			std::vector<std::vector<double>> data;
+
+
+			//Data given in column major order
+			Matrix(int rows, int cols);
+			Matrix(int rows, int cols, double *values);
+			Matrix(int rows, int cols, double diagonal);
+			Matrix(std::vector<std::vector<double> >& values);
+
+			~Matrix();
+
+			Matrix& Add(double constant);
+			Matrix& Add(const Matrix& mat);
+			friend CK_API Matrix operator+(Matrix& left, const Matrix& right);
+			friend CK_API Matrix operator+(Matrix& mat, double constant);
+			friend CK_API Matrix operator+(double constant, Matrix& mat);
+			Matrix& operator+=(const Matrix& mat);
+			Matrix& operator+=(double constant);
+
+			Matrix& Sub(double constant);
+			Matrix& Sub(const Matrix& mat);
+			friend CK_API Matrix operator-(Matrix& left, const Matrix& right);
+			friend CK_API Matrix operator-(Matrix& mat, double constant);
+			friend CK_API Matrix operator-(double constant, Matrix& mat);
+			Matrix& operator-=(const Matrix& mat);
+			Matrix& operator-=(double constant);
+
+			Matrix& Multiply(double scalar);
+			Matrix& Multiply(const Matrix& mat);
+			friend CK_API Matrix operator*(Matrix& left, const Matrix& right);
+			friend CK_API Matrix operator*(Matrix& mat, double scalar);
+			friend CK_API Matrix operator*(double scalar, Matrix& mat);
+			Matrix& operator*=(const Matrix& mat);
+			Matrix& operator*=(double scalar);
+
+			Matrix& Divide(double scalar);
+			friend CK_API Matrix operator/(Matrix& mat, double scalar);
+			Matrix& operator/=(double scalar);
+
+			Matrix& Inverse();
+			Matrix& Transpose();
+
+			Vector getRow(int row);
+
+			void setRow(int row, Vector rowVec);
+			Vector getColumn(int column);
+			void setColumn(int column, Vector columnVec);
+
+			double Det();
+
+#undef near
+#undef far
+			static Matrix Perspective(float fov, float aspectRatio, float near, float far);
+			static Matrix Orthographic(float left, float right, float bottom, float top, float near, float far);
+			static Matrix Identity(int rows, int cols);
+			bool Compatible(const Matrix& mat, int operation);
+
+
+			friend CK_API std::ostream& operator<<(std::ostream& os, Matrix& mat);
 
 		};
 
