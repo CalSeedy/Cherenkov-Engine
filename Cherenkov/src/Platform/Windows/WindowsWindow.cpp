@@ -6,6 +6,8 @@
 #include "Cherenkov/Events/ApplicationEvent.h"
 #include "Cherenkov/Events/MouseEvent.h"
 
+#include <glad/glad.h>
+
 namespace Cherenkov {
 
 	static bool s_GLFWInit = false;
@@ -44,6 +46,8 @@ namespace Cherenkov {
 
 		m_Window = glfwCreateWindow((int)properties.Width, (int)properties.Height, m_Data.Title.c_str(), nullptr, nullptr);
 		glfwMakeContextCurrent(m_Window);
+		int status = gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
+		CK_CORE_ASSERT(status, "Failed to initialise Glad!");
 		glfwSetWindowUserPointer(m_Window, &m_Data);
 		setVSync(true);
 

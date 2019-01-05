@@ -7,6 +7,7 @@
 #include "Events/Event.h"
 #include "Events/ApplicationEvent.h"
 
+
 namespace Cherenkov {
 
 	class CK_API Application

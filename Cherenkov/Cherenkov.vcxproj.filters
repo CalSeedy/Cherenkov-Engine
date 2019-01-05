@@ -19,9 +19,6 @@
     <ClInclude Include="src\Cherenkov\Application.h">
       <Filter>Cherenkov</Filter>
     </ClInclude>
-    <ClInclude Include="src\Cherenkov\Core.h">
-      <Filter>Cherenkov</Filter>
-    </ClInclude>
     <ClInclude Include="src\Cherenkov\EntryPoint.h">
       <Filter>Cherenkov</Filter>
     </ClInclude>
@@ -46,16 +43,19 @@
     <ClInclude Include="src\Cherenkov\Log.h">
       <Filter>Cherenkov</Filter>
     </ClInclude>
+    <ClInclude Include="src\Cherenkov\Maths.h">
+      <Filter>Cherenkov</Filter>
+    </ClInclude>
     <ClInclude Include="src\Cherenkov\Window.h">
+      <Filter>Cherenkov</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Cherenkov\core.h">
       <Filter>Cherenkov</Filter>
     </ClInclude>
     <ClInclude Include="src\Platform\Windows\WindowsWindow.h">
       <Filter>Platform\Windows</Filter>
     </ClInclude>
     <ClInclude Include="src\ckpch.h" />
-    <ClInclude Include="src\Cherenkov\Maths.h">
-      <Filter>Cherenkov</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Cherenkov\Application.cpp">
@@ -70,12 +70,12 @@
     <ClCompile Include="src\Cherenkov\Log.cpp">
       <Filter>Cherenkov</Filter>
     </ClCompile>
+    <ClCompile Include="src\Cherenkov\Maths.cpp">
+      <Filter>Cherenkov</Filter>
+    </ClCompile>
     <ClCompile Include="src\Platform\Windows\WindowsWindow.cpp">
       <Filter>Platform\Windows</Filter>
     </ClCompile>
     <ClCompile Include="src\ckpch.cpp" />
-    <ClCompile Include="src\Cherenkov\Maths.cpp">
-      <Filter>Cherenkov</Filter>
-    </ClCompile>
   </ItemGroup>
 </Project>

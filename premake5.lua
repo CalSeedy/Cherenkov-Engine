@@ -12,8 +12,11 @@ outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
 
 IncludeDir = {}
 IncludeDir["GLFW"] = "Cherenkov/vendor/GLFW/include"
+IncludeDir["Glad"] = "Cherenkov/vendor/Glad/include"
 
 include "Cherenkov/vendor/GLFW"
+include "Cherenkov/vendor/Glad"
+
 
 project "Sandbox"
 	location "Sandbox"
@@ -86,12 +89,15 @@ project "Cherenkov"
 	{
 		"%{prj.name}/vendor/spdlog/include",
 		"%{prj.name}/src",
-		"%{IncludeDir.GLFW}"
+		"%{IncludeDir.GLFW}",
+		"%{IncludeDir.Glad}"
+
 	}
 
 	links
 	{
 		"GLFW",
+		"Glad",
 		"opengl32.lib"
 	}
 
@@ -104,7 +110,8 @@ project "Cherenkov"
 		{
 			"CK_PLATFORM_WINDOWS",
 			"CK_BUILD_DLL",
-			"_WINDLL"
+			"_WINDLL",
+			"GLFW_INCLUDE_NONE"
 		}
 
 		postbuildcommands
