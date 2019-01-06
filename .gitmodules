@@ -7,3 +7,6 @@
 [submodule "Cherenkov/vendor/GLFW"]
 	path = Cherenkov/vendor/GLFW
 	url = https://www.github.com/TheCherno/glfw
+[submodule "Cherenkov/vendor/imgui"]
+	path = Cherenkov/vendor/imgui
+	url = https://www.github.com/ocornut/imgui
