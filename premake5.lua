@@ -13,9 +13,12 @@ outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
 IncludeDir = {}
 IncludeDir["GLFW"] = "Cherenkov/vendor/GLFW/include"
 IncludeDir["Glad"] = "Cherenkov/vendor/Glad/include"
+IncludeDir["ImGui"] = "Cherenkov/vendor/imgui"
 
 include "Cherenkov/vendor/GLFW"
 include "Cherenkov/vendor/Glad"
+include "Cherenkov/vendor/imgui"
+
 
 
 project "Sandbox"
@@ -90,7 +93,8 @@ project "Cherenkov"
 		"%{prj.name}/vendor/spdlog/include",
 		"%{prj.name}/src",
 		"%{IncludeDir.GLFW}",
-		"%{IncludeDir.Glad}"
+		"%{IncludeDir.Glad}",
+		"%{IncludeDir.ImGui}"
 
 	}
 
@@ -98,6 +102,7 @@ project "Cherenkov"
 	{
 		"GLFW",
 		"Glad",
+		"ImGui",
 		"opengl32.lib"
 	}
 

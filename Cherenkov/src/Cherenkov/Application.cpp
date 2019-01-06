@@ -8,8 +8,13 @@
 namespace Cherenkov {
 
 #define BIND_EVENT_FUNC(x) std::bind(&Application::x, this, std::placeholders::_1)
+	
+	Application* Application::s_Instance = nullptr;
+
 	Application::Application()
 	{
+		CK_CORE_ASSERT(!s_Instance, "Application already running!");
+		s_Instance = this;
 		m_Window = std::unique_ptr<Window>(Window::Create());
 		m_Window->setEventCallBack(BIND_EVENT_FUNC(onEvent));
 	}
@@ -22,11 +27,14 @@ namespace Cherenkov {
 	void Application::PushLayer(Layer* layer) {
 	
 		m_LayerStack.PushLayer(layer);
+		layer->onAttach();
 	}
 
 	void Application::PushOverlay(Layer* overlay) {
 
 		m_LayerStack.PushLayer(overlay);
+		overlay->onAttach();
+
 	}
 
 	void Application::onEvent(Event &event) {

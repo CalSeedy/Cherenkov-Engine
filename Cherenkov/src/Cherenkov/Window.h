@@ -5,7 +5,7 @@
 
 namespace Cherenkov {
 
-	struct WindowProperties
+	struct CK_API WindowProperties
 	{
 		std::string Title;
 		unsigned int Width;
