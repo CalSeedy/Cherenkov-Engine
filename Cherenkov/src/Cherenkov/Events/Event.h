@@ -8,7 +8,7 @@ namespace Cherenkov {
 		None = 0,
 		WindowClosed, WindowResized, WindowFocused, WindowDefocused, WindowMoved,
 		AppTick, AppUpdate, AppRender,
-		KeyReleased, KeyPressed,
+		KeyReleased, KeyPressed, KeyTyped,
 		MouseButtonPressed, MouseButtonReleased, MouseMoved, MouseScrolled
 	};
 

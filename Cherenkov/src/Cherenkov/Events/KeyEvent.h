@@ -48,4 +48,19 @@ namespace Cherenkov {
 
 		EVENT_CLASS_TYPE(KeyReleased)
 	};
+
+	class CK_API KeyTypedEvent : public KeyEvent {
+
+	public:
+		KeyTypedEvent(int code)
+			: KeyEvent(code){}
+
+		std::string toStr() const override {
+			std::stringstream stream;
+			stream << "KeyTypedEvent: " << m_KeyCode;
+			return stream.str();
+		}
+
+		EVENT_CLASS_TYPE(KeyTyped)
+	};
 }
