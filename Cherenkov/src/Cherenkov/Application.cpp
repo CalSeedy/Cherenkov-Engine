@@ -1,6 +1,8 @@
 #include "ckpch.h"
 #include "Application.h"
 #include "Log.h"
+#include "Input.h"
+
 
 #include <glad/glad.h>
 
@@ -62,6 +64,9 @@ namespace Cherenkov {
 			for (Layer* layer : m_LayerStack) {
 				layer->onUpdate();
 			}
+
+			auto[x, y] = Input::getMousePos();
+			CK_CORE_TRACE("X: {0}, Y: {1}", x, y);
 
 			m_Window->onUpdate();
 		}

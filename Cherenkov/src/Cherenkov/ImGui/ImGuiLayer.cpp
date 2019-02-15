@@ -21,6 +21,7 @@ namespace Cherenkov {
 	{
 		ImGui::CreateContext();
 		ImGui::StyleColorsDark();
+		
 
 		ImGuiIO& io = ImGui::GetIO();
 		io.BackendFlags |= ImGuiBackendFlags_HasMouseCursors;
@@ -133,6 +134,7 @@ namespace Cherenkov {
 	bool ImGuiLayer::onKeyReleasedEvent(KeyReleasedEvent& event){
 		ImGuiIO& io = ImGui::GetIO();
 		io.KeysDown[event.getKeyCode()] = false;
+		
 		return false;
 	}
 	bool ImGuiLayer::onKeyPressedEvent(KeyPressedEvent& event){

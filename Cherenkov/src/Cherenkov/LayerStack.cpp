@@ -34,7 +34,10 @@ namespace Cherenkov {
 
 	void LayerStack::PushOverlay(Layer* overlay) {
 
+		const size_t insertIndex = m_LayerInsert - begin();
+
 		m_Layers.emplace_back(overlay);
+		m_LayerInsert = begin() + insertIndex;
 
 	}
 
