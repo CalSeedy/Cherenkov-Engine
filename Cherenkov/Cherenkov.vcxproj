@@ -161,10 +161,12 @@
     <ClInclude Include="src\Cherenkov\Events\MouseEvent.h" />
     <ClInclude Include="src\Cherenkov\ImGui\ImGuiLayer.h" />
     <ClInclude Include="src\Cherenkov\Input.h" />
+    <ClInclude Include="src\Cherenkov\KeyCodes.h" />
     <ClInclude Include="src\Cherenkov\Layer.h" />
     <ClInclude Include="src\Cherenkov\LayerStack.h" />
     <ClInclude Include="src\Cherenkov\Log.h" />
     <ClInclude Include="src\Cherenkov\Maths.h" />
+    <ClInclude Include="src\Cherenkov\MouseButtonCodes.h" />
     <ClInclude Include="src\Cherenkov\Window.h" />
     <ClInclude Include="src\Cherenkov\core.h" />
     <ClInclude Include="src\Platform\OpenGL\ImGuiOpenGLRenderer.h" />

@@ -8,11 +8,15 @@ public:
 	void onUpdate() override {
 
 		//CK_INFO("Example Layer Updated!");
+
+		if (Cherenkov::Input::isKeyPressed(CK_KEY_TAB)) {
+			CK_TRACE("Tab pressed!");
+		}
 	}
 
 	void onEvent(Cherenkov::Event &event) override {
 
-		CK_TRACE("{0}", event);
+		//CK_TRACE("{0}", event);
 	}
 };
 

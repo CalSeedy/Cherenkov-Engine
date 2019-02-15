@@ -74,6 +74,8 @@
       <Filter>Platform\Windows</Filter>
     </ClInclude>
     <ClInclude Include="src\ckpch.h" />
+    <ClInclude Include="src\Cherenkov\KeyCodes.h" />
+    <ClInclude Include="src\Cherenkov\MouseButtonCodes.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Cherenkov\Application.cpp">

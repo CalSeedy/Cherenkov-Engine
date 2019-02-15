@@ -12,7 +12,7 @@ namespace Cherenkov {
 		auto window = static_cast<GLFWwindow*>(Application::Get().GetWindow().getNativeWindow());
 		auto state = glfwGetKey(window, keyCode);
 
-		return state == GLFW_PRESS || state == GLFW_RELEASE;
+		return state == GLFW_PRESS || state == GLFW_REPEAT;
 	}
 	bool WindowsInput::isMouseButtonPressedImp(int button)
 	{
