@@ -6,7 +6,7 @@
 #include "Cherenkov/Events/ApplicationEvent.h"
 #include "Cherenkov/Events/MouseEvent.h"
 
-#include <glad/glad.h>
+#include <glad.h>
 
 namespace Cherenkov {
 

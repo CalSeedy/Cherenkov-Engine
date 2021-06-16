@@ -20,16 +20,16 @@ include "Cherenkov/vendor/Glad"
 include "Cherenkov/vendor/imgui"
 
 
-
 project "Sandbox"
 	location "Sandbox"
 	kind "ConsoleApp"
 	language "C++"
+	staticruntime "off"
 
 	targetdir ("bin/" .. outputdir .. "/%{prj.name}")
 	objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
 
-	files 
+	files
 	{
 		"%{prj.name}/src/**.h",
 		"%{prj.name}/src/**.cpp"
@@ -41,7 +41,7 @@ project "Sandbox"
 		"Cherenkov/src"
 	}
 
-	links 
+	links
 	{
 		"Cherenkov"
 	}
@@ -51,7 +51,7 @@ project "Sandbox"
 		staticruntime "On"
 		systemversion "latest"
 
-		defines 
+		defines
 		{
 			"CK_PLATFORM_WINDOWS"
 		}
@@ -71,10 +71,12 @@ project "Sandbox"
 		buildoptions "/MD"
 		optimize "On"
 
+		
 project "Cherenkov"
 	location "Cherenkov"
 	kind "SharedLib"
 	language "C++"
+	staticruntime "off"
 
 	targetdir ("bin/" .. outputdir .. "/%{prj.name}")
 	objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
@@ -82,7 +84,7 @@ project "Cherenkov"
 	pchheader "ckpch.h"
 	pchsource "Cherenkov/src/ckpch.cpp"
 
-	files 
+	files
 	{
 		"%{prj.name}/src/**.h",
 		"%{prj.name}/src/**.cpp"
@@ -90,12 +92,11 @@ project "Cherenkov"
 
 	includedirs
 	{
-		"%{prj.name}/vendor/spdlog/include",
 		"%{prj.name}/src",
+		"%{prj.name}/vendor/spdlog/include",
 		"%{IncludeDir.GLFW}",
 		"%{IncludeDir.Glad}",
 		"%{IncludeDir.ImGui}"
-
 	}
 
 	links
@@ -111,7 +112,7 @@ project "Cherenkov"
 		staticruntime "On"
 		systemversion "latest"
 
-		defines 
+		defines
 		{
 			"CK_PLATFORM_WINDOWS",
 			"CK_BUILD_DLL",
@@ -121,7 +122,7 @@ project "Cherenkov"
 
 		postbuildcommands
 		{
-			("{COPY} %{cfg.buildtarget.relpath} ../bin/" .. outputdir .. "/Sandbox")
+			("{COPY} %{cfg.buildtarget.relpath} \"../bin/" .. outputdir .. "/Sandbox/\"")
 		}
 
 	filter "configurations:Debug"
@@ -138,4 +139,3 @@ project "Cherenkov"
 		defines "CK_DISTRIBUTION"
 		buildoptions "/MD"
 		optimize "On"
-

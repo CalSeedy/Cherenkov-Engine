@@ -6,7 +6,7 @@
 #include "Platform/OpenGL/ImGuiOpenGLRenderer.h"
 
 #include <GLFW/glfw3.h>
-#include <glad/glad.h>
+#include <glad.h>
 namespace Cherenkov {
 	ImGuiLayer::ImGuiLayer() : Layer("ImGuiLayer")
 	{

@@ -46,6 +46,9 @@
     <ClInclude Include="src\Cherenkov\Input.h">
       <Filter>Cherenkov</Filter>
     </ClInclude>
+    <ClInclude Include="src\Cherenkov\KeyCodes.h">
+      <Filter>Cherenkov</Filter>
+    </ClInclude>
     <ClInclude Include="src\Cherenkov\Layer.h">
       <Filter>Cherenkov</Filter>
     </ClInclude>
@@ -56,6 +59,9 @@
       <Filter>Cherenkov</Filter>
     </ClInclude>
     <ClInclude Include="src\Cherenkov\Maths.h">
+      <Filter>Cherenkov</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Cherenkov\MouseButtonCodes.h">
       <Filter>Cherenkov</Filter>
     </ClInclude>
     <ClInclude Include="src\Cherenkov\Window.h">
@@ -74,8 +80,6 @@
       <Filter>Platform\Windows</Filter>
     </ClInclude>
     <ClInclude Include="src\ckpch.h" />
-    <ClInclude Include="src\Cherenkov\KeyCodes.h" />
-    <ClInclude Include="src\Cherenkov\MouseButtonCodes.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Cherenkov\Application.cpp">

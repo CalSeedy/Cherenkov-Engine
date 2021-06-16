@@ -1,12 +1,9 @@
 [submodule "Cherenkov/vendor/spdlog"]
 	path = Cherenkov/vendor/spdlog
 	url = https://github.com/gabime/spdlog
-[submodule "glfw"]
-	path = glfw
-	url = https://github.com/TheCherno/glfw.git
-[submodule "Cherenkov/vendor/GLFW"]
-	path = Cherenkov/vendor/GLFW
-	url = https://www.github.com/TheCherno/glfw
 [submodule "Cherenkov/vendor/imgui"]
 	path = Cherenkov/vendor/imgui
 	url = https://www.github.com/ocornut/imgui
+[submodule "Cherenkov\\vendor\\GLFW"]
+	path = Cherenkov\\vendor\\GLFW
+	url = https://github.com/glfw/glfw

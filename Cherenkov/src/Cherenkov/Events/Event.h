@@ -22,9 +22,9 @@ namespace Cherenkov {
 		EventCategoryMouseButton = BIT(4)
 	};
 
-#define EVENT_CLASS_TYPE(type) static EventType getStaticType() { return EventType::##type;}\
-	virtual EventType getEventType() const override { return getStaticType(); }\
-	virtual const char* getEventName() const override { return #type; }
+#define EVENT_CLASS_TYPE(type)	static EventType getStaticType() { return EventType::##type;}\
+								virtual EventType getEventType() const override { return getStaticType(); }\
+								virtual const char* getEventName() const override { return #type; }
 
 
 #define EVENT_CLASS_CATEGORY(category) virtual int getCategoryFlags() const override { return category; }
@@ -43,7 +43,9 @@ namespace Cherenkov {
 			return getCategoryFlags() & category;
 		}
 
-		bool Handled = false;
+		inline bool isHandled() { return m_handled; }
+	protected:
+		bool m_handled = false;
 	};
 
 	class EventDispatcher {
@@ -61,7 +63,7 @@ namespace Cherenkov {
 		
 			if (m_Event.getEventType() == T::getStaticType()) {
 			
-				m_Event.Handled = func(*(T*)&m_Event);
+				m_Event.m_handled = func(*(T*)&m_Event);
 				return true;
 			}
 			return false;

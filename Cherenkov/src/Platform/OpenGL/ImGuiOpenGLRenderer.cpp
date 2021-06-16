@@ -67,7 +67,7 @@
 #include "TargetConditionals.h"
 #endif
 
-#include <glad/glad.h>
+#include <glad.h>
 
 
 // OpenGL Data

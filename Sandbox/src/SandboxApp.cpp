@@ -16,17 +16,16 @@ public:
 
 	void onEvent(Cherenkov::Event &event) override {
 
-		//CK_TRACE("{0}", event);
+		CK_TRACE("{0}", event);
 	}
 };
+
 
 class Sandbox : public Cherenkov::Application {
 
 public:
 	Sandbox()
 	{
-
-		//double data1[16] = {1, 1, 1, -1, 1, 1, -1, 1, 1, -1, 1, 1, -1, 1, 1, 1};
 
 		Cherenkov::Maths::Matrix mat1 = Cherenkov::Maths::Matrix::Perspective(110, 16 / 9, 2, 100);
 
@@ -65,8 +64,6 @@ public:
 	{
 	}
 };
-
-
 
 
 Cherenkov::Application* Cherenkov::createApplication() {

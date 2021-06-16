@@ -3,7 +3,7 @@
 #include "Log.h"
 #include "Input.h"
 
-#include <glad/glad.h>
+#include <glad.h>
 
 
 namespace Cherenkov {
@@ -47,7 +47,7 @@ namespace Cherenkov {
 		for (auto it = m_LayerStack.end(); it != m_LayerStack.begin();) {
 		
 			(*--it)->onEvent(event);
-			if (event.Handled)
+			if (event.isHandled())
 				break;
 		}
 
