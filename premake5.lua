@@ -14,6 +14,7 @@ IncludeDir = {}
 IncludeDir["GLFW"] = "Cherenkov/vendor/GLFW/include"
 IncludeDir["Glad"] = "Cherenkov/vendor/Glad/include"
 IncludeDir["ImGui"] = "Cherenkov/vendor/imgui"
+IncludeDir["glm"] = "Cherenkov/vendor/glm"
 
 include "Cherenkov/vendor/GLFW"
 include "Cherenkov/vendor/Glad"
@@ -38,7 +39,8 @@ project "Sandbox"
 	includedirs
 	{
 		"Cherenkov/vendor/spdlog/include",
-		"Cherenkov/src"
+		"Cherenkov/src",
+		"%{IncludeDir.glm}"
 	}
 
 	links
@@ -87,7 +89,9 @@ project "Cherenkov"
 	files
 	{
 		"%{prj.name}/src/**.h",
-		"%{prj.name}/src/**.cpp"
+		"%{prj.name}/src/**.cpp",
+		"%{prj.name}/vendor/glm/glm/**.hpp",
+		"%{prj.name}/vendor/glm/glm/**.inl"
 	}
 
 	includedirs
@@ -96,7 +100,8 @@ project "Cherenkov"
 		"%{prj.name}/vendor/spdlog/include",
 		"%{IncludeDir.GLFW}",
 		"%{IncludeDir.Glad}",
-		"%{IncludeDir.ImGui}"
+		"%{IncludeDir.ImGui}",
+		"%{IncludeDir.glm}"
 	}
 
 	links
