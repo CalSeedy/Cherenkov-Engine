@@ -4,9 +4,6 @@
 [submodule "Cherenkov/vendor/imgui"]
 	path = Cherenkov/vendor/imgui
 	url = https://www.github.com/ocornut/imgui
-[submodule "Cherenkov\\vendor\\GLFW"]
-	path = Cherenkov\\vendor\\GLFW
-	url = https://github.com/glfw/glfw
 [submodule "Cherenkov\\vendor\\glm"]
 	path = Cherenkov\\vendor\\glm
 	url = https://github.com/g-truc/glm
