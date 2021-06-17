@@ -3,7 +3,7 @@
 #include "Log.h"
 #include "Input.h"
 
-#include <glad.h>
+#include <glad/glad.h>
 
 
 namespace Cherenkov {
@@ -18,6 +18,9 @@ namespace Cherenkov {
 		s_Instance = this;
 		m_Window = std::unique_ptr<Window>(Window::Create());
 		m_Window->setEventCallBack(BIND_EVENT_FUNC(onEvent));
+
+		m_ImGuiLayer = new ImGuiLayer();
+		PushOverlay(m_ImGuiLayer);
 	}
 
 
@@ -63,11 +66,12 @@ namespace Cherenkov {
 			for (Layer* layer : m_LayerStack) {
 				layer->onUpdate();
 			}
-
-			//auto[x, y] = Input::getMousePos();
-			//CK_CORE_TRACE("X: {0}, Y: {1}", x, y);
-
-
+			
+			m_ImGuiLayer->start();
+			for (Layer* layer : m_LayerStack) {
+				layer->onImGuiDraw();
+			}
+			m_ImGuiLayer->stop();
 
 			m_Window->onUpdate();
 		}

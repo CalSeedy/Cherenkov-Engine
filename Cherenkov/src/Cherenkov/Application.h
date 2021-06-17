@@ -7,6 +7,7 @@
 #include "Events/Event.h"
 #include "Events/ApplicationEvent.h"
 
+#include "Cherenkov/ImGui/ImGuiLayer.h"
 
 namespace Cherenkov {
 
@@ -27,6 +28,7 @@ namespace Cherenkov {
 	private:
 		bool onWindowClose(WindowCloseEvent &event);
 		std::unique_ptr<Window> m_Window;
+		ImGuiLayer* m_ImGuiLayer;
 		bool m_Running = true;
 		LayerStack m_LayerStack;
 		static Application* s_Instance;

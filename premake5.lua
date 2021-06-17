@@ -1,5 +1,6 @@
 workspace "Cherenkov"
 	architecture "x64"
+	startproject "Sandbox"
 
 	configurations
 	{
@@ -40,7 +41,8 @@ project "Sandbox"
 	{
 		"Cherenkov/vendor/spdlog/include",
 		"Cherenkov/src",
-		"%{IncludeDir.glm}"
+		"%{IncludeDir.glm}",
+		"Cherenkov/vendor"
 	}
 
 	links
@@ -50,7 +52,6 @@ project "Sandbox"
 
 	filter "system:windows"
 		cppdialect "C++17"
-		staticruntime "On"
 		systemversion "latest"
 
 		defines
@@ -114,14 +115,12 @@ project "Cherenkov"
 
 	filter "system:windows"
 		cppdialect "C++17"
-		staticruntime "On"
 		systemversion "latest"
 
 		defines
 		{
 			"CK_PLATFORM_WINDOWS",
 			"CK_BUILD_DLL",
-			"_WINDLL",
 			"GLFW_INCLUDE_NONE"
 		}
 
