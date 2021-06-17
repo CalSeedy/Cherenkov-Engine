@@ -6,9 +6,6 @@
 #include "Cherenkov/Events/KeyEvent.h"
 #include "Cherenkov/Events/MouseEvent.h"
 
-#include "backends/imgui_impl_opengl3.h"
-#include "backends/imgui_impl_glfw.h"
-
 namespace Cherenkov {
 
 	class CK_API ImGuiLayer : public Layer {

@@ -1,5 +1,4 @@
 #include <Cherenkov.h>
-
 #include "imgui/imgui.h"
 
 class ExampleLayer : public Cherenkov::Layer {
@@ -21,7 +20,7 @@ public:
 		CK_TRACE("{0}", event);
 	}
 
-	virtual void onImGuiDraw() override
+	void onImGuiDraw() override
 	{
 		ImGui::Begin("Test");
 		ImGui::Text("Hello World");
@@ -35,11 +34,7 @@ class Sandbox : public Cherenkov::Application {
 public:
 	Sandbox()
 	{
-
-
 		PushLayer(new ExampleLayer());
-		
-
 	}
 
 	~Sandbox()

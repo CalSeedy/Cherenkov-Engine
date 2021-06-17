@@ -41,8 +41,8 @@ project "Sandbox"
 	{
 		"Cherenkov/vendor/spdlog/include",
 		"Cherenkov/src",
-		"%{IncludeDir.glm}",
-		"Cherenkov/vendor"
+		"Cherenkov/vendor",
+		"%{IncludeDir.glm}"
 	}
 
 	links
