@@ -3,11 +3,15 @@
 #include "ckpch.h"
 
 #ifdef CK_PLATFORM_WINDOWS
+#if CK_IS_DLL
 	#ifdef CK_BUILD_DLL
 		#define CK_API __declspec(dllexport)
 	#else
 		#define CK_API __declspec(dllimport)
 	#endif
+#else
+	#define CK_API 
+#endif
 #else
 	#error Engine only supports Windows!
 #endif

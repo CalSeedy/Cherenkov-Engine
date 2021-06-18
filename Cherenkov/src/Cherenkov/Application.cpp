@@ -60,7 +60,7 @@ namespace Cherenkov {
 
 		while (m_Running){
 
-			glClearColor(1, 0, 1, 1);
+			glClearColor(0.27f, 0.27f, 0.27f, 1.0);
 			glClear(GL_COLOR_BUFFER_BIT);
 
 			for (Layer* layer : m_LayerStack) {

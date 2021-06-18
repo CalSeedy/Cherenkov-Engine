@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Cherenkov/Window.h"
+#include "Cherenkov/Renderer/RendererContext.h"
 
 #include <glfw/glfw3.h>
 
@@ -28,6 +29,7 @@ namespace Cherenkov {
 		virtual void shutDown();
 		
 		GLFWwindow* m_Window;
+		RendererContext* m_Ctx;
 
 		struct WindowData
 		{

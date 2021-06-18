@@ -26,6 +26,7 @@ project "Sandbox"
 	location "Sandbox"
 	kind "ConsoleApp"
 	language "C++"
+	cppdialect "C++17"
 	staticruntime "off"
 
 	targetdir ("bin/" .. outputdir .. "/%{prj.name}")
@@ -49,37 +50,37 @@ project "Sandbox"
 	{
 		"Cherenkov"
 	}
+	
+	defines
+	{
+		"CK_PLATFORM_WINDOWS"
+	}
 
 	filter "system:windows"
-		cppdialect "C++17"
 		systemversion "latest"
-
-		defines
-		{
-			"CK_PLATFORM_WINDOWS"
-		}
 
 	filter "configurations:Debug"
 		defines "CK_DEBUG"
 		buildoptions "/MDd"
-		symbols "On"
+		symbols "on"
 
 	filter "configurations:Release"
 		defines "CK_RELEASE"
 		buildoptions "/MD"
-		optimize "On"
+		optimize "on"
 
 	filter "configurations:Distribution"
 		defines "CK_DISTRIBUTION"
 		buildoptions "/MD"
-		optimize "On"
+		optimize "on"
 
-		
+
 project "Cherenkov"
 	location "Cherenkov"
-	kind "SharedLib"
+	kind "StaticLib"
 	language "C++"
-	staticruntime "off"
+	cppdialect "C++17"
+	staticruntime "on"
 
 	targetdir ("bin/" .. outputdir .. "/%{prj.name}")
 	objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
@@ -114,32 +115,27 @@ project "Cherenkov"
 	}
 
 	filter "system:windows"
-		cppdialect "C++17"
 		systemversion "latest"
 
 		defines
 		{
 			"CK_PLATFORM_WINDOWS",
 			"CK_BUILD_DLL",
-			"GLFW_INCLUDE_NONE"
-		}
-
-		postbuildcommands
-		{
-			("{COPY} %{cfg.buildtarget.relpath} \"../bin/" .. outputdir .. "/Sandbox/\"")
+			"GLFW_INCLUDE_NONE",
+			"_CRT_SECURE_NO_WARNINGS"
 		}
 
 	filter "configurations:Debug"
 		defines "CK_DEBUG"
 		buildoptions "/MDd"
-		symbols "On"
+		symbols "on"
 
 	filter "configurations:Release"
 		defines "CK_RELEASE"
 		buildoptions "/MD"
-		optimize "On"
+		optimize "on"
 
 	filter "configurations:Distribution"
 		defines "CK_DISTRIBUTION"
 		buildoptions "/MD"
-		optimize "On"
+		optimize "on"

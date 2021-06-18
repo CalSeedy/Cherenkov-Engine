@@ -6,7 +6,9 @@
 #include "Cherenkov/Events/ApplicationEvent.h"
 #include "Cherenkov/Events/MouseEvent.h"
 
-#include <glad/glad.h>
+#include "Platform/OpenGL/OpenGLContext.h"
+
+
 
 namespace Cherenkov {
 
@@ -37,7 +39,6 @@ namespace Cherenkov {
 		CK_CORE_INFO("Creating a {0} x {1} window: \'{2}\'", properties.Width, properties.Height, properties.Title);
 
 		if (!s_GLFWInit) {
-		
 			int success = glfwInit();
 			CK_CORE_ASSERT(success, "Could not successfully initialise GLFW!");
 			glfwSetErrorCallback(GLFWErrorCallback);
@@ -45,9 +46,10 @@ namespace Cherenkov {
 		}
 
 		m_Window = glfwCreateWindow((int)properties.Width, (int)properties.Height, m_Data.Title.c_str(), nullptr, nullptr);
-		glfwMakeContextCurrent(m_Window);
-		int status = gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
-		CK_CORE_ASSERT(status, "Failed to initialise Glad!");
+		m_Ctx = new OpenGLContext(m_Window);
+
+		m_Ctx->init();
+		
 		glfwSetWindowUserPointer(m_Window, &m_Data);
 		setVSync(true);
 
@@ -143,7 +145,7 @@ namespace Cherenkov {
 	void WindowsWindow::onUpdate() {
 	
 		glfwPollEvents();
-		glfwSwapBuffers(m_Window);
+		m_Ctx->swapBuffers();
 	}
 
 	void WindowsWindow::setVSync(bool enabled) {
