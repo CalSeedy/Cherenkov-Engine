@@ -8,8 +8,10 @@
 #include "Events/ApplicationEvent.h"
 
 #include "Cherenkov/ImGui/ImGuiLayer.h"
-#include "Cherenkov/Renderer/Shader.h"
 #include "Cherenkov/Renderer/Buffer.h"
+#include "Cherenkov/Renderer/Shader.h"
+#include "Cherenkov/Renderer/VertexArray.h"
+
 namespace Cherenkov {
 
 	class CK_API Application
@@ -17,13 +19,11 @@ namespace Cherenkov {
 		static Application*				s_Instance;
 
 		ImGuiLayer*						m_ImGuiLayer;
-		std::unique_ptr<IndexBuffer>	m_IndexBuffer;
 		LayerStack						m_LayerStack;
 		bool							m_Running = true;
-		std::unique_ptr<Shader>			m_Shader;
-		unsigned int					m_VertexArray;
-		std::unique_ptr<VertexBuffer>	m_VertexBuffer;
-		std::unique_ptr<Window>			m_Window;
+		std::shared_ptr<Shader>			m_Shader;
+		std::shared_ptr<VertexArray>	m_VertexArray;
+		std::shared_ptr<Window>			m_Window;
 
 		bool onWindowClose(WindowCloseEvent& event);
 	public:
