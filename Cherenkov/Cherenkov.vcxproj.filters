@@ -13,8 +13,14 @@
     <Filter Include="src\Cherenkov\ImGui">
       <UniqueIdentifier>{6BAF4107-D710-1F15-607E-65C7CCDE55D4}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\Cherenkov\Renderer">
+      <UniqueIdentifier>{47E215EC-33DC-3E3E-1C49-D54E08E2A4AA}</UniqueIdentifier>
+    </Filter>
     <Filter Include="src\Platform">
       <UniqueIdentifier>{21CA02E5-0D2D-9289-B6B2-CA3FA2F45D0C}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\Platform\OpenGL">
+      <UniqueIdentifier>{35A49437-A105-7245-2A73-B8F796D3A804}</UniqueIdentifier>
     </Filter>
     <Filter Include="src\Platform\Windows">
       <UniqueIdentifier>{5B054582-4794-CE4B-F0B2-E246DC20DFF1}</UniqueIdentifier>
@@ -46,6 +52,9 @@
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="src\Cherenkov\Application.h">
+      <Filter>src\Cherenkov</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Cherenkov\Core.h">
       <Filter>src\Cherenkov</Filter>
     </ClInclude>
     <ClInclude Include="src\Cherenkov\EntryPoint.h">
@@ -84,11 +93,29 @@
     <ClInclude Include="src\Cherenkov\MouseButtonCodes.h">
       <Filter>src\Cherenkov</Filter>
     </ClInclude>
+    <ClInclude Include="src\Cherenkov\Renderer\Buffer.h">
+      <Filter>src\Cherenkov\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Cherenkov\Renderer\Renderer.h">
+      <Filter>src\Cherenkov\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Cherenkov\Renderer\RendererContext.h">
+      <Filter>src\Cherenkov\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Cherenkov\Renderer\Shader.h">
+      <Filter>src\Cherenkov\Renderer</Filter>
+    </ClInclude>
     <ClInclude Include="src\Cherenkov\Window.h">
       <Filter>src\Cherenkov</Filter>
     </ClInclude>
-    <ClInclude Include="src\Cherenkov\core.h">
-      <Filter>src\Cherenkov</Filter>
+    <ClInclude Include="src\Platform\OpenGL\OpenGLBuffer.h">
+      <Filter>src\Platform\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Platform\OpenGL\OpenGLContext.h">
+      <Filter>src\Platform\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Platform\OpenGL\OpenGLShader.h">
+      <Filter>src\Platform\OpenGL</Filter>
     </ClInclude>
     <ClInclude Include="src\Platform\Windows\WindowsInput.h">
       <Filter>src\Platform\Windows</Filter>
@@ -1344,8 +1371,6 @@
     <ClInclude Include="vendor\glm\glm\vector_relational.hpp">
       <Filter>vendor\glm\glm</Filter>
     </ClInclude>
-    <ClInclude Include="src\Cherenkov\Renderer\RendererContext.h" />
-    <ClInclude Include="src\Platform\OpenGL\OpenGLContext.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Cherenkov\Application.cpp">
@@ -1366,6 +1391,21 @@
     <ClCompile Include="src\Cherenkov\Log.cpp">
       <Filter>src\Cherenkov</Filter>
     </ClCompile>
+    <ClCompile Include="src\Cherenkov\Renderer\Buffer.cpp">
+      <Filter>src\Cherenkov\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Cherenkov\Renderer\Renderer.cpp">
+      <Filter>src\Cherenkov\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Platform\OpenGL\OpenGLBuffer.cpp">
+      <Filter>src\Platform\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Platform\OpenGL\OpenGLContext.cpp">
+      <Filter>src\Platform\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Platform\OpenGL\OpenGLShader.cpp">
+      <Filter>src\Platform\OpenGL</Filter>
+    </ClCompile>
     <ClCompile Include="src\Platform\Windows\WindowsInput.cpp">
       <Filter>src\Platform\Windows</Filter>
     </ClCompile>
@@ -1375,6 +1415,5 @@
     <ClCompile Include="src\ckpch.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="src\Platform\OpenGL\OpenGLContext.cpp" />
   </ItemGroup>
 </Project>

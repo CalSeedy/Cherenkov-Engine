@@ -3,6 +3,9 @@
 #include "Log.h"
 #include "Input.h"
 
+#include "Platform/OpenGL/OpenGLShader.h"
+#include "Platform/OpenGL/OpenGLBuffer.h"
+
 #include <glad/glad.h>
 
 
@@ -25,23 +28,25 @@ namespace Cherenkov {
 		glGenVertexArrays(1, &m_VertexArray);
 		glBindVertexArray(m_VertexArray);
 
-		glGenBuffers(1, &m_VertexBuffer);
-		glBindBuffer(GL_ARRAY_BUFFER, m_VertexBuffer);
-
 		float verts[3 * 3] = {
 			-0.7f, -0.7f, 0.0f,
 			0.7f, -0.7f, 0.0f,
 			0.0f, 0.7f, 0.0f
 		};
-		glBufferData(GL_ARRAY_BUFFER, sizeof(verts), verts, GL_STATIC_DRAW);
+
+		m_VertexBuffer.reset(VertexBuffer::init(verts, sizeof(verts)/ sizeof(float_t)));
+		//glBufferData(GL_ARRAY_BUFFER, sizeof(verts), verts, GL_STATIC_DRAW);
 
 		glEnableVertexAttribArray(0);
 		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), nullptr);
 
-		glGenBuffers(1, &m_IndexBuffer);
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_IndexBuffer);
-		unsigned int idxs[3] = { 0, 1, 2 };
-		glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(idxs), idxs, GL_STATIC_DRAW);
+		uint32_t idxs[3] = { 0, 1, 2 };
+		m_IndexBuffer.reset(IndexBuffer::init(idxs, sizeof(idxs)/sizeof(uint32_t)));
+
+		const char* vertIn("../Cherenkov/src/Cherenkov/Shaders/shader.vert");
+		const char* fragIn("../Cherenkov/src/Cherenkov/Shaders/shader.frag");
+
+		m_Shader.reset(new OpenGLShader(vertIn, fragIn));
 	}
 
 
@@ -84,8 +89,9 @@ namespace Cherenkov {
 			glClearColor(0.27f, 0.27f, 0.27f, 1.0);
 			glClear(GL_COLOR_BUFFER_BIT);
 
+			m_Shader->bind();
 			glBindVertexArray(m_VertexArray);
-			glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_INT, nullptr);
+			glDrawElements(GL_TRIANGLES, m_IndexBuffer->count(), GL_UNSIGNED_INT, nullptr);
 
 			for (Layer* layer : m_LayerStack) {
 				layer->onUpdate();

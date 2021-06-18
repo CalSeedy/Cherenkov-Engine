@@ -145,6 +145,7 @@
   <ItemGroup>
     <ClInclude Include="src\Cherenkov.h" />
     <ClInclude Include="src\Cherenkov\Application.h" />
+    <ClInclude Include="src\Cherenkov\Core.h" />
     <ClInclude Include="src\Cherenkov\EntryPoint.h" />
     <ClInclude Include="src\Cherenkov\Events\ApplicationEvent.h" />
     <ClInclude Include="src\Cherenkov\Events\Event.h" />
@@ -157,13 +158,17 @@
     <ClInclude Include="src\Cherenkov\LayerStack.h" />
     <ClInclude Include="src\Cherenkov\Log.h" />
     <ClInclude Include="src\Cherenkov\MouseButtonCodes.h" />
+    <ClInclude Include="src\Cherenkov\Renderer\Buffer.h" />
+    <ClInclude Include="src\Cherenkov\Renderer\Renderer.h" />
+    <ClInclude Include="src\Cherenkov\Renderer\RendererContext.h" />
+    <ClInclude Include="src\Cherenkov\Renderer\Shader.h" />
     <ClInclude Include="src\Cherenkov\Window.h" />
-    <ClInclude Include="src\Cherenkov\core.h" />
+    <ClInclude Include="src\Platform\OpenGL\OpenGLBuffer.h" />
     <ClInclude Include="src\Platform\OpenGL\OpenGLContext.h" />
+    <ClInclude Include="src\Platform\OpenGL\OpenGLShader.h" />
     <ClInclude Include="src\Platform\Windows\WindowsInput.h" />
     <ClInclude Include="src\Platform\Windows\WindowsWindow.h" />
     <ClInclude Include="src\ckpch.h" />
-    <ClInclude Include="src\Cherenkov\Renderer\RendererContext.h" />
     <ClInclude Include="vendor\glm\glm\common.hpp" />
     <ClInclude Include="vendor\glm\glm\detail\_features.hpp" />
     <ClInclude Include="vendor\glm\glm\detail\_fixes.hpp" />
@@ -587,7 +592,11 @@
     <ClCompile Include="src\Cherenkov\Layer.cpp" />
     <ClCompile Include="src\Cherenkov\LayerStack.cpp" />
     <ClCompile Include="src\Cherenkov\Log.cpp" />
+    <ClCompile Include="src\Cherenkov\Renderer\Buffer.cpp" />
+    <ClCompile Include="src\Cherenkov\Renderer\Renderer.cpp" />
+    <ClCompile Include="src\Platform\OpenGL\OpenGLBuffer.cpp" />
     <ClCompile Include="src\Platform\OpenGL\OpenGLContext.cpp" />
+    <ClCompile Include="src\Platform\OpenGL\OpenGLShader.cpp" />
     <ClCompile Include="src\Platform\Windows\WindowsInput.cpp" />
     <ClCompile Include="src\Platform\Windows\WindowsWindow.cpp" />
     <ClCompile Include="src\ckpch.cpp">

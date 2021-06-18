@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Core.h"
+#include "Cherenkov/Core.h"
 #include "Events/Event.h"
 
 namespace Cherenkov {
