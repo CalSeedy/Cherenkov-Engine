@@ -5,8 +5,8 @@
 
 #include "Platform/OpenGL/OpenGLShader.h"
 #include "Platform/OpenGL/OpenGLBuffer.h"
+#include "Platform/OpenGL/OpenGLRendererAPI.h"
 
-#include <glad/glad.h>
 
 
 namespace Cherenkov {
@@ -55,8 +55,7 @@ namespace Cherenkov {
 	}
 
 
-	Application::~Application()
-	{
+	Application::~Application()	{
 	}
 
 	void Application::PushLayer(Layer* layer) {
@@ -91,12 +90,15 @@ namespace Cherenkov {
 
 		while (m_Running){
 
-			glClearColor(0.27f, 0.27f, 0.27f, 1.0);
-			glClear(GL_COLOR_BUFFER_BIT);
+			RenderCommand::clear({ 1.0f, 0.0f, 1.0f, 1.0f });
+
+			Renderer::beginScene();
 
 			m_Shader->bind();
-			m_VertexArray->bind();
-			glDrawElements(GL_TRIANGLES, m_VertexArray->getIndexBuffer()->count(), GL_UNSIGNED_INT, nullptr);
+			Renderer::submit(m_VertexArray);
+
+			Renderer::endScene();
+			
 
 			for (Layer* layer : m_LayerStack) {
 				layer->onUpdate();

@@ -159,13 +159,16 @@
     <ClInclude Include="src\Cherenkov\Log.h" />
     <ClInclude Include="src\Cherenkov\MouseButtonCodes.h" />
     <ClInclude Include="src\Cherenkov\Renderer\Buffer.h" />
+    <ClInclude Include="src\Cherenkov\Renderer\Commands.h" />
     <ClInclude Include="src\Cherenkov\Renderer\Renderer.h" />
+    <ClInclude Include="src\Cherenkov\Renderer\RendererAPI.h" />
     <ClInclude Include="src\Cherenkov\Renderer\RendererContext.h" />
     <ClInclude Include="src\Cherenkov\Renderer\Shader.h" />
     <ClInclude Include="src\Cherenkov\Renderer\VertexArray.h" />
     <ClInclude Include="src\Cherenkov\Window.h" />
     <ClInclude Include="src\Platform\OpenGL\OpenGLBuffer.h" />
     <ClInclude Include="src\Platform\OpenGL\OpenGLContext.h" />
+    <ClInclude Include="src\Platform\OpenGL\OpenGLRendererAPI.h" />
     <ClInclude Include="src\Platform\OpenGL\OpenGLShader.h" />
     <ClInclude Include="src\Platform\OpenGL\OpenGLVertexArray.h" />
     <ClInclude Include="src\Platform\Windows\WindowsInput.h" />
@@ -595,10 +598,13 @@
     <ClCompile Include="src\Cherenkov\LayerStack.cpp" />
     <ClCompile Include="src\Cherenkov\Log.cpp" />
     <ClCompile Include="src\Cherenkov\Renderer\Buffer.cpp" />
+    <ClCompile Include="src\Cherenkov\Renderer\Commands.cpp" />
     <ClCompile Include="src\Cherenkov\Renderer\Renderer.cpp" />
+    <ClCompile Include="src\Cherenkov\Renderer\RendererAPI.cpp" />
     <ClCompile Include="src\Cherenkov\Renderer\VertexArray.cpp" />
     <ClCompile Include="src\Platform\OpenGL\OpenGLBuffer.cpp" />
     <ClCompile Include="src\Platform\OpenGL\OpenGLContext.cpp" />
+    <ClCompile Include="src\Platform\OpenGL\OpenGLRendererAPI.cpp" />
     <ClCompile Include="src\Platform\OpenGL\OpenGLShader.cpp" />
     <ClCompile Include="src\Platform\OpenGL\OpenGLVertexArray.cpp" />
     <ClCompile Include="src\Platform\Windows\WindowsInput.cpp" />
@@ -617,10 +623,6 @@
     <ProjectReference Include="vendor\imgui\ImGui.vcxproj">
       <Project>{C0FF640D-2C14-8DBE-F595-301E616989EF}</Project>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="src\Cherenkov\Shaders\shader.frag" />
-    <None Include="src\Cherenkov\Shaders\shader.vert" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

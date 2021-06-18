@@ -1,15 +1,15 @@
 #pragma once
-#include "Cherenkov/Core.h"
+#include "Commands.h"
+
 namespace Cherenkov {
 
-	enum class RendererAPI {
-		None = 0, OpenGL = 1
-	};
-
 	class Renderer {
-		static RendererAPI s_RendererAPI;
 	public:
-		inline static RendererAPI getAPI() { return s_RendererAPI; }
+		inline static RendererAPI::API getAPI() { return RendererAPI::getAPI(); }
+
+		static void beginScene();
+		static void endScene();
+		static void submit(const std::shared_ptr<VertexArray>& vertexArray);
 	};
 	
 }

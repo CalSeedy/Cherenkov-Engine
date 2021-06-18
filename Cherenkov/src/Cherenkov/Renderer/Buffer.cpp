@@ -12,8 +12,8 @@ namespace Cherenkov {
 
 	VertexBuffer* VertexBuffer::init(float_t* vertices, uint32_t count) {
 		switch (Renderer::getAPI()) {
-		case RendererAPI::None:			return nullptr;
-		case RendererAPI::OpenGL:		return new OpenGLVertexBuffer(vertices, count);
+		case RendererAPI::API::None:		return nullptr;
+		case RendererAPI::API::OpenGL:		return new OpenGLVertexBuffer(vertices, count);
 		default:
 			CK_CORE_ASSERT(false, "Unknown Renderer!");
 			return nullptr;
@@ -22,8 +22,8 @@ namespace Cherenkov {
 
 	IndexBuffer* IndexBuffer::init(uint32_t* indices, uint32_t count) {
 		switch (Renderer::getAPI()) {
-		case RendererAPI::None:			return nullptr;
-		case RendererAPI::OpenGL:		return new OpenGLIndexBuffer(indices, count);
+		case RendererAPI::API::None:		return nullptr;
+		case RendererAPI::API::OpenGL:		return new OpenGLIndexBuffer(indices, count);
 		default:
 			CK_ASSERT(false, "Unknown Renderer!");
 			return nullptr;

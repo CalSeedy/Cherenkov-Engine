@@ -9,6 +9,7 @@
 
 #include "Cherenkov/ImGui/ImGuiLayer.h"
 #include "Cherenkov/Renderer/Buffer.h"
+#include "Cherenkov/Renderer/Renderer.h"
 #include "Cherenkov/Renderer/Shader.h"
 #include "Cherenkov/Renderer/VertexArray.h"
 
