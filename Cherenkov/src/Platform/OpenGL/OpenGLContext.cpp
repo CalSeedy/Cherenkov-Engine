@@ -15,6 +15,8 @@ namespace Cherenkov {
 		glfwMakeContextCurrent(m_Window);
 		int status = gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
 		CK_CORE_ASSERT(status, "Failed to initialise Glad!");
+
+		CK_CORE_INFO("Renderer (OpenGL): {0} {1} (Version: {2})", glGetString(GL_VENDOR), glGetString(GL_RENDERER), glGetString(GL_VERSION));
 	}
 	void OpenGLContext::swapBuffers() {
 		glfwSwapBuffers(m_Window);

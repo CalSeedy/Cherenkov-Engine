@@ -25,6 +25,9 @@ public:
 		ImGui::Begin("Test");
 		ImGui::Text("Hello World");
 		ImGui::End();
+
+		static bool show = true;
+		ImGui::ShowDemoWindow(&show);
 	}
 };
 

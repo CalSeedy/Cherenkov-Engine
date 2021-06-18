@@ -78,8 +78,7 @@ namespace Cherenkov {
 	}
 
 	void ImGuiLayer::onImGuiDraw() {
-		static bool show = true;
-		ImGui::ShowDemoWindow(&show);
+		
 	}
 
 }
