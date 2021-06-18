@@ -15,6 +15,32 @@ namespace Cherenkov {
 	
 	Application* Application::s_Instance = nullptr;
 
+	static GLenum getBaseType(ShaderDataType type) {
+		switch (type)
+		{
+		case Cherenkov::ShaderDataType::None:			return GL_NONE;
+		case Cherenkov::ShaderDataType::Float:			return GL_FLOAT;
+		case Cherenkov::ShaderDataType::Int:			return GL_INT;
+		case Cherenkov::ShaderDataType::Bool:			return GL_BOOL;
+		//case Cherenkov::ShaderDataType::Struct:			break;
+		case Cherenkov::ShaderDataType::Vec2f:			return GL_FLOAT;
+		case Cherenkov::ShaderDataType::Vec3f:			return GL_FLOAT;
+		case Cherenkov::ShaderDataType::Vec4f:			return GL_FLOAT;
+		case Cherenkov::ShaderDataType::Mat2f:			return GL_FLOAT;
+		case Cherenkov::ShaderDataType::Mat3f:			return GL_FLOAT;
+		case Cherenkov::ShaderDataType::Mat4f:			return GL_FLOAT;
+		case Cherenkov::ShaderDataType::Vec2i:			return GL_INT;
+		case Cherenkov::ShaderDataType::Vec3i:			return GL_INT;
+		case Cherenkov::ShaderDataType::Vec4i:			return GL_INT;
+		case Cherenkov::ShaderDataType::Mat2i:			return GL_INT;
+		case Cherenkov::ShaderDataType::Mat3i:			return GL_INT;
+		case Cherenkov::ShaderDataType::Mat4i:			return GL_INT;
+		default:
+			CK_CORE_ASSERT(false, "Unknown DataType {0}!", type);
+			return 0;
+		}
+	}
+
 	Application::Application()
 	{
 		CK_CORE_ASSERT(!s_Instance, "Application already running!");
@@ -28,17 +54,27 @@ namespace Cherenkov {
 		glGenVertexArrays(1, &m_VertexArray);
 		glBindVertexArray(m_VertexArray);
 
-		float verts[3 * 3] = {
-			-0.7f, -0.7f, 0.0f,
-			0.7f, -0.7f, 0.0f,
-			0.0f, 0.7f, 0.0f
+		float verts[3 * 7] = {
+			-0.7f, -0.7f, 0.0f,	1.0f, 0.5f, 0.63f, 1.0f,
+			 0.7f, -0.7f, 0.0f,	1.0f, 0.5f, 0.63f, 1.0f,
+			  0.0f, 0.7f, 0.0f,	1.0f, 0.5f, 0.63f, 1.0f
 		};
 
 		m_VertexBuffer.reset(VertexBuffer::init(verts, sizeof(verts)/ sizeof(float_t)));
-		//glBufferData(GL_ARRAY_BUFFER, sizeof(verts), verts, GL_STATIC_DRAW);
 
-		glEnableVertexAttribArray(0);
-		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), nullptr);
+		BufferLayout layout = {
+			{ShaderDataType::Vec3f, "a_Pos"},
+			{ShaderDataType::Vec4f, "a_Col"}
+		};
+
+		m_VertexBuffer->layout(layout);
+		uint32_t idx = 0;
+		for (auto& element : m_VertexBuffer->getLayout()) {
+			glEnableVertexAttribArray(idx);
+			glVertexAttribPointer(idx, element.count(), getBaseType(element.Type), element.Normalised ? GL_TRUE : GL_FALSE, layout.stride(), (const void*)element.Offset);
+			idx++;
+		}
+		//glBufferData(GL_ARRAY_BUFFER, sizeof(verts), verts, GL_STATIC_DRAW);		
 
 		uint32_t idxs[3] = { 0, 1, 2 };
 		m_IndexBuffer.reset(IndexBuffer::init(idxs, sizeof(idxs)/sizeof(uint32_t)));

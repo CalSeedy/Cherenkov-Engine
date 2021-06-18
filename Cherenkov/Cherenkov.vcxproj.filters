@@ -1416,4 +1416,8 @@
       <Filter>src</Filter>
     </ClCompile>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="src\Cherenkov\Shaders\shader.frag" />
+    <None Include="src\Cherenkov\Shaders\shader.vert" />
+  </ItemGroup>
 </Project>
