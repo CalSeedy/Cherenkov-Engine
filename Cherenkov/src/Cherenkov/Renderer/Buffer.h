@@ -15,7 +15,6 @@ namespace Cherenkov {
 	};
 
 	static uint32_t TypeSize(ShaderDataType type) {
-		uint32_t size;
 		switch (type)
 		{
 		case Cherenkov::ShaderDataType::None:			return 0;

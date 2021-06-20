@@ -12,7 +12,7 @@ namespace Cherenkov {
 	
 	Application* Application::s_Instance = nullptr;
 	 
-	Application::Application() : m_Camera{ -1.6f, 1.6f, 0.9f, -0.9f } {
+	Application::Application() : m_Camera{ -1.6f, 1.6f, -0.9f, 0.9f } {
 		CK_CORE_ASSERT(!s_Instance, "Application already running!");
 		s_Instance = this;
 		m_Window = std::unique_ptr<Window>(Window::Create());
@@ -23,10 +23,11 @@ namespace Cherenkov {
 
 		m_VertexArray.reset(VertexArray::init());
 
-		float verts[3 * 3] = {
-			-0.7f, -0.7f, 0.0f,
-			 0.7f, -0.7f, 0.0f,
-			  0.0f, 0.7f, 0.0f
+		float verts[4 * 3] = {
+			-0.5f, -0.5f, 0.0f,
+			 0.5f, -0.5f, 0.0f,
+			 0.5f,  0.5f, 0.0f,
+			-0.5f,  0.5f, 0.0f
 		};
 
 		std::shared_ptr<VertexBuffer> vertexBuffer;
@@ -38,7 +39,7 @@ namespace Cherenkov {
 		vertexBuffer->layout(layout);
 		m_VertexArray->addVertexBuffer(vertexBuffer);
 		
-		uint32_t idxs[3] = { 0, 1, 2 };
+		uint32_t idxs[6] = { 0, 1, 2, 2, 3, 0 };
 		std::shared_ptr<IndexBuffer> indexBuffer;
 		indexBuffer.reset(IndexBuffer::init(idxs, sizeof(idxs)/sizeof(uint32_t)));
 		m_VertexArray->setIndexBuffer(indexBuffer);
@@ -86,6 +87,9 @@ namespace Cherenkov {
 		while (m_Running){
 
 			RenderCommand::clear({ 1.0f, 0.0f, 1.0f, 1.0f });
+
+			m_Camera.setPosition({ 0.5f, 0.5f, 0.0f });
+			m_Camera.setRotation(45.0f);
 
 			Renderer::beginScene(m_Camera);
 
