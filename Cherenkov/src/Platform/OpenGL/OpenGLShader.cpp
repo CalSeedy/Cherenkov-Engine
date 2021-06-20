@@ -3,7 +3,7 @@
 
 #include "Cherenkov/Log.h"
 #include <glad/glad.h>
-
+#include <glm/gtc/type_ptr.hpp>
 namespace Cherenkov {
 
 	std::string getSource(const char* path) {
@@ -136,5 +136,10 @@ namespace Cherenkov {
 
 	void OpenGLShader::unbind() const {
 		glUseProgram(0);
+	}
+
+	void OpenGLShader::uniformMat4(const std::string& id, const glm::mat4& matrix) const {
+		GLint loc = glGetUniformLocation(m_ID, id.c_str());
+		glUniformMatrix4fv(loc, 1, GL_FALSE, glm::value_ptr(matrix));
 	}
 }

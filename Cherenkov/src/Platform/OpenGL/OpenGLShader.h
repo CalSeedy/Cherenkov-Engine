@@ -12,5 +12,6 @@ namespace Cherenkov {
 
 		void bind() const override;
 		void unbind() const override;
+		void uniformMat4(const std::string& id, const glm::mat4& matrix) const override;
 	};
 }

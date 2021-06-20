@@ -1,15 +1,16 @@
 #pragma once
 
-#include "Cherenkov/core.h"
-
+#include "Cherenkov/Core.h"
 #include "Window.h"
 #include "LayerStack.h"
+
 #include "Events/Event.h"
 #include "Events/ApplicationEvent.h"
 
 #include "Cherenkov/ImGui/ImGuiLayer.h"
+
 #include "Cherenkov/Renderer/Buffer.h"
-#include "Cherenkov/Renderer/Renderer.h"
+#include "Cherenkov/Renderer/Camera.h"
 #include "Cherenkov/Renderer/Shader.h"
 #include "Cherenkov/Renderer/VertexArray.h"
 
@@ -19,6 +20,7 @@ namespace Cherenkov {
 	{
 		static Application*				s_Instance;
 
+		OrthographicCamera				m_Camera;
 		ImGuiLayer*						m_ImGuiLayer;
 		LayerStack						m_LayerStack;
 		bool							m_Running = true;

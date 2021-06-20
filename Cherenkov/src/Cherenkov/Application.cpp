@@ -1,12 +1,9 @@
 #include "ckpch.h"
 #include "Application.h"
+
 #include "Log.h"
+#include "Renderer/Renderer.h"
 #include "Input.h"
-
-#include "Platform/OpenGL/OpenGLShader.h"
-#include "Platform/OpenGL/OpenGLBuffer.h"
-#include "Platform/OpenGL/OpenGLRendererAPI.h"
-
 
 
 namespace Cherenkov {
@@ -14,9 +11,8 @@ namespace Cherenkov {
 #define BIND_EVENT_FUNC(x) std::bind(&Application::x, this, std::placeholders::_1)
 	
 	Application* Application::s_Instance = nullptr;
-
-	Application::Application()
-	{
+	 
+	Application::Application() : m_Camera{ -1.6f, 1.6f, 0.9f, -0.9f } {
 		CK_CORE_ASSERT(!s_Instance, "Application already running!");
 		s_Instance = this;
 		m_Window = std::unique_ptr<Window>(Window::Create());
@@ -27,18 +23,17 @@ namespace Cherenkov {
 
 		m_VertexArray.reset(VertexArray::init());
 
-		float verts[3 * 7] = {
-			-0.7f, -0.7f, 0.0f,	1.0f, 0.5f, 0.63f, 1.0f,
-			 0.7f, -0.7f, 0.0f,	1.0f, 0.5f, 0.63f, 1.0f,
-			  0.0f, 0.7f, 0.0f,	1.0f, 0.5f, 0.63f, 1.0f
+		float verts[3 * 3] = {
+			-0.7f, -0.7f, 0.0f,
+			 0.7f, -0.7f, 0.0f,
+			  0.0f, 0.7f, 0.0f
 		};
 
 		std::shared_ptr<VertexBuffer> vertexBuffer;
 		vertexBuffer.reset(VertexBuffer::init(verts, sizeof(verts) / sizeof(float_t)));
 		
 		BufferLayout layout = {
-			{ShaderDataType::Vec3f, "a_Pos"},
-			{ShaderDataType::Vec4f, "a_Col"}
+			{ShaderDataType::Vec3f, "a_Pos"}
 		};
 		vertexBuffer->layout(layout);
 		m_VertexArray->addVertexBuffer(vertexBuffer);
@@ -92,10 +87,9 @@ namespace Cherenkov {
 
 			RenderCommand::clear({ 1.0f, 0.0f, 1.0f, 1.0f });
 
-			Renderer::beginScene();
+			Renderer::beginScene(m_Camera);
 
-			m_Shader->bind();
-			Renderer::submit(m_VertexArray);
+			Renderer::submit(m_VertexArray, m_Shader);
 
 			Renderer::endScene();
 			
@@ -114,8 +108,7 @@ namespace Cherenkov {
 		}
 	}
 
-	bool Application::onWindowClose(WindowCloseEvent &event)
-	{
+	bool Application::onWindowClose(WindowCloseEvent &event) {
 		m_Running = false;
 		return true;
 	}
