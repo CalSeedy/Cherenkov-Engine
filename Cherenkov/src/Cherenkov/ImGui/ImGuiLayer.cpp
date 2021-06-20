@@ -13,6 +13,7 @@
 namespace Cherenkov {
 	ImGuiLayer::ImGuiLayer() : Layer("ImGuiLayer")
 	{
+		
 	}
 
 	ImGuiLayer::~ImGuiLayer()
@@ -44,6 +45,7 @@ namespace Cherenkov {
 
 		ImGui_ImplGlfw_InitForOpenGL(window, true);
 		ImGui_ImplOpenGL3_Init("#version 410");
+		
 	}
 
 	void ImGuiLayer::onDetach()
@@ -58,6 +60,8 @@ namespace Cherenkov {
 		ImGui_ImplOpenGL3_NewFrame();
 		ImGui_ImplGlfw_NewFrame();
 		ImGui::NewFrame();
+		static bool show = true;
+		ImGui::ShowDemoWindow(&show);
 	}
 
 	void ImGuiLayer::stop()
