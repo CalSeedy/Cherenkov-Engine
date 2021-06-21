@@ -8,6 +8,5 @@ namespace Cherenkov {
 	public:
 		virtual void clear(const glm::vec4& colour) override;
 		virtual void drawIndexed(const std::shared_ptr<VertexArray>& vertexArray) override;
-
 	};
 }

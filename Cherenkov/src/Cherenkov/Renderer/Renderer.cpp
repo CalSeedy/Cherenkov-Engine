@@ -13,9 +13,10 @@ namespace Cherenkov {
 
 	}
 
-	void Renderer::submit(const std::shared_ptr<VertexArray>& vertexArray, const std::shared_ptr<Shader>& shader) {
+	void Renderer::submit(const std::shared_ptr<VertexArray>& vertexArray, const std::shared_ptr<Shader>& shader, const glm::mat4& transform) {
 		shader->bind();
 		shader->uniformMat4("viewProjection", s_Scene->Projection);
+		shader->uniformMat4("transform", transform);
 		vertexArray->bind();
 		RenderCommand::drawIndexed(vertexArray);
 	}

@@ -5,7 +5,7 @@
 namespace Cherenkov {
 
 	class CK_API WindowResizeEvent : public Event {
-
+		unsigned int m_Width, m_Height;
 	public:
 		WindowResizeEvent(unsigned int width, unsigned int height)
 			: m_Width(width), m_Height(height) {}
@@ -20,10 +20,7 @@ namespace Cherenkov {
 		}
 
 		EVENT_CLASS_CATEGORY(EventCategoryApplication)
-		EVENT_CLASS_TYPE(WindowResized)
-		
-	private:
-		unsigned int m_Width, m_Height;
+		EVENT_CLASS_TYPE(WindowResized)		
 	};
 
 	class CK_API WindowCloseEvent : public Event {

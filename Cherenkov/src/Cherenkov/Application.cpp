@@ -2,7 +2,7 @@
 #include "Application.h"
 
 #include "Log.h"
-#include "Renderer/Renderer.h"
+//#include "Renderer/Renderer.h"
 #include "Input.h"
 #include <GLFW/glfw3.h>
 
@@ -44,6 +44,7 @@ namespace Cherenkov {
 	
 		EventDispatcher dispatcher(event);
 		dispatcher.Dispatch<WindowCloseEvent>(BIND_EVENT_FUNC(onWindowClose));
+		dispatcher.Dispatch<WindowResizeEvent>(BIND_EVENT_FUNC(onWindowResize));
 		//CK_CORE_TRACE("{0}", event);
 
 		for (auto it = m_LayerStack.end(); it != m_LayerStack.begin();) {
@@ -75,6 +76,12 @@ namespace Cherenkov {
 			m_Window->onUpdate();
 		}
 	}
+
+	bool Application::onWindowResize(WindowResizeEvent &event) {
+		m_Window->setViewport(event.getWidth(), event.getHeight());
+		return false;
+	}
+	
 
 	bool Application::onWindowClose(WindowCloseEvent &event) {
 		m_Running = false;

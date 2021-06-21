@@ -11,7 +11,6 @@ namespace Cherenkov {
 		};
 		virtual void clear(const glm::vec4& colour) = 0;
 		virtual void drawIndexed(const std::shared_ptr<VertexArray>& vertexArray) = 0;
-
 		inline static API getAPI() { return s_API; }
 
 	private:

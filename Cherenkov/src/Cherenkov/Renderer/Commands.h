@@ -15,6 +15,5 @@ namespace Cherenkov {
 		inline static void drawIndexed(const std::shared_ptr<VertexArray>& vertexArray) {
 			s_RendererAPI->drawIndexed(vertexArray);
 		}
-
 	};
 }

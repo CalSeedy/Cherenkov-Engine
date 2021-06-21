@@ -17,13 +17,15 @@ namespace Cherenkov {
 
 		inline unsigned int getWidth() const override { return m_Data.Width; }
 		inline unsigned int getHeight() const override { return m_Data.Height; }
-		
+
 		inline void setEventCallBack(const EventCallbackFn &callback) override { m_Data.EventCallback = callback; }
 		void setVSync(bool enabled) override;
 		bool isVSync() const override;
 	
 		inline virtual void* getNativeWindow() const { return m_Window; }
-
+		inline void setViewport(uint32_t width, uint32_t height) const override {
+			m_Ctx->setViewport(width, height);
+		}
 	private:
 		virtual void init(const WindowProperties &properties);
 		virtual void shutDown();

@@ -29,6 +29,7 @@ namespace Cherenkov {
 		std::shared_ptr<Window>			m_Window;
 
 		bool onWindowClose(WindowCloseEvent& event);
+		bool onWindowResize(WindowResizeEvent& event);
 	public:
 		Application();
 		virtual ~Application();
