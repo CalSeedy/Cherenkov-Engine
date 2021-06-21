@@ -5,13 +5,15 @@ class ExampleLayer : public Cherenkov::Layer {
 	Cherenkov::OrthographicCamera				m_Camera;
 	glm::vec3									m_CameraPos;
 	float										m_CameraRotation = 0.0f;
-	const float									m_CameraPanSpeed = 0.1f;
-	const float									m_CameraRotSpeed = 1.0f;
+	const float									m_CameraPanSpeed = 5.0f;
+	const float									m_CameraRotSpeed = 70.0f;
 
 	std::shared_ptr<Cherenkov::Shader>			m_Shader;
 	std::shared_ptr<Cherenkov::VertexArray>		m_VertexArray;
+
 public:
 	ExampleLayer() : Layer("Test!"), m_Camera{ -1.6f, 1.6f, -0.9f, 0.9f }, m_CameraPos{ 0.0f } {
+
 		m_VertexArray.reset(Cherenkov::VertexArray::init());
 
 		float verts[4 * 3] = {
@@ -41,25 +43,25 @@ public:
 		m_Shader.reset(new Cherenkov::OpenGLShader(vertIn, fragIn));
 	}
 
-	void onUpdate() override {
-		
+	void onUpdate(Cherenkov::Timestep dt) override {
+		CK_TRACE("dt: {0} s ({1} FPS)", dt.getSeconds(), dt.toFPS());
 		if (Cherenkov::Input::isKeyPressed(CK_KEY_W))
-			m_CameraPos.y += m_CameraPanSpeed;
+			m_CameraPos.y += m_CameraPanSpeed * dt;
 
 		else if (Cherenkov::Input::isKeyPressed(CK_KEY_S))
-			m_CameraPos.y -= m_CameraPanSpeed;
+			m_CameraPos.y -= m_CameraPanSpeed * dt;
 
 		if (Cherenkov::Input::isKeyPressed(CK_KEY_A))
-			m_CameraPos.x -= m_CameraPanSpeed;
+			m_CameraPos.x -= m_CameraPanSpeed * dt;
 
 		else if (Cherenkov::Input::isKeyPressed(CK_KEY_D))
-			m_CameraPos.x += m_CameraPanSpeed;
+			m_CameraPos.x += m_CameraPanSpeed * dt;
 		
 		if (Cherenkov::Input::isKeyPressed(CK_KEY_Q))
-			m_CameraRotation += m_CameraRotSpeed;
+			m_CameraRotation += m_CameraRotSpeed * dt;
 
 		else if (Cherenkov::Input::isKeyPressed(CK_KEY_E))
-			m_CameraRotation -= m_CameraRotSpeed;
+			m_CameraRotation -= m_CameraRotSpeed * dt;
 
 		Cherenkov::RenderCommand::clear({ 1.0f, 0.0f, 1.0f, 1.0f });
 
@@ -96,7 +98,6 @@ public:
 
 
 class Sandbox : public Cherenkov::Application {
-
 public:
 	Sandbox()
 	{

@@ -1387,6 +1387,7 @@
       <Filter>vendor\glm\glm</Filter>
     </ClInclude>
     <ClInclude Include="src\Cherenkov\Renderer\Camera.h" />
+    <ClInclude Include="src\Cherenkov\Core\TimeStep.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Cherenkov\Application.cpp">

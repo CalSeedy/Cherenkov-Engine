@@ -2,6 +2,7 @@
 
 #include "Cherenkov/Core.h"
 #include "Events/Event.h"
+#include "Core/TimeStep.h"
 
 namespace Cherenkov {
 
@@ -13,7 +14,7 @@ namespace Cherenkov {
 
 		virtual void onAttach() {}
 		virtual void onDetach() {}
-		virtual void onUpdate() {}
+		virtual void onUpdate(Timestep dt) {}
 		virtual void onImGuiDraw() {}
 		virtual void onEvent(Event &event) {}
 

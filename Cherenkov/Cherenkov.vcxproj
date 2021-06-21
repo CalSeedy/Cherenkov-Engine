@@ -146,6 +146,7 @@
     <ClInclude Include="src\Cherenkov.h" />
     <ClInclude Include="src\Cherenkov\Application.h" />
     <ClInclude Include="src\Cherenkov\Core.h" />
+    <ClInclude Include="src\Cherenkov\Core\TimeStep.h" />
     <ClInclude Include="src\Cherenkov\EntryPoint.h" />
     <ClInclude Include="src\Cherenkov\Events\ApplicationEvent.h" />
     <ClInclude Include="src\Cherenkov\Events\Event.h" />

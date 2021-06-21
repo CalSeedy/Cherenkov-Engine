@@ -7,6 +7,8 @@
 #include "Events/Event.h"
 #include "Events/ApplicationEvent.h"
 
+#include "Cherenkov/Core/TimeStep.h"
+
 #include "Cherenkov/ImGui/ImGuiLayer.h"
 
 #include "Cherenkov/Renderer/Buffer.h"
@@ -20,6 +22,7 @@ namespace Cherenkov {
 	{
 		static Application*				s_Instance;
 
+		float							m_FrameTime = 0.0f;
 		ImGuiLayer*						m_ImGuiLayer;
 		LayerStack						m_LayerStack;
 		bool							m_Running = true;

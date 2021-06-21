@@ -4,7 +4,7 @@
 #include "Log.h"
 #include "Renderer/Renderer.h"
 #include "Input.h"
-
+#include <GLFW/glfw3.h>
 
 namespace Cherenkov {
 
@@ -17,6 +17,8 @@ namespace Cherenkov {
 		s_Instance = this;
 		m_Window = std::unique_ptr<Window>(Window::Create());
 		m_Window->setEventCallBack(BIND_EVENT_FUNC(onEvent));
+		m_Window->setVSync(true);
+
 
 		m_ImGuiLayer = new ImGuiLayer();
 		PushOverlay(m_ImGuiLayer);
@@ -57,10 +59,13 @@ namespace Cherenkov {
 
 	void Application::Run() {
 
-		while (m_Running){		
+		while (m_Running){
+			float_t time = (float_t)glfwGetTime();
+			Timestep dt = time - m_FrameTime;
+			m_FrameTime = time;
 
 			for (Layer* layer : m_LayerStack) {
-				layer->onUpdate();
+				layer->onUpdate(dt);
 			}
 			
 			m_ImGuiLayer->start();

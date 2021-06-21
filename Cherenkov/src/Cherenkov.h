@@ -5,6 +5,8 @@
 #include "Cherenkov/Layer.h"
 #include "Cherenkov/Log.h"
 
+#include "Cherenkov/Core/TimeStep.h"
+
 #include "Cherenkov/Input.h"
 #include "Cherenkov/KeyCodes.h"
 #include "Cherenkov/MouseButtonCodes.h"
