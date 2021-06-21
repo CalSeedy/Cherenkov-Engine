@@ -32,13 +32,11 @@ namespace Cherenkov {
 	void Application::PushLayer(Layer* layer) {
 	
 		m_LayerStack.PushLayer(layer);
-		layer->onAttach();
 	}
 
 	void Application::PushOverlay(Layer* overlay) {
 
 		m_LayerStack.PushLayer(overlay);
-		overlay->onAttach();
 
 	}
 

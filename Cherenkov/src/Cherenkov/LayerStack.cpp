@@ -15,6 +15,7 @@ namespace Cherenkov {
 	void LayerStack::PushLayer(Layer* layer) {
 		m_Layers.emplace(m_Layers.begin() + m_LayerInsertIdx, layer);
 		m_LayerInsertIdx++;
+		layer->onAttach();
 	}
 
 	void LayerStack::PopLayer(Layer* layer) {
@@ -23,6 +24,7 @@ namespace Cherenkov {
 
 		if (object != m_Layers.end()) {
 		
+			layer->onDetach();
 			m_Layers.erase(object);
 			m_LayerInsertIdx--;
 		}
@@ -30,6 +32,7 @@ namespace Cherenkov {
 
 	void LayerStack::PushOverlay(Layer* overlay) {
 		m_Layers.emplace_back(overlay);
+		overlay->onAttach();
 	}
 
 	void LayerStack::PopOverlay(Layer* overlay) {
@@ -37,6 +40,7 @@ namespace Cherenkov {
 		auto object = std::find(m_Layers.begin(), m_Layers.end(), overlay);
 
 		if (object != m_Layers.end()) {
+			overlay->onDetach();
 			m_Layers.erase(object);
 		}
 	}
