@@ -10,3 +10,6 @@
 [submodule "Cherenkov/vendor/GLFW"]
 	path = Cherenkov/vendor/GLFW
 	url = https://github.com/glfw/glfw
+[submodule "Cherenkov/vendor/stb"]
+	path = Cherenkov/vendor/stb
+	url = https://github.com/nothings/stb.git
