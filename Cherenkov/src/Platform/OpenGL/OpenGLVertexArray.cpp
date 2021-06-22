@@ -39,7 +39,7 @@ namespace Cherenkov {
 	void OpenGLVertexArray::unbind() const{
 		glBindVertexArray(0);
 	}
-	void OpenGLVertexArray::addVertexBuffer(const std::shared_ptr<VertexBuffer>& vBuffer) {
+	void OpenGLVertexArray::addVertexBuffer(const Ref<VertexBuffer>& vBuffer) {
 		glBindVertexArray(m_RendererID);
 		vBuffer->bind();
 
@@ -54,7 +54,7 @@ namespace Cherenkov {
 		}
 		m_VertexBuffers.push_back(vBuffer);
 	}
-	void OpenGLVertexArray::setIndexBuffer(const std::shared_ptr<IndexBuffer>& iBuffer){
+	void OpenGLVertexArray::setIndexBuffer(const Ref<IndexBuffer>& iBuffer){
 		glBindVertexArray(m_RendererID);
 		iBuffer->bind();
 		m_IndexBuffer = iBuffer;

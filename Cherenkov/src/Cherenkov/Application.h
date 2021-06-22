@@ -26,7 +26,7 @@ namespace Cherenkov {
 		ImGuiLayer*						m_ImGuiLayer;
 		LayerStack						m_LayerStack;
 		bool							m_Running = true;
-		std::shared_ptr<Window>			m_Window;
+		Ref<Window>			m_Window;
 
 		bool onWindowClose(WindowCloseEvent& event);
 		bool onWindowResize(WindowResizeEvent& event);

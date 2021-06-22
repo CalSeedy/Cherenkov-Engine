@@ -14,7 +14,7 @@ namespace Cherenkov {
 
 	}
 
-	void Renderer::submit(const std::shared_ptr<VertexArray>& vertexArray, const std::shared_ptr<Shader>& shader, const glm::mat4& transform) {
+	void Renderer::submit(const Ref<VertexArray>& vertexArray, const Ref<Shader>& shader, const glm::mat4& transform) {
 		shader->bind();
 		std::dynamic_pointer_cast<OpenGLShader>(shader)->uniformMat4("viewProjection", s_Scene->Projection);
 		std::dynamic_pointer_cast<OpenGLShader>(shader)->uniformMat4("transform", transform);

@@ -16,8 +16,8 @@ class ExampleLayer : public Cherenkov::Layer {
 	const float									m_PanSpeed = 5.0f;
 	const float									m_RotSpeed = 70.0f;
 
-	std::shared_ptr<Cherenkov::Shader>			m_Shader;
-	std::shared_ptr<Cherenkov::VertexArray>		m_VertexArray;
+	Cherenkov::Ref<Cherenkov::Shader>			m_Shader;
+	Cherenkov::Ref<Cherenkov::VertexArray>		m_VertexArray;
 
 public:
 	ExampleLayer() : Layer("Test!"), m_Camera{ -1.6f, 1.6f, -0.9f, 0.9f }, m_CameraPos{ 0.0f } {
@@ -31,7 +31,7 @@ public:
 			-0.5f,  0.5f, 0.0f
 		};
 
-		std::shared_ptr<Cherenkov::VertexBuffer> vertexBuffer;
+		Cherenkov::Ref<Cherenkov::VertexBuffer> vertexBuffer;
 		vertexBuffer.reset(Cherenkov::VertexBuffer::init(verts, sizeof(verts) / sizeof(float_t)));
 
 		Cherenkov::BufferLayout layout = {
@@ -41,7 +41,7 @@ public:
 		m_VertexArray->addVertexBuffer(vertexBuffer);
 
 		uint32_t idxs[6] = { 0, 1, 2, 2, 3, 0 };
-		std::shared_ptr<Cherenkov::IndexBuffer> indexBuffer;
+		Cherenkov::Ref<Cherenkov::IndexBuffer> indexBuffer;
 		indexBuffer.reset(Cherenkov::IndexBuffer::init(idxs, sizeof(idxs) / sizeof(uint32_t)));
 		m_VertexArray->setIndexBuffer(indexBuffer);
 
