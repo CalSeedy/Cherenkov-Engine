@@ -12,13 +12,30 @@ namespace Cherenkov {
 		m_Width = width;
 		m_Height = height;
 
+		GLenum internalFormat = 0, glFormat = 0;
+
+		switch (channels) {
+		case 3:
+			internalFormat = GL_RGB8;
+			glFormat = GL_RGB;
+			break;
+		case 4:
+			internalFormat = GL_RGBA8;
+			glFormat = GL_RGBA;
+			break;
+		default:
+			break;
+		}
+
+		CK_CORE_ASSERT((internalFormat & glFormat), "Texture2D format not supported!");
+
 		glCreateTextures(GL_TEXTURE_2D, 1, &m_RendererID);
-		glTextureStorage2D(m_RendererID, 1, GL_RGB8, m_Width, m_Height);
+		glTextureStorage2D(m_RendererID, 1, internalFormat, m_Width, m_Height);
 
 		glTextureParameteri(m_RendererID, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 		glTextureParameteri(m_RendererID, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
-		glTextureSubImage2D(m_RendererID, 0, 0, 0, m_Width, m_Height, GL_RGB, GL_UNSIGNED_BYTE, data);
+		glTextureSubImage2D(m_RendererID, 0, 0, 0, m_Width, m_Height, glFormat, GL_UNSIGNED_BYTE, data);
 
 		stbi_image_free(data);
 	}

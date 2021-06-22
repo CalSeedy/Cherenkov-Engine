@@ -19,10 +19,10 @@ namespace Cherenkov {
 		return code;
 	}
 
-	OpenGLShader::OpenGLShader(const char* vertexPath, const char* fragmentPath) : m_ID{NULL} {		
+	OpenGLShader::OpenGLShader(const std::string& vertexPath, const std::string& fragmentPath) : m_ID{NULL} {
 		// Read our shaders into the appropriate buffers
-		std::string vertexSource = getSource(vertexPath);// Get source code for vertex shader.
-		std::string fragmentSource = getSource(fragmentPath);// Get source code for fragment shader.
+		std::string vertexSource = getSource(vertexPath.c_str());// Get source code for vertex shader.
+		std::string fragmentSource = getSource(fragmentPath.c_str());// Get source code for fragment shader.
 
 		// Create an empty vertex shader handle
 		GLuint vertexShader = glCreateShader(GL_VERTEX_SHADER);

@@ -7,7 +7,7 @@ namespace Cherenkov {
 		uint32_t m_ID;
 
 	public:
-		OpenGLShader(const char* vertexPath, const char* fragmentPath);
+		OpenGLShader(const std::string& vertexPath, const std::string& fragmentPath);
 		virtual ~OpenGLShader();
 
 		virtual void bind() const override;

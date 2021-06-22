@@ -6,6 +6,10 @@ namespace Cherenkov {
 	
 	Renderer::Scene* Renderer::s_Scene = new Renderer::Scene;
 
+	void Renderer::init() {
+		RenderCommand::init();
+	}
+
 	void Renderer::beginScene(OrthographicCamera& camera) {
 		s_Scene->Projection = camera.getViewProjection();
 	}

@@ -18,6 +18,7 @@ class ExampleLayer : public Cherenkov::Layer {
 
 	Cherenkov::Ref<Cherenkov::Shader>			m_Shader;
 	Cherenkov::Ref<Cherenkov::Texture2D>		m_Texture;
+	Cherenkov::Ref<Cherenkov::Texture2D>		m_Texture2;
 	Cherenkov::Ref<Cherenkov::Shader>			m_TextureShader;
 	Cherenkov::Ref<Cherenkov::VertexArray>		m_VertexArray;
 
@@ -48,15 +49,16 @@ public:
 		indexBuffer.reset(Cherenkov::IndexBuffer::init(idxs, sizeof(idxs) / sizeof(uint32_t)));
 		m_VertexArray->setIndexBuffer(indexBuffer);
 
-		const char* vertIn("../Cherenkov/src/Cherenkov/Shaders/shader.vert");
-		const char* fragIn("../Cherenkov/src/Cherenkov/Shaders/shader.frag");
-		const char* texVertIn("../Cherenkov/src/Cherenkov/Shaders/TextureShader.vert");
-		const char* texFragIn("../Cherenkov/src/Cherenkov/Shaders/TextureShader.frag");
+		std::string vertIn("../Cherenkov/src/Cherenkov/Shaders/shader.vert");
+		std::string fragIn("../Cherenkov/src/Cherenkov/Shaders/shader.frag");
+		std::string texVertIn("../Cherenkov/src/Cherenkov/Shaders/TextureShader.vert");
+		std::string texFragIn("../Cherenkov/src/Cherenkov/Shaders/TextureShader.frag");
 
 		m_Shader.reset(Cherenkov::Shader::init(vertIn, fragIn));
 		m_TextureShader.reset(Cherenkov::Shader::init(texVertIn, texFragIn));
 
 		m_Texture = Cherenkov::Texture2D::init("assets/checkerboardSq.png");
+		m_Texture2 = Cherenkov::Texture2D::init("assets/ChernoLogo.png");
 
 		std::dynamic_pointer_cast<Cherenkov::OpenGLShader>(m_TextureShader)->bind();
 		std::dynamic_pointer_cast<Cherenkov::OpenGLShader>(m_TextureShader)->uniformInt("tex", 0);
@@ -119,6 +121,9 @@ public:
 
 		m_Texture->bind();
 		Cherenkov::Renderer::submit(m_VertexArray, m_TextureShader, glm::scale(glm::mat4(1.0f), glm::vec3(1.5f*m_ObjScale)));
+
+		m_Texture2->bind();
+		Cherenkov::Renderer::submit(m_VertexArray, m_TextureShader, glm::scale(glm::mat4(1.0f), glm::vec3(1.5f * m_ObjScale)));
 
 		Cherenkov::Renderer::endScene();
 	}

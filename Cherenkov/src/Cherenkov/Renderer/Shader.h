@@ -12,6 +12,6 @@ namespace Cherenkov {
 		virtual void bind() const = 0;
 		virtual void unbind() const = 0;
 
-		static Shader* init(const char* vertexPath, const char* fragmentPath);
+		static Shader* init(const std::string& vertexPath, const std::string& fragmentPath);
 	};
 }

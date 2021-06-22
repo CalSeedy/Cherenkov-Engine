@@ -2,8 +2,9 @@
 #include "Application.h"
 
 #include "Log.h"
-//#include "Renderer/Renderer.h"
 #include "Input.h"
+
+#include "Cherenkov/Renderer/Renderer.h"
 #include <GLFW/glfw3.h>
 
 namespace Cherenkov {
@@ -19,6 +20,7 @@ namespace Cherenkov {
 		m_Window->setEventCallBack(BIND_EVENT_FUNC(onEvent));
 		m_Window->setVSync(true);
 
+		Renderer::init();
 
 		m_ImGuiLayer = new ImGuiLayer();
 		PushOverlay(m_ImGuiLayer);
