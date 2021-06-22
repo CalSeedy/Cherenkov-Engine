@@ -18,6 +18,7 @@
 #include "Cherenkov/Renderer/Commands.h"
 #include "Cherenkov/Renderer/Renderer.h"
 #include "Cherenkov/Renderer/Shader.h"
+#include "Cherenkov/Renderer/Texture.h"
 #include "Cherenkov/Renderer/VertexArray.h"
 
 

@@ -7,6 +7,9 @@
     <Filter Include="src\Cherenkov">
       <UniqueIdentifier>{81DD2E19-ED9D-AA4F-B6D8-F3CC2258EF2B}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\Cherenkov\Core">
+      <UniqueIdentifier>{799A63BA-657E-2410-CEDE-1E63BAE10E92}</UniqueIdentifier>
+    </Filter>
     <Filter Include="src\Cherenkov\Events">
       <UniqueIdentifier>{452ED6E6-31BD-5FB0-DADB-73ABC6497056}</UniqueIdentifier>
     </Filter>
@@ -46,6 +49,24 @@
     <Filter Include="vendor\glm\glm\gtx">
       <UniqueIdentifier>{B3A6A76B-9F8A-68C1-08EB-6214F4ED5243}</UniqueIdentifier>
     </Filter>
+    <Filter Include="vendor\stb">
+      <UniqueIdentifier>{8BD3C5A8-778B-07F6-E092-E051CC69A2E6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="vendor\stb\deprecated">
+      <UniqueIdentifier>{4B110A4A-B77D-C544-8071-5DA2EC9CE7AC}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="vendor\stb\tests">
+      <UniqueIdentifier>{ADFA85EA-99F3-A43C-C225-8AC1AE7D8448}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="vendor\stb\tests\caveview">
+      <UniqueIdentifier>{964AC9A2-020D-FD2C-4BBD-8BB9B7BED50A}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="vendor\stb\tests\oversample">
+      <UniqueIdentifier>{3A63C469-A670-F24F-2F57-EE3A9B63BE06}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="vendor\stb\tests\prerelease">
+      <UniqueIdentifier>{2463F77B-9070-2562-1957-214D8563F118}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Cherenkov.h">
@@ -56,6 +77,9 @@
     </ClInclude>
     <ClInclude Include="src\Cherenkov\Core.h">
       <Filter>src\Cherenkov</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Cherenkov\Core\TimeStep.h">
+      <Filter>src\Cherenkov\Core</Filter>
     </ClInclude>
     <ClInclude Include="src\Cherenkov\EntryPoint.h">
       <Filter>src\Cherenkov</Filter>
@@ -96,6 +120,9 @@
     <ClInclude Include="src\Cherenkov\Renderer\Buffer.h">
       <Filter>src\Cherenkov\Renderer</Filter>
     </ClInclude>
+    <ClInclude Include="src\Cherenkov\Renderer\Camera.h">
+      <Filter>src\Cherenkov\Renderer</Filter>
+    </ClInclude>
     <ClInclude Include="src\Cherenkov\Renderer\Commands.h">
       <Filter>src\Cherenkov\Renderer</Filter>
     </ClInclude>
@@ -109,6 +136,9 @@
       <Filter>src\Cherenkov\Renderer</Filter>
     </ClInclude>
     <ClInclude Include="src\Cherenkov\Renderer\Shader.h">
+      <Filter>src\Cherenkov\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Cherenkov\Renderer\Texture.h">
       <Filter>src\Cherenkov\Renderer</Filter>
     </ClInclude>
     <ClInclude Include="src\Cherenkov\Renderer\VertexArray.h">
@@ -127,6 +157,9 @@
       <Filter>src\Platform\OpenGL</Filter>
     </ClInclude>
     <ClInclude Include="src\Platform\OpenGL\OpenGLShader.h">
+      <Filter>src\Platform\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Platform\OpenGL\OpenGLTexture.h">
       <Filter>src\Platform\OpenGL</Filter>
     </ClInclude>
     <ClInclude Include="src\Platform\OpenGL\OpenGLVertexArray.h">
@@ -1386,8 +1419,99 @@
     <ClInclude Include="vendor\glm\glm\vector_relational.hpp">
       <Filter>vendor\glm\glm</Filter>
     </ClInclude>
-    <ClInclude Include="src\Cherenkov\Renderer\Camera.h" />
-    <ClInclude Include="src\Cherenkov\Core\TimeStep.h" />
+    <ClInclude Include="vendor\stb\deprecated\rrsprintf.h">
+      <Filter>vendor\stb\deprecated</Filter>
+    </ClInclude>
+    <ClInclude Include="vendor\stb\deprecated\stretchy_buffer.h">
+      <Filter>vendor\stb\deprecated</Filter>
+    </ClInclude>
+    <ClInclude Include="vendor\stb\stb.h">
+      <Filter>vendor\stb</Filter>
+    </ClInclude>
+    <ClInclude Include="vendor\stb\stb_c_lexer.h">
+      <Filter>vendor\stb</Filter>
+    </ClInclude>
+    <ClInclude Include="vendor\stb\stb_connected_components.h">
+      <Filter>vendor\stb</Filter>
+    </ClInclude>
+    <ClInclude Include="vendor\stb\stb_divide.h">
+      <Filter>vendor\stb</Filter>
+    </ClInclude>
+    <ClInclude Include="vendor\stb\stb_ds.h">
+      <Filter>vendor\stb</Filter>
+    </ClInclude>
+    <ClInclude Include="vendor\stb\stb_dxt.h">
+      <Filter>vendor\stb</Filter>
+    </ClInclude>
+    <ClInclude Include="vendor\stb\stb_easy_font.h">
+      <Filter>vendor\stb</Filter>
+    </ClInclude>
+    <ClInclude Include="vendor\stb\stb_herringbone_wang_tile.h">
+      <Filter>vendor\stb</Filter>
+    </ClInclude>
+    <ClInclude Include="vendor\stb\stb_hexwave.h">
+      <Filter>vendor\stb</Filter>
+    </ClInclude>
+    <ClInclude Include="vendor\stb\stb_image.h">
+      <Filter>vendor\stb</Filter>
+    </ClInclude>
+    <ClInclude Include="vendor\stb\stb_image_resize.h">
+      <Filter>vendor\stb</Filter>
+    </ClInclude>
+    <ClInclude Include="vendor\stb\stb_image_write.h">
+      <Filter>vendor\stb</Filter>
+    </ClInclude>
+    <ClInclude Include="vendor\stb\stb_include.h">
+      <Filter>vendor\stb</Filter>
+    </ClInclude>
+    <ClInclude Include="vendor\stb\stb_leakcheck.h">
+      <Filter>vendor\stb</Filter>
+    </ClInclude>
+    <ClInclude Include="vendor\stb\stb_perlin.h">
+      <Filter>vendor\stb</Filter>
+    </ClInclude>
+    <ClInclude Include="vendor\stb\stb_rect_pack.h">
+      <Filter>vendor\stb</Filter>
+    </ClInclude>
+    <ClInclude Include="vendor\stb\stb_sprintf.h">
+      <Filter>vendor\stb</Filter>
+    </ClInclude>
+    <ClInclude Include="vendor\stb\stb_textedit.h">
+      <Filter>vendor\stb</Filter>
+    </ClInclude>
+    <ClInclude Include="vendor\stb\stb_tilemap_editor.h">
+      <Filter>vendor\stb</Filter>
+    </ClInclude>
+    <ClInclude Include="vendor\stb\stb_truetype.h">
+      <Filter>vendor\stb</Filter>
+    </ClInclude>
+    <ClInclude Include="vendor\stb\stb_voxel_render.h">
+      <Filter>vendor\stb</Filter>
+    </ClInclude>
+    <ClInclude Include="vendor\stb\tests\caveview\cave_parse.h">
+      <Filter>vendor\stb\tests\caveview</Filter>
+    </ClInclude>
+    <ClInclude Include="vendor\stb\tests\caveview\caveview.h">
+      <Filter>vendor\stb\tests\caveview</Filter>
+    </ClInclude>
+    <ClInclude Include="vendor\stb\tests\caveview\glext.h">
+      <Filter>vendor\stb\tests\caveview</Filter>
+    </ClInclude>
+    <ClInclude Include="vendor\stb\tests\caveview\glext_list.h">
+      <Filter>vendor\stb\tests\caveview</Filter>
+    </ClInclude>
+    <ClInclude Include="vendor\stb\tests\caveview\stb_gl.h">
+      <Filter>vendor\stb\tests\caveview</Filter>
+    </ClInclude>
+    <ClInclude Include="vendor\stb\tests\caveview\stb_glprog.h">
+      <Filter>vendor\stb\tests\caveview</Filter>
+    </ClInclude>
+    <ClInclude Include="vendor\stb\tests\oversample\stb_wingraph.h">
+      <Filter>vendor\stb\tests\oversample</Filter>
+    </ClInclude>
+    <ClInclude Include="vendor\stb\tests\prerelease\stb_lib.h">
+      <Filter>vendor\stb\tests\prerelease</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Cherenkov\Application.cpp">
@@ -1411,6 +1535,9 @@
     <ClCompile Include="src\Cherenkov\Renderer\Buffer.cpp">
       <Filter>src\Cherenkov\Renderer</Filter>
     </ClCompile>
+    <ClCompile Include="src\Cherenkov\Renderer\Camera.cpp">
+      <Filter>src\Cherenkov\Renderer</Filter>
+    </ClCompile>
     <ClCompile Include="src\Cherenkov\Renderer\Commands.cpp">
       <Filter>src\Cherenkov\Renderer</Filter>
     </ClCompile>
@@ -1418,6 +1545,12 @@
       <Filter>src\Cherenkov\Renderer</Filter>
     </ClCompile>
     <ClCompile Include="src\Cherenkov\Renderer\RendererAPI.cpp">
+      <Filter>src\Cherenkov\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Cherenkov\Renderer\Shader.cpp">
+      <Filter>src\Cherenkov\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Cherenkov\Renderer\Texture.cpp">
       <Filter>src\Cherenkov\Renderer</Filter>
     </ClCompile>
     <ClCompile Include="src\Cherenkov\Renderer\VertexArray.cpp">
@@ -1435,6 +1568,9 @@
     <ClCompile Include="src\Platform\OpenGL\OpenGLShader.cpp">
       <Filter>src\Platform\OpenGL</Filter>
     </ClCompile>
+    <ClCompile Include="src\Platform\OpenGL\OpenGLTexture.cpp">
+      <Filter>src\Platform\OpenGL</Filter>
+    </ClCompile>
     <ClCompile Include="src\Platform\OpenGL\OpenGLVertexArray.cpp">
       <Filter>src\Platform\OpenGL</Filter>
     </ClCompile>
@@ -1447,7 +1583,5 @@
     <ClCompile Include="src\ckpch.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="src\Cherenkov\Renderer\Camera.cpp" />
-    <ClCompile Include="src\Cherenkov\Renderer\Shader.cpp" />
   </ItemGroup>
 </Project>

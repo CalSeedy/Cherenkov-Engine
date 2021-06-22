@@ -15,6 +15,6 @@ namespace Cherenkov {
 
 		static VertexArray* init();
 
-		virtual ~VertexArray() {}
+		virtual ~VertexArray() = default;
 	};
 }

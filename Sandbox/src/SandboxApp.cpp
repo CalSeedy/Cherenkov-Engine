@@ -17,6 +17,8 @@ class ExampleLayer : public Cherenkov::Layer {
 	const float									m_RotSpeed = 70.0f;
 
 	Cherenkov::Ref<Cherenkov::Shader>			m_Shader;
+	Cherenkov::Ref<Cherenkov::Texture2D>		m_Texture;
+	Cherenkov::Ref<Cherenkov::Shader>			m_TextureShader;
 	Cherenkov::Ref<Cherenkov::VertexArray>		m_VertexArray;
 
 public:
@@ -24,18 +26,19 @@ public:
 
 		m_VertexArray.reset(Cherenkov::VertexArray::init());
 
-		float verts[4 * 3] = {
-			-0.5f, -0.5f, 0.0f,
-			 0.5f, -0.5f, 0.0f,
-			 0.5f,  0.5f, 0.0f,
-			-0.5f,  0.5f, 0.0f
+		float verts[4 * 5] = {
+			-0.5f, -0.5f, 0.0f, 0.0f, 0.0f,
+			 0.5f, -0.5f, 0.0f, 1.0f, 0.0f,
+			 0.5f,  0.5f, 0.0f, 1.0f, 1.0f,
+			-0.5f,  0.5f, 0.0f, 0.0f, 1.0f
 		};
 
 		Cherenkov::Ref<Cherenkov::VertexBuffer> vertexBuffer;
 		vertexBuffer.reset(Cherenkov::VertexBuffer::init(verts, sizeof(verts) / sizeof(float_t)));
 
 		Cherenkov::BufferLayout layout = {
-			{Cherenkov::ShaderDataType::Vec3f, "a_Pos"}
+			{Cherenkov::ShaderDataType::Vec3f, "a_Pos"},
+			{Cherenkov::ShaderDataType::Vec2f, "a_TexCoord"}
 		};
 		vertexBuffer->layout(layout);
 		m_VertexArray->addVertexBuffer(vertexBuffer);
@@ -47,8 +50,16 @@ public:
 
 		const char* vertIn("../Cherenkov/src/Cherenkov/Shaders/shader.vert");
 		const char* fragIn("../Cherenkov/src/Cherenkov/Shaders/shader.frag");
+		const char* texVertIn("../Cherenkov/src/Cherenkov/Shaders/TextureShader.vert");
+		const char* texFragIn("../Cherenkov/src/Cherenkov/Shaders/TextureShader.frag");
 
 		m_Shader.reset(Cherenkov::Shader::init(vertIn, fragIn));
+		m_TextureShader.reset(Cherenkov::Shader::init(texVertIn, texFragIn));
+
+		m_Texture = Cherenkov::Texture2D::init("assets/checkerboardSq.png");
+
+		std::dynamic_pointer_cast<Cherenkov::OpenGLShader>(m_TextureShader)->bind();
+		std::dynamic_pointer_cast<Cherenkov::OpenGLShader>(m_TextureShader)->uniformInt("tex", 0);
 	}
 
 	void onUpdate(Cherenkov::Timestep dt) override {
@@ -105,6 +116,10 @@ public:
 				Cherenkov::Renderer::submit(m_VertexArray, m_Shader, transform);
 			}
 		}
+
+		m_Texture->bind();
+		Cherenkov::Renderer::submit(m_VertexArray, m_TextureShader, glm::scale(glm::mat4(1.0f), glm::vec3(1.5f*m_ObjScale)));
+
 		Cherenkov::Renderer::endScene();
 	}
 

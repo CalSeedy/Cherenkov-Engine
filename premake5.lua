@@ -16,6 +16,7 @@ IncludeDir["GLFW"] = "Cherenkov/vendor/GLFW/include"
 IncludeDir["Glad"] = "Cherenkov/vendor/Glad/include"
 IncludeDir["ImGui"] = "Cherenkov/vendor/imgui"
 IncludeDir["glm"] = "Cherenkov/vendor/glm"
+IncludeDir["stb"] = "Cherenkov/vendor/stb"
 
 include "Cherenkov/vendor/GLFW"
 include "Cherenkov/vendor/Glad"
@@ -43,14 +44,15 @@ project "Sandbox"
 		"Cherenkov/vendor/spdlog/include",
 		"Cherenkov/src",
 		"Cherenkov/vendor",
-		"%{IncludeDir.glm}"
+		"%{IncludeDir.glm}",
+		"%{IncludeDir.stb}"
 	}
 
 	links
 	{
 		"Cherenkov"
 	}
-	
+
 	defines
 	{
 		"CK_PLATFORM_WINDOWS"
@@ -93,7 +95,8 @@ project "Cherenkov"
 		"%{prj.name}/src/**.h",
 		"%{prj.name}/src/**.cpp",
 		"%{prj.name}/vendor/glm/glm/**.hpp",
-		"%{prj.name}/vendor/glm/glm/**.inl"
+		"%{prj.name}/vendor/glm/glm/**.inl",
+		"%{prj.name}/vendor/stb/**.h"
 	}
 
 	includedirs
@@ -103,7 +106,8 @@ project "Cherenkov"
 		"%{IncludeDir.GLFW}",
 		"%{IncludeDir.Glad}",
 		"%{IncludeDir.ImGui}",
-		"%{IncludeDir.glm}"
+		"%{IncludeDir.glm}",
+		"%{IncludeDir.stb}"
 	}
 
 	links
@@ -122,7 +126,8 @@ project "Cherenkov"
 			"CK_PLATFORM_WINDOWS",
 			"CK_BUILD_DLL",
 			"GLFW_INCLUDE_NONE",
-			"_CRT_SECURE_NO_WARNINGS"
+			"_CRT_SECURE_NO_WARNINGS",
+			"STB_IMAGE_IMPLEMENTATION"
 		}
 
 	filter "configurations:Debug"

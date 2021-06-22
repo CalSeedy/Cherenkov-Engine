@@ -76,8 +76,8 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>ckpch.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
-      <PreprocessorDefinitions>CK_PLATFORM_WINDOWS;CK_BUILD_DLL;GLFW_INCLUDE_NONE;_CRT_SECURE_NO_WARNINGS;CK_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>src;vendor\spdlog\include;vendor\GLFW\include;vendor\Glad\include;vendor\imgui;vendor\glm;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>CK_PLATFORM_WINDOWS;CK_BUILD_DLL;GLFW_INCLUDE_NONE;_CRT_SECURE_NO_WARNINGS;STB_IMAGE_IMPLEMENTATION;CK_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>src;vendor\spdlog\include;vendor\GLFW\include;vendor\Glad\include;vendor\imgui;vendor\glm;vendor\stb;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <Optimization>Disabled</Optimization>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
@@ -97,8 +97,8 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>ckpch.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
-      <PreprocessorDefinitions>CK_PLATFORM_WINDOWS;CK_BUILD_DLL;GLFW_INCLUDE_NONE;_CRT_SECURE_NO_WARNINGS;CK_RELEASE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>src;vendor\spdlog\include;vendor\GLFW\include;vendor\Glad\include;vendor\imgui;vendor\glm;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>CK_PLATFORM_WINDOWS;CK_BUILD_DLL;GLFW_INCLUDE_NONE;_CRT_SECURE_NO_WARNINGS;STB_IMAGE_IMPLEMENTATION;CK_RELEASE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>src;vendor\spdlog\include;vendor\GLFW\include;vendor\Glad\include;vendor\imgui;vendor\glm;vendor\stb;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
@@ -122,8 +122,8 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>ckpch.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
-      <PreprocessorDefinitions>CK_PLATFORM_WINDOWS;CK_BUILD_DLL;GLFW_INCLUDE_NONE;_CRT_SECURE_NO_WARNINGS;CK_DISTRIBUTION;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>src;vendor\spdlog\include;vendor\GLFW\include;vendor\Glad\include;vendor\imgui;vendor\glm;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>CK_PLATFORM_WINDOWS;CK_BUILD_DLL;GLFW_INCLUDE_NONE;_CRT_SECURE_NO_WARNINGS;STB_IMAGE_IMPLEMENTATION;CK_DISTRIBUTION;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>src;vendor\spdlog\include;vendor\GLFW\include;vendor\Glad\include;vendor\imgui;vendor\glm;vendor\stb;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
@@ -166,12 +166,14 @@
     <ClInclude Include="src\Cherenkov\Renderer\RendererAPI.h" />
     <ClInclude Include="src\Cherenkov\Renderer\RendererContext.h" />
     <ClInclude Include="src\Cherenkov\Renderer\Shader.h" />
+    <ClInclude Include="src\Cherenkov\Renderer\Texture.h" />
     <ClInclude Include="src\Cherenkov\Renderer\VertexArray.h" />
     <ClInclude Include="src\Cherenkov\Window.h" />
     <ClInclude Include="src\Platform\OpenGL\OpenGLBuffer.h" />
     <ClInclude Include="src\Platform\OpenGL\OpenGLContext.h" />
     <ClInclude Include="src\Platform\OpenGL\OpenGLRendererAPI.h" />
     <ClInclude Include="src\Platform\OpenGL\OpenGLShader.h" />
+    <ClInclude Include="src\Platform\OpenGL\OpenGLTexture.h" />
     <ClInclude Include="src\Platform\OpenGL\OpenGLVertexArray.h" />
     <ClInclude Include="src\Platform\Windows\WindowsInput.h" />
     <ClInclude Include="src\Platform\Windows\WindowsWindow.h" />
@@ -591,6 +593,37 @@
     <ClInclude Include="vendor\glm\glm\vec3.hpp" />
     <ClInclude Include="vendor\glm\glm\vec4.hpp" />
     <ClInclude Include="vendor\glm\glm\vector_relational.hpp" />
+    <ClInclude Include="vendor\stb\deprecated\rrsprintf.h" />
+    <ClInclude Include="vendor\stb\deprecated\stretchy_buffer.h" />
+    <ClInclude Include="vendor\stb\stb.h" />
+    <ClInclude Include="vendor\stb\stb_c_lexer.h" />
+    <ClInclude Include="vendor\stb\stb_connected_components.h" />
+    <ClInclude Include="vendor\stb\stb_divide.h" />
+    <ClInclude Include="vendor\stb\stb_ds.h" />
+    <ClInclude Include="vendor\stb\stb_dxt.h" />
+    <ClInclude Include="vendor\stb\stb_easy_font.h" />
+    <ClInclude Include="vendor\stb\stb_herringbone_wang_tile.h" />
+    <ClInclude Include="vendor\stb\stb_hexwave.h" />
+    <ClInclude Include="vendor\stb\stb_image.h" />
+    <ClInclude Include="vendor\stb\stb_image_resize.h" />
+    <ClInclude Include="vendor\stb\stb_image_write.h" />
+    <ClInclude Include="vendor\stb\stb_include.h" />
+    <ClInclude Include="vendor\stb\stb_leakcheck.h" />
+    <ClInclude Include="vendor\stb\stb_perlin.h" />
+    <ClInclude Include="vendor\stb\stb_rect_pack.h" />
+    <ClInclude Include="vendor\stb\stb_sprintf.h" />
+    <ClInclude Include="vendor\stb\stb_textedit.h" />
+    <ClInclude Include="vendor\stb\stb_tilemap_editor.h" />
+    <ClInclude Include="vendor\stb\stb_truetype.h" />
+    <ClInclude Include="vendor\stb\stb_voxel_render.h" />
+    <ClInclude Include="vendor\stb\tests\caveview\cave_parse.h" />
+    <ClInclude Include="vendor\stb\tests\caveview\caveview.h" />
+    <ClInclude Include="vendor\stb\tests\caveview\glext.h" />
+    <ClInclude Include="vendor\stb\tests\caveview\glext_list.h" />
+    <ClInclude Include="vendor\stb\tests\caveview\stb_gl.h" />
+    <ClInclude Include="vendor\stb\tests\caveview\stb_glprog.h" />
+    <ClInclude Include="vendor\stb\tests\oversample\stb_wingraph.h" />
+    <ClInclude Include="vendor\stb\tests\prerelease\stb_lib.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Cherenkov\Application.cpp" />
@@ -605,11 +638,13 @@
     <ClCompile Include="src\Cherenkov\Renderer\Renderer.cpp" />
     <ClCompile Include="src\Cherenkov\Renderer\RendererAPI.cpp" />
     <ClCompile Include="src\Cherenkov\Renderer\Shader.cpp" />
+    <ClCompile Include="src\Cherenkov\Renderer\Texture.cpp" />
     <ClCompile Include="src\Cherenkov\Renderer\VertexArray.cpp" />
     <ClCompile Include="src\Platform\OpenGL\OpenGLBuffer.cpp" />
     <ClCompile Include="src\Platform\OpenGL\OpenGLContext.cpp" />
     <ClCompile Include="src\Platform\OpenGL\OpenGLRendererAPI.cpp" />
     <ClCompile Include="src\Platform\OpenGL\OpenGLShader.cpp" />
+    <ClCompile Include="src\Platform\OpenGL\OpenGLTexture.cpp" />
     <ClCompile Include="src\Platform\OpenGL\OpenGLVertexArray.cpp" />
     <ClCompile Include="src\Platform\Windows\WindowsInput.cpp" />
     <ClCompile Include="src\Platform\Windows\WindowsWindow.cpp" />
