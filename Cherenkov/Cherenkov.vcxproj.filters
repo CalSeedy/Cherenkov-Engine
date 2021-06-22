@@ -1448,5 +1448,6 @@
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="src\Cherenkov\Renderer\Camera.cpp" />
+    <ClCompile Include="src\Cherenkov\Renderer\Shader.cpp" />
   </ItemGroup>
 </Project>

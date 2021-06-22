@@ -1,6 +1,7 @@
 #include <Cherenkov.h>
 #include "imgui/imgui.h"
 #include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
 
 class ExampleLayer : public Cherenkov::Layer {
 	Cherenkov::OrthographicCamera				m_Camera;
@@ -8,6 +9,7 @@ class ExampleLayer : public Cherenkov::Layer {
 	float										m_CameraRotation = 0.0f;
 
 	float										m_ObjAngle{ 0.0f };
+	glm::vec4									m_ObjColour{ 0.906f, 0.227f, 0.137f, 1.0f };
 	float										m_ObjScale{ 1.0f };
 	glm::vec3									m_ObjTranslate{ 0.0f };
 
@@ -46,7 +48,7 @@ public:
 		const char* vertIn("../Cherenkov/src/Cherenkov/Shaders/shader.vert");
 		const char* fragIn("../Cherenkov/src/Cherenkov/Shaders/shader.frag");
 
-		m_Shader.reset(new Cherenkov::OpenGLShader(vertIn, fragIn));
+		m_Shader.reset(Cherenkov::Shader::init(vertIn, fragIn));
 	}
 
 	void onUpdate(Cherenkov::Timestep dt) override {
@@ -73,18 +75,6 @@ public:
 
 
 		/* --------------- Object Transform ---------------*/
-		if (Cherenkov::Input::isKeyPressed(CK_KEY_I))
-			m_ObjTranslate.y += m_PanSpeed * dt;
-
-		else if (Cherenkov::Input::isKeyPressed(CK_KEY_K))
-			m_ObjTranslate.y -= m_PanSpeed * dt;
-
-		if (Cherenkov::Input::isKeyPressed(CK_KEY_J))
-			m_ObjTranslate.x -= m_PanSpeed * dt;
-
-		else if (Cherenkov::Input::isKeyPressed(CK_KEY_L))
-			m_ObjTranslate.x += m_PanSpeed * dt;
-
 		if (Cherenkov::Input::isKeyPressed(CK_KEY_U))
 			m_ObjAngle += m_RotSpeed * dt;
 
@@ -104,6 +94,10 @@ public:
 		m_Camera.setRotation(m_CameraRotation);
 
 		Cherenkov::Renderer::beginScene(m_Camera);
+
+		std::dynamic_pointer_cast<Cherenkov::OpenGLShader>(m_Shader)->bind();
+		std::dynamic_pointer_cast<Cherenkov::OpenGLShader>(m_Shader)->uniformFloat4("colour", m_ObjColour);
+
 		for (int i = -10; i < 10; ++i) {
 			for (int j = -10; j < 10; ++j) {
 				glm::vec3 pos = {i * (m_ObjScale * 1.1f), j * (m_ObjScale * 1.1f), 0.0f};
@@ -133,7 +127,11 @@ public:
 		return false;
 	}
 	void onImGuiDraw() override	{
-
+		ImGui::Begin("Settings");
+		ImGui::ColorPicker4("Sq. Colour", glm::value_ptr(m_ObjColour));
+		ImGui::DragFloat3("Camera: Position", glm::value_ptr(m_CameraPos));
+		ImGui::DragFloat("Camera: Rotation", &m_CameraRotation, m_RotSpeed, glm::radians(-180.0f), glm::radians(180.0f));
+		ImGui::End();
 	}
 };
 

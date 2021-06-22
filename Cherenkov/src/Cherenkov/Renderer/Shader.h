@@ -7,9 +7,11 @@ namespace Cherenkov {
 	class Shader {
 
 	public:
+		virtual ~Shader() = default;
+
 		virtual void bind() const = 0;
 		virtual void unbind() const = 0;
 
-		virtual void uniformMat4(const std::string& id, const glm::mat4& matrix) const = 0;
+		static Shader* init(const char* vertexPath, const char* fragmentPath);
 	};
 }

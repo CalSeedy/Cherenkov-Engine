@@ -14,13 +14,12 @@ namespace Cherenkov {
 		file.seekg(0, std::ios::end);
 		code.reserve(file.tellg());
 		file.seekg(0, std::ios::beg);
-		code.assign((std::istreambuf_iterator<char>(file)),	std::istreambuf_iterator<char>());
+		code.assign((std::istreambuf_iterator<char>(file)), std::istreambuf_iterator<char>());
 
 		return code;
 	}
 
-	OpenGLShader::OpenGLShader(const char* vertexPath, const char* fragmentPath) : m_ID{NULL} {
-		
+	OpenGLShader::OpenGLShader(const char* vertexPath, const char* fragmentPath) : m_ID{NULL} {		
 		// Read our shaders into the appropriate buffers
 		std::string vertexSource = getSource(vertexPath);// Get source code for vertex shader.
 		std::string fragmentSource = getSource(fragmentPath);// Get source code for fragment shader.
@@ -138,8 +137,38 @@ namespace Cherenkov {
 		glUseProgram(0);
 	}
 
+	void OpenGLShader::uniformInt(const std::string& id, int value) const {
+		GLint loc = glGetUniformLocation(m_ID, id.c_str());
+		glUniform1i(loc, value);
+	}
+
+	void OpenGLShader::uniformMat3(const std::string& id, const glm::mat3& matrix) const {
+		GLint loc = glGetUniformLocation(m_ID, id.c_str());
+		glUniformMatrix3fv(loc, 1, GL_FALSE, glm::value_ptr(matrix));
+	}
+
 	void OpenGLShader::uniformMat4(const std::string& id, const glm::mat4& matrix) const {
 		GLint loc = glGetUniformLocation(m_ID, id.c_str());
 		glUniformMatrix4fv(loc, 1, GL_FALSE, glm::value_ptr(matrix));
+	}
+
+	void OpenGLShader::uniformFloat(const std::string& id, float_t value) const	{
+		GLint loc = glGetUniformLocation(m_ID, id.c_str());
+		glUniform1f(loc, value);
+	}
+
+	void OpenGLShader::uniformFloat2(const std::string& id, const glm::vec2& vector) const {
+		GLint loc = glGetUniformLocation(m_ID, id.c_str());
+		glUniform2f(loc, vector.x, vector.y);
+	}
+
+	void OpenGLShader::uniformFloat3(const std::string& id, const glm::vec3& vector) const {
+		GLint loc = glGetUniformLocation(m_ID, id.c_str());
+		glUniform3f(loc, vector.x, vector.y, vector.z);
+	}
+
+	void OpenGLShader::uniformFloat4(const std::string& id, const glm::vec4& vector) const {
+		GLint loc = glGetUniformLocation(m_ID, id.c_str());
+		glUniform4f(loc, vector.x, vector.y, vector.z, vector.w);
 	}
 }
