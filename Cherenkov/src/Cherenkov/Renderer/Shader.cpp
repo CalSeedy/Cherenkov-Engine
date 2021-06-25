@@ -17,4 +17,15 @@ namespace Cherenkov {
 
 	}
 
+	Shader* Shader::init(const std::string& filepath) {
+		switch (Renderer::getAPI()) {
+		case RendererAPI::API::None:		return nullptr;
+		case RendererAPI::API::OpenGL:		return new OpenGLShader(filepath);
+		default:
+			CK_CORE_ASSERT(false, "Unknown Renderer!");
+			return nullptr;
+		}
+		return nullptr;
+	}
+
 }

@@ -1,13 +1,18 @@
 #pragma once
 #include "Cherenkov/Renderer/Shader.h"
 
+
+typedef unsigned int GLenum;
+
 namespace Cherenkov {
 	
 	class OpenGLShader : public Shader {
 		uint32_t m_ID;
-
+		void compile(const std::unordered_map<GLenum, std::string>& shaders);
+		std::unordered_map<GLenum, std::string> parse(const std::string& src);
 	public:
 		OpenGLShader(const std::string& vertexPath, const std::string& fragmentPath);
+		OpenGLShader(const std::string& filepath);
 		virtual ~OpenGLShader();
 
 		virtual void bind() const override;

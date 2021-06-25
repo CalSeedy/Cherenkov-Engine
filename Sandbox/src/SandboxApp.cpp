@@ -51,14 +51,13 @@ public:
 
 		std::string vertIn("../Cherenkov/src/Cherenkov/Shaders/shader.vert");
 		std::string fragIn("../Cherenkov/src/Cherenkov/Shaders/shader.frag");
-		std::string texVertIn("../Cherenkov/src/Cherenkov/Shaders/TextureShader.vert");
-		std::string texFragIn("../Cherenkov/src/Cherenkov/Shaders/TextureShader.frag");
+		std::string texShader("assets/Shaders/Texture.glsl");
 
 		m_Shader.reset(Cherenkov::Shader::init(vertIn, fragIn));
-		m_TextureShader.reset(Cherenkov::Shader::init(texVertIn, texFragIn));
+		m_TextureShader.reset(Cherenkov::Shader::init(texShader));
 
-		m_Texture = Cherenkov::Texture2D::init("assets/checkerboardSq.png");
-		m_Texture2 = Cherenkov::Texture2D::init("assets/ChernoLogo.png");
+		m_Texture = Cherenkov::Texture2D::init ("assets/Textures/checkerboardSq.png");
+		m_Texture2 = Cherenkov::Texture2D::init("assets/Textures/ChernoLogo.png");
 
 		std::dynamic_pointer_cast<Cherenkov::OpenGLShader>(m_TextureShader)->bind();
 		std::dynamic_pointer_cast<Cherenkov::OpenGLShader>(m_TextureShader)->uniformInt("tex", 0);
@@ -150,7 +149,8 @@ public:
 		ImGui::Begin("Settings");
 		ImGui::ColorPicker4("Sq. Colour", glm::value_ptr(m_ObjColour));
 		ImGui::DragFloat3("Camera: Position", glm::value_ptr(m_CameraPos));
-		ImGui::DragFloat("Camera: Rotation", &m_CameraRotation, m_RotSpeed, glm::radians(-180.0f), glm::radians(180.0f));
+		ImGui::SliderFloat("Camera: Rotation", &m_CameraRotation, -180.0f, 180.0f);
+		ImGui::SliderFloat("Grid: Rotation", &m_ObjAngle, -180.0f, 180.0f);
 		ImGui::End();
 	}
 };
