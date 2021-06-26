@@ -19,7 +19,7 @@ namespace Cherenkov {
 
 	std::string getSource(const char* path) {
 
-		std::ifstream file(path, std::ios::in, std::ios::binary);
+		std::ifstream file(path, std::ios::in | std::ios::binary);
 		if (file) {
 		
 		} else {
@@ -36,7 +36,9 @@ namespace Cherenkov {
 	}
 
 	void OpenGLShader::compile(const std::unordered_map<GLenum, std::string>& shaders) {
-		std::vector<GLenum> shaderIDs(shaders.size());
+		CK_CORE_ASSERT(shaders.size() <= 5, "Maximum shader limit exceeded!");
+		std::array<GLenum, 5> shaderIDs;
+		int idx = 0;
 		GLuint id = glCreateProgram();
 		for (auto& kv : shaders) {
 			GLenum type = kv.first;
@@ -67,7 +69,7 @@ namespace Cherenkov {
 			}
 
 			glAttachShader(id, shader);
-			shaderIDs.push_back(shader);
+			shaderIDs[idx++] = shader;
 		}		
 
 		glLinkProgram(id);
