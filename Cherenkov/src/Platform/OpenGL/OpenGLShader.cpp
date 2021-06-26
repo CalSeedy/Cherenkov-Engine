@@ -15,6 +15,7 @@ namespace Cherenkov {
 		} else {
 			CK_CORE_ERROR("Unknown type: {0}", type);
 		}
+		return 0;
 	}
 
 	std::string getSource(const char* path) {
@@ -120,7 +121,7 @@ namespace Cherenkov {
 		return shaders;
 	}
 
-	OpenGLShader::OpenGLShader(const std::string& vertexPath, const std::string& fragmentPath) : m_ID{NULL} {
+	OpenGLShader::OpenGLShader(const std::string& name, const std::string& vertexPath, const std::string& fragmentPath) : m_Name{name}{
 		std::unordered_map<GLenum, std::string> shaders;
 		shaders[GL_VERTEX_SHADER] = getSource(vertexPath.c_str());
 		shaders[GL_FRAGMENT_SHADER] = getSource(fragmentPath.c_str());
@@ -131,6 +132,12 @@ namespace Cherenkov {
 		std::string source = getSource(filepath.c_str());
 		auto shaders = parse(source);
 		compile(shaders);
+
+		size_t lastSlash = filepath.find_last_of("/\\");
+		lastSlash = lastSlash == std::string::npos ? 0 : lastSlash + 1;
+		size_t lastDot = filepath.rfind(".") - 1;
+
+		m_Name = filepath.substr(lastSlash, lastDot - lastSlash);
 	}
 
 	OpenGLShader::~OpenGLShader() {

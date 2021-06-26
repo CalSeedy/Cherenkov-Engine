@@ -17,6 +17,7 @@ class ExampleLayer : public Cherenkov::Layer {
 	const float									m_RotSpeed = 70.0f;
 
 	Cherenkov::Ref<Cherenkov::Shader>			m_Shader;
+	Cherenkov::Ref<Cherenkov::ShaderLibrary>	m_ShaderLibrary;
 	Cherenkov::Ref<Cherenkov::Texture2D>		m_Texture;
 	Cherenkov::Ref<Cherenkov::Texture2D>		m_Texture2;
 	Cherenkov::Ref<Cherenkov::Shader>			m_TextureShader;
@@ -53,8 +54,8 @@ public:
 		std::string fragIn("../Cherenkov/src/Cherenkov/Shaders/shader.frag");
 		std::string texShader("assets/Shaders/Texture.glsl");
 
-		m_Shader.reset(Cherenkov::Shader::init(vertIn, fragIn));
-		m_TextureShader.reset(Cherenkov::Shader::init(texShader));
+		m_Shader = Cherenkov::Shader::init("SquareColourShader",vertIn, fragIn);
+		m_TextureShader = Cherenkov::Shader::init(texShader);
 
 		m_Texture = Cherenkov::Texture2D::init ("assets/Textures/checkerboardSq.png");
 		m_Texture2 = Cherenkov::Texture2D::init("assets/Textures/ChernoLogo.png");
