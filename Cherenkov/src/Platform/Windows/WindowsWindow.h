@@ -23,9 +23,7 @@ namespace Cherenkov {
 		bool isVSync() const override;
 	
 		inline virtual void* getNativeWindow() const { return m_Window; }
-		inline void setViewport(uint32_t width, uint32_t height) const override {
-			m_Ctx->setViewport(width, height);
-		}
+
 	private:
 		virtual void init(const WindowProperties &properties);
 		virtual void shutDown();

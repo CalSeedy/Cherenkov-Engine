@@ -34,7 +34,6 @@ namespace Cherenkov {
 		virtual bool isVSync() const = 0;
 
 		virtual void* getNativeWindow() const = 0;
-		virtual void setViewport(uint32_t width, uint32_t height) const = 0;
 
 		static Window* Create(const WindowProperties &properties = WindowProperties());
 	}; 

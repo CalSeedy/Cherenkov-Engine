@@ -16,4 +16,7 @@ namespace Cherenkov {
 	void OpenGLRendererAPI::drawIndexed(const Ref<VertexArray>& vertexArray) {
 		glDrawElements(GL_TRIANGLES, vertexArray->getIndexBuffer()->count(), GL_UNSIGNED_INT, nullptr);
 	}
+	void OpenGLRendererAPI::setViewport(uint32_t x1, uint32_t y1, uint32_t x2, uint32_t y2)	{
+		glViewport(x1, y1, x2, y2);
+	}
 }

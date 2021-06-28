@@ -161,6 +161,7 @@
     <ClInclude Include="src\Cherenkov\MouseButtonCodes.h" />
     <ClInclude Include="src\Cherenkov\Renderer\Buffer.h" />
     <ClInclude Include="src\Cherenkov\Renderer\Camera.h" />
+    <ClInclude Include="src\Cherenkov\CameraController.h" />
     <ClInclude Include="src\Cherenkov\Renderer\Commands.h" />
     <ClInclude Include="src\Cherenkov\Renderer\Renderer.h" />
     <ClInclude Include="src\Cherenkov\Renderer\RendererAPI.h" />
@@ -627,6 +628,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Cherenkov\Application.cpp" />
+    <ClCompile Include="src\Cherenkov\CameraController.cpp" />
     <ClCompile Include="src\Cherenkov\ImGui\ImGuiBuild.cpp" />
     <ClCompile Include="src\Cherenkov\ImGui\ImGuiLayer.cpp" />
     <ClCompile Include="src\Cherenkov\Layer.cpp" />

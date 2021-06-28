@@ -65,27 +65,28 @@ namespace Cherenkov {
 			Timestep dt = time - m_FrameTime;
 			m_FrameTime = time;
 
-			for (Layer* layer : m_LayerStack) {
-				layer->onUpdate(dt);
+			if (!m_Minimized) {
+				for (Layer* layer : m_LayerStack)
+					layer->onUpdate(dt);
 			}
-			
 			m_ImGuiLayer->start();
 			for (Layer* layer : m_LayerStack) {
 				layer->onImGuiDraw();
 			}
 			m_ImGuiLayer->stop();
-
 			m_Window->onUpdate();
 		}
 	}
 
-	bool Application::onWindowResize(WindowResizeEvent &event) {
-		m_Window->setViewport(event.getWidth(), event.getHeight());
+	bool Application::onWindowResize(WindowResizeEvent &ev) {
+		if (ev.getWidth() == 0 || ev.getHeight() == 0) m_Minimized = true;
+		else m_Minimized = false;
+		Renderer::onWindowResize(ev.getWidth(), ev.getHeight());
 		return false;
 	}
 	
 
-	bool Application::onWindowClose(WindowCloseEvent &event) {
+	bool Application::onWindowClose(WindowCloseEvent &ev) {
 		m_Running = false;
 		return true;
 	}

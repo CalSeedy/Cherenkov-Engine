@@ -4,10 +4,8 @@
 #include <glm/gtc/type_ptr.hpp>
 
 class ExampleLayer : public Cherenkov::Layer {
-	Cherenkov::OrthographicCamera				m_Camera;
-	glm::vec3									m_CameraPos;
-	float										m_CameraRotation = 0.0f;
-
+	Cherenkov::OrthographicCameraController		m_CameraController;
+	
 	float										m_ObjAngle{ 0.0f };
 	glm::vec4									m_ObjColour{ 0.906f, 0.227f, 0.137f, 1.0f };
 	float										m_ObjScale{ 1.0f };
@@ -24,7 +22,7 @@ class ExampleLayer : public Cherenkov::Layer {
 	Cherenkov::Ref<Cherenkov::VertexArray>		m_VertexArray;
 
 public:
-	ExampleLayer() : Layer("Test!"), m_Camera{ -1.6f, 1.6f, -0.9f, 0.9f }, m_CameraPos{ 0.0f } {
+	ExampleLayer() : Layer("Test!"), m_CameraController { 1920.0f / 1080.0f } {
 
 		m_VertexArray.reset(Cherenkov::VertexArray::init());
 
@@ -67,26 +65,7 @@ public:
 	void onUpdate(Cherenkov::Timestep dt) override {
 		//CK_TRACE("dt: {0} s ({1} FPS)", dt.getSeconds(), dt.toFPS());
 
-		/* --------------- Camera Transform ---------------*/
-		if (Cherenkov::Input::isKeyPressed(CK_KEY_W))
-			m_CameraPos.y += m_PanSpeed * dt;
-
-		else if (Cherenkov::Input::isKeyPressed(CK_KEY_S))
-			m_CameraPos.y -= m_PanSpeed * dt;
-
-		if (Cherenkov::Input::isKeyPressed(CK_KEY_A))
-			m_CameraPos.x -= m_PanSpeed * dt;
-
-		else if (Cherenkov::Input::isKeyPressed(CK_KEY_D))
-			m_CameraPos.x += m_PanSpeed * dt;
-
-		if (Cherenkov::Input::isKeyPressed(CK_KEY_Q))
-			m_CameraRotation += m_RotSpeed * dt;
-
-		else if (Cherenkov::Input::isKeyPressed(CK_KEY_E))
-			m_CameraRotation -= m_RotSpeed * dt;
-
-
+		m_CameraController.onUpdate(dt);
 		/* --------------- Object Transform ---------------*/
 		if (Cherenkov::Input::isKeyPressed(CK_KEY_U))
 			m_ObjAngle += m_RotSpeed * dt;
@@ -103,10 +82,7 @@ public:
 
 		Cherenkov::RenderCommand::clear({ 1.0f, 0.0f, 1.0f, 1.0f });
 
-		m_Camera.setPosition(m_CameraPos);
-		m_Camera.setRotation(m_CameraRotation);
-
-		Cherenkov::Renderer::beginScene(m_Camera);
+		Cherenkov::Renderer::beginScene(m_CameraController.getCamera());
 
 		std::dynamic_pointer_cast<Cherenkov::OpenGLShader>(m_Shader)->bind();
 		std::dynamic_pointer_cast<Cherenkov::OpenGLShader>(m_Shader)->uniformFloat4("colour", m_ObjColour);
@@ -128,30 +104,13 @@ public:
 		Cherenkov::Renderer::endScene();
 	}
 
-	void onEvent(Cherenkov::Event &event) override {
-		Cherenkov::EventDispatcher dispatcher(event);
-		dispatcher.Dispatch<Cherenkov::KeyPressedEvent>(CK_BIND_EVENT_FN(ExampleLayer::onKeyPressedEvent));
+	void onEvent(Cherenkov::Event &ev) override {
+		m_CameraController.onEvent(ev);
 	}
 
-	bool onKeyPressedEvent(Cherenkov::KeyPressedEvent& event) {
-		switch (event.getKeyCode()) {
-		case CK_KEY_ENTER:
-			m_CameraPos = { 0.0f, 0.0f, 0.0f };
-			m_CameraRotation = 0.0f;
-			m_ObjTranslate = { 0.0f, 0.0f, 0.0f };
-			m_ObjAngle = 0.0f;
-			break;
-		default:
-			break;
-		}
-		return false;
-	}
 	void onImGuiDraw() override	{
 		ImGui::Begin("Settings");
 		ImGui::ColorPicker4("Sq. Colour", glm::value_ptr(m_ObjColour));
-		ImGui::DragFloat3("Camera: Position", glm::value_ptr(m_CameraPos));
-		ImGui::SliderFloat("Camera: Rotation", &m_CameraRotation, -180.0f, 180.0f);
-		ImGui::SliderFloat("Grid: Rotation", &m_ObjAngle, -180.0f, 180.0f);
 		ImGui::End();
 	}
 };

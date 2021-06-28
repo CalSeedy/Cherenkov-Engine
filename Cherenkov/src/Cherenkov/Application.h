@@ -26,7 +26,8 @@ namespace Cherenkov {
 		ImGuiLayer*						m_ImGuiLayer;
 		LayerStack						m_LayerStack;
 		bool							m_Running = true;
-		Ref<Window>			m_Window;
+		bool							m_Minimized = false;
+		Ref<Window>						m_Window;
 
 		bool onWindowClose(WindowCloseEvent& event);
 		bool onWindowResize(WindowResizeEvent& event);

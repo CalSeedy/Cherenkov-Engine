@@ -19,5 +19,9 @@ namespace Cherenkov {
 		inline static void drawIndexed(const Ref<VertexArray>& vertexArray) {
 			s_RendererAPI->drawIndexed(vertexArray);
 		}
+
+		inline static void setViewport(uint32_t x1, uint32_t y1, uint32_t x2, uint32_t y2) {
+			s_RendererAPI->setViewport(x1, y1, x2, y2);
+		}
 	};
 }

@@ -1,6 +1,13 @@
 #pragma once
 #include <glm/glm.hpp>
 
+#ifdef near
+#undef near
+#endif
+
+#ifdef far
+#undef far
+#endif
 namespace Cherenkov {
 
 	class Camera {
@@ -16,6 +23,7 @@ namespace Cherenkov {
 
 		virtual void setRotation(float angle) = 0;
 
+		virtual void setProjection(float left, float right, float bottom, float top, float near, float far) = 0;
 		virtual void setPosition(const glm::vec3& position) = 0;
 		virtual void setPosition(float x, float y, float z) = 0;
 	};
@@ -40,6 +48,8 @@ namespace Cherenkov {
 		inline const float& getRotation() const override { return m_Rotation; }
 
 		inline void setRotation(float angle) { m_Rotation = angle; recalculateMatrices(); }
+
+		void setProjection(float left, float right, float bottom, float top, float near = -1.0f, float far = 1.0f) override;
 
 		inline void setPosition(const glm::vec3& position) override { m_Position = position; recalculateMatrices(); }
 		inline void setPosition(float x, float y, float z) override { m_Position.x = x; m_Position.y = y; m_Position.z = z; recalculateMatrices(); }

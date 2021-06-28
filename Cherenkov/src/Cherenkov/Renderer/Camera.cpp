@@ -13,5 +13,10 @@ namespace Cherenkov {
 	OrthographicCamera::OrthographicCamera(float left, float right, float bottom, float top) : m_Projection{ glm::ortho(left, right, bottom, top, -1.0f, 1.0f) }, m_View{ 1.0f } {
 		m_ViewProjection = m_Projection * m_View;
 	}
+
+	void OrthographicCamera::setProjection(float left, float right, float bottom, float top, float near, float far) {
+		m_Projection = glm::ortho(left, right, bottom, top, near, far);
+		m_ViewProjection = m_Projection * m_View;
+	}
 }
 
