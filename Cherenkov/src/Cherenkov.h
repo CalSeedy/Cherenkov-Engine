@@ -1,16 +1,16 @@
 #pragma once
 
 // Useful for Cherenkov Apps
-#include "Cherenkov/Application.h"
-#include "Cherenkov/Layer.h"
-#include "Cherenkov/Log.h"
+#include "Cherenkov/Core/Application.h"
+#include "Cherenkov/Core/Layer.h"
+#include "Cherenkov/Core/Log.h"
 
 #include "Cherenkov/Core/TimeStep.h"
 
 #include "Cherenkov/CameraController.h"
-#include "Cherenkov/Input.h"
-#include "Cherenkov/KeyCodes.h"
-#include "Cherenkov/MouseButtonCodes.h"
+#include "Cherenkov/Core/Input.h"
+#include "Cherenkov/Core/KeyCodes.h"
+#include "Cherenkov/Core/MouseButtonCodes.h"
 
 #include "Cherenkov/ImGui/ImGuiLayer.h"
 
@@ -22,4 +22,4 @@
 #include "Cherenkov/Renderer/VertexArray.h"
 
 
-#include "Cherenkov/EntryPoint.h"
+#include "Cherenkov/Core/EntryPoint.h"

@@ -1,6 +1,6 @@
 #include "ckpch.h"
 #include "WindowsWindow.h"
-#include "Cherenkov/Log.h"
+#include "Cherenkov/Core/Log.h"
 
 #include "Cherenkov/Events/KeyEvent.h"
 #include "Cherenkov/Events/ApplicationEvent.h"

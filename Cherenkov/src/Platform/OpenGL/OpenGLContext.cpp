@@ -1,7 +1,7 @@
 #include "ckpch.h"
 #include "OpenGLContext.h"
 
-#include "Cherenkov/Log.h"
+#include "Cherenkov/Core/Log.h"
 
 #include <GLFW/glfw3.h>
 #include <glad/glad.h>

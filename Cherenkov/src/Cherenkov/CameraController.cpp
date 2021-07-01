@@ -1,11 +1,11 @@
 #include "ckpch.h"
 #include "CameraController.h"
-#include "Input.h"
-#include "KeyCodes.h"
+#include "Cherenkov/Core/Input.h"
+#include "Cherenkov/Core/KeyCodes.h"
 
 float zoomFactor = 0.25f;
 float zoomLimitLow = 0.1f;
-float zoomLimitHigh = 10.f;
+float zoomLimitHigh = 10.0f;
 
 namespace Cherenkov {
     bool OrthographicCameraController::onMouseScrolled(MouseScrollEvent& e) {

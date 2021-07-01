@@ -1,7 +1,6 @@
 #pragma once
-
-#include "Cherenkov/Core.h"
-#include "Layer.h"
+#include "Cherenkov/Core/Core.h"
+#include "Cherenkov/Core/Layer.h"
 
 namespace Cherenkov {
 

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Cherenkov/Input.h"
+#include "Cherenkov/Core/Input.h"
 
 namespace Cherenkov {
 	

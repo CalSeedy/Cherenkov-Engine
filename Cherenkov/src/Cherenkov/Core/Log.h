@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Cherenkov/Core.h"
+#include "Cherenkov/Core/Core.h"
 #include "spdlog/spdlog.h"
 #include "spdlog/fmt/ostr.h"
 

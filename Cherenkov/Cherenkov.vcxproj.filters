@@ -72,17 +72,41 @@
     <ClInclude Include="src\Cherenkov.h">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="src\Cherenkov\Application.h">
+    <ClInclude Include="src\Cherenkov\CameraController.h">
       <Filter>src\Cherenkov</Filter>
     </ClInclude>
-    <ClInclude Include="src\Cherenkov\Core.h">
-      <Filter>src\Cherenkov</Filter>
+    <ClInclude Include="src\Cherenkov\Core\Application.h">
+      <Filter>src\Cherenkov\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Cherenkov\Core\Core.h">
+      <Filter>src\Cherenkov\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Cherenkov\Core\EntryPoint.h">
+      <Filter>src\Cherenkov\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Cherenkov\Core\Input.h">
+      <Filter>src\Cherenkov\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Cherenkov\Core\KeyCodes.h">
+      <Filter>src\Cherenkov\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Cherenkov\Core\Layer.h">
+      <Filter>src\Cherenkov\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Cherenkov\Core\LayerStack.h">
+      <Filter>src\Cherenkov\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Cherenkov\Core\Log.h">
+      <Filter>src\Cherenkov\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Cherenkov\Core\MouseButtonCodes.h">
+      <Filter>src\Cherenkov\Core</Filter>
     </ClInclude>
     <ClInclude Include="src\Cherenkov\Core\TimeStep.h">
       <Filter>src\Cherenkov\Core</Filter>
     </ClInclude>
-    <ClInclude Include="src\Cherenkov\EntryPoint.h">
-      <Filter>src\Cherenkov</Filter>
+    <ClInclude Include="src\Cherenkov\Core\Window.h">
+      <Filter>src\Cherenkov\Core</Filter>
     </ClInclude>
     <ClInclude Include="src\Cherenkov\Events\ApplicationEvent.h">
       <Filter>src\Cherenkov\Events</Filter>
@@ -98,24 +122,6 @@
     </ClInclude>
     <ClInclude Include="src\Cherenkov\ImGui\ImGuiLayer.h">
       <Filter>src\Cherenkov\ImGui</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Cherenkov\Input.h">
-      <Filter>src\Cherenkov</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Cherenkov\KeyCodes.h">
-      <Filter>src\Cherenkov</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Cherenkov\Layer.h">
-      <Filter>src\Cherenkov</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Cherenkov\LayerStack.h">
-      <Filter>src\Cherenkov</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Cherenkov\Log.h">
-      <Filter>src\Cherenkov</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Cherenkov\MouseButtonCodes.h">
-      <Filter>src\Cherenkov</Filter>
     </ClInclude>
     <ClInclude Include="src\Cherenkov\Renderer\Buffer.h">
       <Filter>src\Cherenkov\Renderer</Filter>
@@ -143,9 +149,6 @@
     </ClInclude>
     <ClInclude Include="src\Cherenkov\Renderer\VertexArray.h">
       <Filter>src\Cherenkov\Renderer</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Cherenkov\Window.h">
-      <Filter>src\Cherenkov</Filter>
     </ClInclude>
     <ClInclude Include="src\Platform\OpenGL\OpenGLBuffer.h">
       <Filter>src\Platform\OpenGL</Filter>
@@ -1512,26 +1515,28 @@
     <ClInclude Include="vendor\stb\tests\prerelease\stb_lib.h">
       <Filter>vendor\stb\tests\prerelease</Filter>
     </ClInclude>
-    <ClInclude Include="src\Cherenkov\CameraController.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\Cherenkov\Application.cpp">
+    <ClCompile Include="src\Cherenkov\CameraController.cpp">
       <Filter>src\Cherenkov</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Cherenkov\Core\Application.cpp">
+      <Filter>src\Cherenkov\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Cherenkov\Core\Layer.cpp">
+      <Filter>src\Cherenkov\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Cherenkov\Core\LayerStack.cpp">
+      <Filter>src\Cherenkov\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Cherenkov\Core\Log.cpp">
+      <Filter>src\Cherenkov\Core</Filter>
     </ClCompile>
     <ClCompile Include="src\Cherenkov\ImGui\ImGuiBuild.cpp">
       <Filter>src\Cherenkov\ImGui</Filter>
     </ClCompile>
     <ClCompile Include="src\Cherenkov\ImGui\ImGuiLayer.cpp">
       <Filter>src\Cherenkov\ImGui</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Cherenkov\Layer.cpp">
-      <Filter>src\Cherenkov</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Cherenkov\LayerStack.cpp">
-      <Filter>src\Cherenkov</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Cherenkov\Log.cpp">
-      <Filter>src\Cherenkov</Filter>
     </ClCompile>
     <ClCompile Include="src\Cherenkov\Renderer\Buffer.cpp">
       <Filter>src\Cherenkov\Renderer</Filter>
@@ -1584,6 +1589,5 @@
     <ClCompile Include="src\ckpch.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="src\Cherenkov\CameraController.cpp" />
   </ItemGroup>
 </Project>

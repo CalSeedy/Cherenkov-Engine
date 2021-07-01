@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Cherenkov/Window.h"
+#include "Cherenkov/Core/Window.h"
 #include "Cherenkov/Renderer/RendererContext.h"
 
 #include <glfw/glfw3.h>
