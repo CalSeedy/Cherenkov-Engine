@@ -94,9 +94,10 @@ namespace Cherenkov {
 			return;
 		}
 
-		for (auto sID : shaderIDs)
+		for (auto sID : shaderIDs) {
 			glDetachShader(id, sID);
-
+			glDeleteShader(sID);
+		}
 		m_ID = id;
 	}
 
@@ -115,6 +116,7 @@ namespace Cherenkov {
 			CK_CORE_ASSERT(shaderType, "Invalid shader type specified");
 
 			size_t nextLinePos = src.find_first_not_of("\r\n", eol);
+			CK_CORE_ASSERT(nextLinePos != std::string::npos, "Syntax error");
 			pos = src.find(typeMarker, nextLinePos);
 			shaders[shaderType] = src.substr(nextLinePos, pos - (nextLinePos == std::string::npos ? src.size() - 1 : nextLinePos));
 		}

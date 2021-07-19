@@ -17,6 +17,13 @@ namespace Cherenkov {
 		CK_CORE_ASSERT(status, "Failed to initialise Glad!");
 
 		CK_CORE_INFO("Renderer (OpenGL): {0} {1} (Version: {2})", glGetString(GL_VENDOR), glGetString(GL_RENDERER), glGetString(GL_VERSION));
+	#ifdef CK_ENABLE_ASSERTS
+		int versMaj;
+		int versMin;
+		glGetIntegerv(GL_MAJOR_VERSION, &versMaj);
+		glGetIntegerv(GL_MINOR_VERSION, &versMin);
+		CK_CORE_ASSERT(versMaj > 4 || (versMaj == 4 && versMin >= 5), "Require OpenGL version >= 4.5");
+	#endif
 	}
 	void OpenGLContext::swapBuffers() {
 		glfwSwapBuffers(m_Window);
