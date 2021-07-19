@@ -28,16 +28,16 @@ namespace Cherenkov {
 
     void OrthographicCameraController::onUpdate(Timestep dt) {
         if (Input::isKeyPressed(CK_KEY_W))
-            m_CameraPos.y += m_PanSpeed * dt;
+            m_CameraPos.y += sin(glm::radians(m_CameraRotation)) * m_PanSpeed * dt;
 
         else if (Input::isKeyPressed(CK_KEY_S))
-            m_CameraPos.y -= m_PanSpeed * dt;
+            m_CameraPos.y -= sin(glm::radians(m_CameraRotation)) * m_PanSpeed * dt;
 
         if (Input::isKeyPressed(CK_KEY_A))
-            m_CameraPos.x -= m_PanSpeed * dt;
+            m_CameraPos.x -= cos(glm::radians(m_CameraRotation)) * m_PanSpeed * dt;
 
         else if (Input::isKeyPressed(CK_KEY_D))
-            m_CameraPos.x += m_PanSpeed * dt;
+            m_CameraPos.x += cos(glm::radians(m_CameraRotation)) * m_PanSpeed * dt;
 
         if (m_Camera.getPosition() != m_CameraPos) m_Camera.setPosition(m_CameraPos);
 
@@ -48,6 +48,7 @@ namespace Cherenkov {
             m_CameraRotation -= m_RotSpeed * dt;
 
         if (m_Camera.getRotation() != m_CameraRotation) m_Camera.setRotation(m_CameraRotation);
+        while (m_CameraRotation > 180.0f) m_CameraRotation -= 180.0f
     }
 
     void OrthographicCameraController::onEvent(Event& ev) {
