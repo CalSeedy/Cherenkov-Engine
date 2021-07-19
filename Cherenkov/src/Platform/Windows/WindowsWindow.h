@@ -29,7 +29,7 @@ namespace Cherenkov {
 		virtual void shutDown();
 		
 		GLFWwindow* m_Window;
-		RendererContext* m_Ctx;
+		Scope<RendererContext> m_Ctx;
 
 		struct WindowData
 		{

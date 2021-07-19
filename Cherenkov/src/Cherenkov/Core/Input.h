@@ -24,6 +24,6 @@ namespace Cherenkov {
 		virtual float getMouseXImp() = 0;
 		virtual std::pair<float, float> getMousePosImp() = 0;
 	private:
-		static Input* s_Instance;
+		static Scope<Input> s_Instance;
 	};
 }

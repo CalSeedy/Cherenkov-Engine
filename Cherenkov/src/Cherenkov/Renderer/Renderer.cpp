@@ -4,7 +4,7 @@
 #include "Platform/OpenGL/OpenGLShader.h"
 namespace Cherenkov {
 	
-	Renderer::Scene* Renderer::s_Scene = new Renderer::Scene;
+	Scope<Renderer::Scene> Renderer::s_Scene = CreateScope<Renderer::Scene>();
 
 	void Renderer::init() {
 		RenderCommand::init();

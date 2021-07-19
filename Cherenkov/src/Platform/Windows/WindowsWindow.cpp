@@ -46,7 +46,7 @@ namespace Cherenkov {
 		}
 
 		m_Window = glfwCreateWindow((int)properties.Width, (int)properties.Height, m_Data.Title.c_str(), nullptr, nullptr);
-		m_Ctx = new OpenGLContext(m_Window);
+		m_Ctx = CreateScope<OpenGLContext>(m_Window);
 
 		m_Ctx->init();
 		

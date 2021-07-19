@@ -81,7 +81,7 @@ public:
 			m_ObjScale -= 1.0f * dt;
 
 		Cherenkov::RenderCommand::clear({ 1.0f, 0.0f, 1.0f, 1.0f });
-
+		
 		Cherenkov::Renderer::beginScene(m_CameraController.getCamera());
 
 		std::dynamic_pointer_cast<Cherenkov::OpenGLShader>(m_Shader)->bind();

@@ -10,7 +10,7 @@ namespace Cherenkov {
 		struct Scene {
 			glm::mat4 Projection;
 		};
-		static Scene* s_Scene;
+		static Scope<Scene> s_Scene;
 
 	public:
 		inline static RendererAPI::API getAPI() { return RendererAPI::getAPI(); }

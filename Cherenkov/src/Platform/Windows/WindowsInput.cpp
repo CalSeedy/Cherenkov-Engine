@@ -6,7 +6,7 @@
 #include <GLFW/glfw3.h>
 
 namespace Cherenkov {
-	Input* Input::s_Instance = new WindowsInput(); //could use nullptr; and init elsewhere
+	Scope<Input> Input::s_Instance = CreateScope<WindowsInput>();
 
 	bool WindowsInput::isKeyPressedImp(int keyCode){
 		auto window = static_cast<GLFWwindow*>(Application::Get().GetWindow().getNativeWindow());
