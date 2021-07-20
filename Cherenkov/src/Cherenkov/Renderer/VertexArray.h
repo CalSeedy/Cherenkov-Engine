@@ -13,7 +13,7 @@ namespace Cherenkov {
 		virtual const std::vector<Ref<VertexBuffer>>& getVertexBuffers() const = 0;
 		virtual const Ref<IndexBuffer>& getIndexBuffer() const = 0;
 
-		static VertexArray* init();
+		static Ref<VertexArray> init();
 
 		virtual ~VertexArray() = default;
 	};

@@ -1,7 +1,11 @@
 #include <Cherenkov.h>
+#include <Cherenkov/Core/EntryPoint.h>
+
 #include "imgui/imgui.h"
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
+
+#include "Sandbox2D.h"
 
 class ExampleLayer : public Cherenkov::Layer {
 	Cherenkov::OrthographicCameraController		m_CameraController;
@@ -24,7 +28,7 @@ class ExampleLayer : public Cherenkov::Layer {
 public:
 	ExampleLayer() : Layer("Test!"), m_CameraController { 1920.0f / 1080.0f } {
 
-		m_VertexArray.reset(Cherenkov::VertexArray::init());
+		m_VertexArray = Cherenkov::VertexArray::init();
 
 		float verts[4 * 5] = {
 			-0.5f, -0.5f, 0.0f, 0.0f, 0.0f,
@@ -118,13 +122,12 @@ public:
 
 class Sandbox : public Cherenkov::Application {
 public:
-	Sandbox()
-	{
-		PushLayer(new ExampleLayer());
+	Sandbox() {
+		//PushLayer(new ExampleLayer());
+		PushLayer(new Sandbox2D());
 	}
 
-	~Sandbox()
-	{
+	~Sandbox(){
 	}
 };
 

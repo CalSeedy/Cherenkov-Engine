@@ -20,6 +20,3 @@
 #include "Cherenkov/Renderer/Shader.h"
 #include "Cherenkov/Renderer/Texture.h"
 #include "Cherenkov/Renderer/VertexArray.h"
-
-
-#include "Cherenkov/Core/EntryPoint.h"
