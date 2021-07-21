@@ -1,13 +1,15 @@
 #include "ckpch.h"
 #include "Renderer.h"
 
-#include "Platform/OpenGL/OpenGLShader.h"
+#include "Cherenkov/Renderer/Renderer2D.h"
+
 namespace Cherenkov {
 	
 	Scope<Renderer::Scene> Renderer::s_Scene = CreateScope<Renderer::Scene>();
 
 	void Renderer::init() {
 		RenderCommand::init();
+		Renderer2D::init();
 	}
 
 	void Renderer::beginScene(OrthographicCamera& camera) {
@@ -20,8 +22,8 @@ namespace Cherenkov {
 
 	void Renderer::submit(const Ref<VertexArray>& vertexArray, const Ref<Shader>& shader, const glm::mat4& transform) {
 		shader->bind();
-		std::dynamic_pointer_cast<OpenGLShader>(shader)->uniformMat4("viewProjection", s_Scene->Projection);
-		std::dynamic_pointer_cast<OpenGLShader>(shader)->uniformMat4("transform", transform);
+		shader->setMat4("viewProjection", s_Scene->Projection);
+		shader->setMat4("transform", transform);
 		vertexArray->bind();
 		RenderCommand::drawIndexed(vertexArray);
 	}

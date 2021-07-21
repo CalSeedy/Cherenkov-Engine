@@ -165,6 +165,7 @@
     <ClInclude Include="src\Cherenkov\Renderer\Camera.h" />
     <ClInclude Include="src\Cherenkov\Renderer\Commands.h" />
     <ClInclude Include="src\Cherenkov\Renderer\Renderer.h" />
+    <ClInclude Include="src\Cherenkov\Renderer\Renderer2D.h" />
     <ClInclude Include="src\Cherenkov\Renderer\RendererAPI.h" />
     <ClInclude Include="src\Cherenkov\Renderer\RendererContext.h" />
     <ClInclude Include="src\Cherenkov\Renderer\Shader.h" />
@@ -638,6 +639,7 @@
     <ClCompile Include="src\Cherenkov\Renderer\Camera.cpp" />
     <ClCompile Include="src\Cherenkov\Renderer\Commands.cpp" />
     <ClCompile Include="src\Cherenkov\Renderer\Renderer.cpp" />
+    <ClCompile Include="src\Cherenkov\Renderer\Renderer2D.cpp" />
     <ClCompile Include="src\Cherenkov\Renderer\RendererAPI.cpp" />
     <ClCompile Include="src\Cherenkov\Renderer\Shader.cpp" />
     <ClCompile Include="src\Cherenkov\Renderer\Texture.cpp" />

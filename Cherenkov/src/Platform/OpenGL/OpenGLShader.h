@@ -17,18 +17,27 @@ namespace Cherenkov {
 		OpenGLShader(const std::string& filepath);
 		virtual ~OpenGLShader();
 
-		virtual void bind() const override;
-		virtual void unbind() const override;
-		virtual const std::string& name() const override { return m_Name; }
-		
-		void uniformInt(const std::string& id, int value) const;
-		
-		void uniformMat3(const std::string& id, const glm::mat3& matrix) const;
-		void uniformMat4(const std::string& id, const glm::mat4& matrix) const;
+		void bind() const override;
+		void unbind() const override;
 
-		void uniformFloat(const std::string& id, float_t value) const;
-		void uniformFloat2(const std::string& id, const glm::vec2& vector) const;
-		void uniformFloat3(const std::string& id, const glm::vec3& vector) const;
-		void uniformFloat4(const std::string& id, const glm::vec4& vector) const;
+		void setInt(const std::string& name, int32_t vector) override;
+		void setFloat(const std::string& name, float_t vector) override;
+		void setFloat2(const std::string& name, const glm::vec2& vector) override;
+		void setFloat3(const std::string& name, const glm::vec3& vector) override;
+		void setFloat4(const std::string& name, const glm::vec4& vector) override;
+		void setMat3(const std::string& name, const glm::mat3& matrix) override;
+		void setMat4(const std::string& name, const glm::mat4& matrix) override;
+
+		const std::string& name() const override { return m_Name; }
+		
+		void uploadUniformInt(const std::string& id, int32_t value) const;
+		
+		void uploadUniformMat3(const std::string& id, const glm::mat3& matrix) const;
+		void uploadUniformMat4(const std::string& id, const glm::mat4& matrix) const;
+
+		void uploadUniformFloat(const std::string& id, float_t value) const;
+		void uploadUniformFloat2(const std::string& id, const glm::vec2& vector) const;
+		void uploadUniformFloat3(const std::string& id, const glm::vec3& vector) const;
+		void uploadUniformFloat4(const std::string& id, const glm::vec4& vector) const;
 	};
 }

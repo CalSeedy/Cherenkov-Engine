@@ -11,14 +11,13 @@ void Sandbox2D::onUpdate(Cherenkov::Timestep dt) {
 
 	Cherenkov::RenderCommand::clear({ 1.0f, 0.0f, 1.0f, 1.0f });
 
-	Cherenkov::Renderer::beginScene(m_CameraController.getCamera());
+	Cherenkov::Renderer2D::beginScene(m_CameraController.getCamera());
 
-	std::dynamic_pointer_cast<Cherenkov::OpenGLShader>(m_Shader)->bind();
-	std::dynamic_pointer_cast<Cherenkov::OpenGLShader>(m_Shader)->uniformFloat4("colour", m_ObjColour);
+	Cherenkov::Renderer2D::Quad({ 0.0f, 0.0f }, { 1.0f, 1.0f }, { 64/256.0f, 64 / 256.0f, 64 / 256.0f, 1.0f});
+	Cherenkov::Renderer2D::Quad({ -1.0f, 0.0f }, { 0.5f, 0.5f }, m_Texture, 30.0f);
+	Cherenkov::Renderer2D::Quad({ 3.0f, -2.0f }, { 0.2f, 0.6f }, { 0.8f, 0.9f, 0.6, 1.0f});
 
-	Cherenkov::Renderer::submit(m_VertexArray, m_Shader, glm::scale(glm::mat4(1.0f), glm::vec3(1.5f)));
-
-	Cherenkov::Renderer::endScene();
+	Cherenkov::Renderer2D::endScene();
 }
 
 void Sandbox2D::onImGuiDraw() {
@@ -32,33 +31,7 @@ void Sandbox2D::onEvent(Cherenkov::Event& ev) {
 }
 
 void Sandbox2D::onAttach() {
-	m_VertexArray = Cherenkov::VertexArray::init();
-
-	float verts[4 * 5] = {
-		-0.5f, -0.5f, 0.0f,
-		 0.5f, -0.5f, 0.0f,
-		 0.5f,  0.5f, 0.0f,
-		-0.5f,  0.5f, 0.0f
-	};
-
-	Cherenkov::Ref<Cherenkov::VertexBuffer> vertexBuffer;
-	vertexBuffer.reset(Cherenkov::VertexBuffer::init(verts, sizeof(verts) / sizeof(float_t)));
-
-	Cherenkov::BufferLayout layout = {
-		{Cherenkov::ShaderDataType::Vec3f, "a_Pos"}
-	};
-	vertexBuffer->layout(layout);
-	m_VertexArray->addVertexBuffer(vertexBuffer);
-
-	uint32_t idxs[6] = { 0, 1, 2, 2, 3, 0 };
-	Cherenkov::Ref<Cherenkov::IndexBuffer> indexBuffer;
-	indexBuffer.reset(Cherenkov::IndexBuffer::init(idxs, sizeof(idxs) / sizeof(uint32_t)));
-	m_VertexArray->setIndexBuffer(indexBuffer);
-
-	std::string vertIn("../Cherenkov/src/Cherenkov/Shaders/shader.vert");
-	std::string fragIn("../Cherenkov/src/Cherenkov/Shaders/shader.frag");
-
-	m_Shader = Cherenkov::Shader::init("SquareColourShader", vertIn, fragIn);
+	m_Texture = Cherenkov::Texture2D::init("assets/Textures/checkerboardSq.png");
 }
 
 void Sandbox2D::onDetach() {

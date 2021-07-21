@@ -59,11 +59,11 @@ public:
 		m_Shader = Cherenkov::Shader::init("SquareColourShader",vertIn, fragIn);
 		m_TextureShader = Cherenkov::Shader::init(texShader);
 
-		m_Texture = Cherenkov::Texture2D::init ("assets/Textures/checkerboardSq.png");
+		m_Texture = Cherenkov::Texture2D::init("assets/Textures/checkerboardSq.png");
 		m_Texture2 = Cherenkov::Texture2D::init("assets/Textures/ChernoLogo.png");
 
-		std::dynamic_pointer_cast<Cherenkov::OpenGLShader>(m_TextureShader)->bind();
-		std::dynamic_pointer_cast<Cherenkov::OpenGLShader>(m_TextureShader)->uniformInt("tex", 0);
+		m_TextureShader->bind();
+		m_TextureShader->setInt("tex", 0);
 	}
 
 	void onUpdate(Cherenkov::Timestep dt) override {
@@ -88,8 +88,8 @@ public:
 		
 		Cherenkov::Renderer::beginScene(m_CameraController.getCamera());
 
-		std::dynamic_pointer_cast<Cherenkov::OpenGLShader>(m_Shader)->bind();
-		std::dynamic_pointer_cast<Cherenkov::OpenGLShader>(m_Shader)->uniformFloat4("colour", m_ObjColour);
+		m_Shader->bind();
+		m_Shader->setFloat4("colour", m_ObjColour);
 
 		for (int i = -10; i < 10; ++i) {
 			for (int j = -10; j < 10; ++j) {

@@ -48,7 +48,7 @@ namespace Cherenkov {
 			GLuint shader = glCreateShader(type);
 
 			const GLchar* source = src.c_str();
-			glShaderSource(shader, 1, &source, 0);
+			glShaderSource(shader, 1, &source, nullptr);
 
 			glCompileShader(shader);
 
@@ -137,7 +137,7 @@ namespace Cherenkov {
 
 		size_t lastSlash = filepath.find_last_of("/\\");
 		lastSlash = lastSlash == std::string::npos ? 0 : lastSlash + 1;
-		size_t lastDot = filepath.rfind(".") - 1;
+		size_t lastDot = filepath.rfind('.') - 1;
 
 		m_Name = filepath.substr(lastSlash, lastDot - lastSlash);
 	}
@@ -154,37 +154,65 @@ namespace Cherenkov {
 		glUseProgram(0);
 	}
 
-	void OpenGLShader::uniformInt(const std::string& id, int value) const {
+	void OpenGLShader::setInt(const std::string& name, int32_t value) {
+		uploadUniformInt(name, value);
+	}
+
+	void OpenGLShader::setFloat(const std::string& name, float_t value) {
+		uploadUniformFloat(name, value);
+	}
+
+	void OpenGLShader::setFloat2(const std::string& name, const glm::vec2& vector) {
+		uploadUniformFloat2(name, vector);
+	}
+
+	void OpenGLShader::setFloat3(const std::string& name, const glm::vec3& vector) {
+		uploadUniformFloat3(name, vector);
+	}
+
+	void OpenGLShader::setFloat4(const std::string& name, const glm::vec4& vector) {
+		uploadUniformFloat4(name, vector);
+	}
+
+	void OpenGLShader::setMat3(const std::string& name, const glm::mat3& matrix) {
+		uploadUniformMat3(name, matrix);
+	}
+
+	void OpenGLShader::setMat4(const std::string& name, const glm::mat4& matrix) {
+		uploadUniformMat4(name, matrix);
+	}
+
+	void OpenGLShader::uploadUniformInt(const std::string& id, int32_t value) const {
 		GLint loc = glGetUniformLocation(m_ID, id.c_str());
 		glUniform1i(loc, value);
 	}
 
-	void OpenGLShader::uniformMat3(const std::string& id, const glm::mat3& matrix) const {
+	void OpenGLShader::uploadUniformMat3(const std::string& id, const glm::mat3& matrix) const {
 		GLint loc = glGetUniformLocation(m_ID, id.c_str());
 		glUniformMatrix3fv(loc, 1, GL_FALSE, glm::value_ptr(matrix));
 	}
 
-	void OpenGLShader::uniformMat4(const std::string& id, const glm::mat4& matrix) const {
+	void OpenGLShader::uploadUniformMat4(const std::string& id, const glm::mat4& matrix) const {
 		GLint loc = glGetUniformLocation(m_ID, id.c_str());
 		glUniformMatrix4fv(loc, 1, GL_FALSE, glm::value_ptr(matrix));
 	}
 
-	void OpenGLShader::uniformFloat(const std::string& id, float_t value) const	{
+	void OpenGLShader::uploadUniformFloat(const std::string& id, float_t value) const	{
 		GLint loc = glGetUniformLocation(m_ID, id.c_str());
 		glUniform1f(loc, value);
 	}
 
-	void OpenGLShader::uniformFloat2(const std::string& id, const glm::vec2& vector) const {
+	void OpenGLShader::uploadUniformFloat2(const std::string& id, const glm::vec2& vector) const {
 		GLint loc = glGetUniformLocation(m_ID, id.c_str());
 		glUniform2f(loc, vector.x, vector.y);
 	}
 
-	void OpenGLShader::uniformFloat3(const std::string& id, const glm::vec3& vector) const {
+	void OpenGLShader::uploadUniformFloat3(const std::string& id, const glm::vec3& vector) const {
 		GLint loc = glGetUniformLocation(m_ID, id.c_str());
 		glUniform3f(loc, vector.x, vector.y, vector.z);
 	}
 
-	void OpenGLShader::uniformFloat4(const std::string& id, const glm::vec4& vector) const {
+	void OpenGLShader::uploadUniformFloat4(const std::string& id, const glm::vec4& vector) const {
 		GLint loc = glGetUniformLocation(m_ID, id.c_str());
 		glUniform4f(loc, vector.x, vector.y, vector.z, vector.w);
 	}

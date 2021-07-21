@@ -12,6 +12,14 @@ namespace Cherenkov {
 		virtual void bind() const = 0;
 		virtual void unbind() const = 0;
 
+		virtual void setInt(const std::string& name, int32_t vector) = 0;
+		virtual void setFloat(const std::string& name, float_t vector) = 0;
+		virtual void setFloat2(const std::string& name, const glm::vec2& vector) = 0;
+		virtual void setFloat3(const std::string& name, const glm::vec3& vector) = 0;
+		virtual void setFloat4(const std::string& name, const glm::vec4& vector) = 0;
+		virtual void setMat3(const std::string& name, const glm::mat3& matrix) = 0;
+		virtual void setMat4(const std::string& name, const glm::mat4& matrix) = 0;
+
 		virtual const std::string& name() const = 0;
 
 		static Ref<Shader> init(const std::string& name, const std::string& vertexPath, const std::string& fragmentPath);

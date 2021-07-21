@@ -135,6 +135,9 @@
     <ClInclude Include="src\Cherenkov\Renderer\Renderer.h">
       <Filter>src\Cherenkov\Renderer</Filter>
     </ClInclude>
+    <ClInclude Include="src\Cherenkov\Renderer\Renderer2D.h">
+      <Filter>src\Cherenkov\Renderer</Filter>
+    </ClInclude>
     <ClInclude Include="src\Cherenkov\Renderer\RendererAPI.h">
       <Filter>src\Cherenkov\Renderer</Filter>
     </ClInclude>
@@ -1548,6 +1551,9 @@
       <Filter>src\Cherenkov\Renderer</Filter>
     </ClCompile>
     <ClCompile Include="src\Cherenkov\Renderer\Renderer.cpp">
+      <Filter>src\Cherenkov\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Cherenkov\Renderer\Renderer2D.cpp">
       <Filter>src\Cherenkov\Renderer</Filter>
     </ClCompile>
     <ClCompile Include="src\Cherenkov\Renderer\RendererAPI.cpp">
