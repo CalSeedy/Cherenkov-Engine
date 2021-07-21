@@ -13,6 +13,12 @@ class Sandbox2D : public Cherenkov::Layer {
 
 	Cherenkov::Ref<Cherenkov::VertexArray>		m_VertexArray;
 
+	struct ProfileResult {
+		const char* Name;
+		float Time;
+	};
+
+	std::vector<ProfileResult>					m_Results;
 public:
 	Sandbox2D();
 

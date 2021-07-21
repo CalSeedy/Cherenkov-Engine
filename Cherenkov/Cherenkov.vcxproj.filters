@@ -1518,6 +1518,7 @@
     <ClInclude Include="vendor\stb\tests\prerelease\stb_lib.h">
       <Filter>vendor\stb\tests\prerelease</Filter>
     </ClInclude>
+    <ClInclude Include="src\Profiling\Timer.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Cherenkov\CameraController.cpp">
