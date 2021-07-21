@@ -1,5 +1,6 @@
 #pragma once
 #include "Cherenkov/Renderer/Texture.h"
+#include <glad/glad.h>
 
 namespace Cherenkov {
 	
@@ -9,14 +10,22 @@ namespace Cherenkov {
 		std::string	m_Path;
 		uint32_t	m_RendererID;
 		uint32_t	m_Width;
+		
+		struct { 
+			GLenum	GLFormat;
+			GLenum	InternalFormat;
+		} m_Format;
+
 	public:
 		OpenGLTexture2D(const std::string& path);
+		OpenGLTexture2D(uint32_t width, uint32_t height);
 		virtual ~OpenGLTexture2D();
+
 		virtual void bind(uint32_t slot = 0) const override;
 
 		virtual uint32_t height() const override { return m_Height; }
 		virtual uint32_t width() const override { return m_Width; }
 
-
+		void setData(void* data, uint32_t size) override;
 	};
 }

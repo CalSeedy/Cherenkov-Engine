@@ -9,7 +9,7 @@ namespace Cherenkov {
 	Ref<Shader> Shader::init(const std::string& name, const std::string& vertexPath, const std::string& fragmentPath) {
 		switch (Renderer::getAPI()) {
 		case RendererAPI::API::None:		return nullptr;
-		case RendererAPI::API::OpenGL:		return std::make_shared<OpenGLShader>(name, vertexPath, fragmentPath);
+		case RendererAPI::API::OpenGL:		return CreateRef<OpenGLShader>(name, vertexPath, fragmentPath);
 		default:
 			CK_CORE_ASSERT(false, "Unknown Renderer!");
 			return nullptr;
@@ -20,7 +20,7 @@ namespace Cherenkov {
 	Ref<Shader> Shader::init(const std::string& filepath) {
 		switch (Renderer::getAPI()) {
 		case RendererAPI::API::None:		return nullptr;
-		case RendererAPI::API::OpenGL:		return std::make_shared<OpenGLShader>(filepath);
+		case RendererAPI::API::OpenGL:		return CreateRef<OpenGLShader>(filepath);
 		default:
 			CK_CORE_ASSERT(false, "Unknown Renderer!");
 			return nullptr;

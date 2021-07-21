@@ -13,9 +13,9 @@ void Sandbox2D::onUpdate(Cherenkov::Timestep dt) {
 
 	Cherenkov::Renderer2D::beginScene(m_CameraController.getCamera());
 
-	Cherenkov::Renderer2D::Quad({ 0.0f, 0.0f }, { 1.0f, 1.0f }, { 64/256.0f, 64 / 256.0f, 64 / 256.0f, 1.0f});
+	Cherenkov::Renderer2D::Quad({ 0.0f, 0.0f }, { 1.0f, 1.0f }, { 1.0f, 1.0f, 0.0f, 1.0f});
 	Cherenkov::Renderer2D::Quad({ -1.0f, 0.0f }, { 0.5f, 0.5f }, m_Texture, 30.0f);
-	Cherenkov::Renderer2D::Quad({ 3.0f, -2.0f }, { 0.2f, 0.6f }, { 0.8f, 0.9f, 0.6, 1.0f});
+	Cherenkov::Renderer2D::Quad({ 1.0f, -1.0f }, { 1.0f, 1.0f }, {0.5f, 0.2f, 0.8f, 1.0f}, m_Texture, 10.0f);
 
 	Cherenkov::Renderer2D::endScene();
 }

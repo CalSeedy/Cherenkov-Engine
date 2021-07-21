@@ -26,6 +26,6 @@ in vec2 texCoord;
 
 void main(){
 	
-	c = texture(tex, texCoord);
+	c = texture(tex, texCoord) * colour;
 
 }

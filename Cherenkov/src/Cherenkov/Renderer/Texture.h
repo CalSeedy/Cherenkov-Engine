@@ -12,6 +12,7 @@ namespace Cherenkov {
 		
 		
 		virtual void bind(uint32_t slot = 0) const = 0;
+		virtual void setData(void* data, uint32_t size) = 0;
 	};
 
 
@@ -19,6 +20,9 @@ namespace Cherenkov {
 
 	public:
 		static Ref<Texture2D> init(const std::string& path);
+		static Ref<Texture2D> init(uint32_t width, uint32_t height);
 		virtual ~Texture2D() = default;
+
+		virtual void setData(void* data, uint32_t size) = 0;
 	};
 }

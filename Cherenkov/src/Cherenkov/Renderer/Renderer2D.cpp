@@ -17,8 +17,8 @@ namespace Cherenkov {
 	struct Storage {
 
 		Ref<VertexArray> vertexArray;
-		Ref<Shader> colourShader;
 		Ref<Shader> textureShader;
+		Ref<Texture2D> Blank;
 	};
 
 	static Scope<Storage> s_Storage;
@@ -49,10 +49,10 @@ namespace Cherenkov {
 		indexBuffer.reset(IndexBuffer::init(idxs, sizeof(idxs) / sizeof(uint32_t)));
 		s_Storage->vertexArray->setIndexBuffer(indexBuffer);
 
-		std::string vertIn("../Cherenkov/src/Cherenkov/Shaders/shader.vert");
-		std::string fragIn("../Cherenkov/src/Cherenkov/Shaders/shader.frag");
+		s_Storage->Blank = Texture2D::init(1, 1);
+		uint32_t blankData = 0xffffffff;
+		s_Storage->Blank->setData(&blankData, sizeof(blankData));
 
-		s_Storage->colourShader = Shader::init("SquareColourShader", vertIn, fragIn);
 		s_Storage->textureShader = Shader::init("assets/Shaders/Texture.glsl");
 		s_Storage->textureShader->bind();
 		s_Storage->textureShader->setInt("tex", 0);
@@ -63,9 +63,6 @@ namespace Cherenkov {
 	}
 
 	void Renderer2D::beginScene(const OrthographicCamera& camera) {
-		s_Storage->colourShader->bind();
-		s_Storage->colourShader->setMat4("viewProjection", camera.getViewProjection());
-		
 		s_Storage->textureShader->bind();
 		s_Storage->textureShader->setMat4("viewProjection", camera.getViewProjection());
 	}
@@ -75,7 +72,7 @@ namespace Cherenkov {
 	}
 
 	void Renderer2D::Quad(const glm::vec2& position, const glm::vec2& scale, const glm::vec4& colour, float_t rotation) {
-		Quad({ position.x, position.y, 0.0f }, scale, colour, rotation);
+		Quad({ position.x, position.y, 0.0f }, scale, colour, s_Storage->Blank, rotation);
 	}
 
 	void Renderer2D::Quad(const glm::vec2& position, const glm::vec2& scale, const glm::vec4& colour, const Ref<Texture2D>& texture, float_t rotation) {
@@ -83,38 +80,30 @@ namespace Cherenkov {
 	}
 
 	void Renderer2D::Quad(const glm::vec3& position, const glm::vec2& scale, const glm::vec4& colour, float_t rotation) {
-		s_Storage->colourShader->bind();
-		s_Storage->colourShader->setFloat4("colour", colour);
-		glm::mat4 transform = glm::translate(glm::mat4(1.0f), position) * glm::rotate(glm::mat4(1.0f), glm::radians(rotation), {0.0f, 0.0f, 1.0f}) * glm::scale(glm::mat4(1.0f), { scale.x, scale.y, 1.0f });
-		s_Storage->colourShader->setMat4("transform", transform);
-		s_Storage->vertexArray->bind();
-		RenderCommand::drawIndexed(s_Storage->vertexArray);
+		Quad(position, scale, colour, s_Storage->Blank, rotation);
 	}
 
+	// all other Quads call this with default values
 	void Renderer2D::Quad(const glm::vec3& position, const glm::vec2& scale, const glm::vec4& colour, const Ref<Texture2D>& texture, float_t rotation) {
-		/*
-		s_Storage->colourShader->bind();
-		s_Storage->colourShader->setFloat4("colour", colour);
-		glm::mat4 transform = glm::translate(glm::mat4(1.0f), position) * glm::rotate(glm::mat4(1.0f), glm::radians(rotation), { 0.0f, 0.0f, 1.0f }) * glm::scale(glm::mat4(1.0f), { scale.x, scale.y, 1.0f });
-		s_Storage->colourShader->setMat4("transform", transform);
-		s_Storage->vertexArray->bind();
-		RenderCommand::drawIndexed(s_Storage->vertexArray);
-		*/
-	}
-
-	void Renderer2D::Quad(const glm::vec2& position, const glm::vec2& scale, const Ref<Texture2D>& texture, float_t rotation) {
-		Quad({ position.x, position.y, 0.0f }, scale, texture, rotation);
-	}
-
-	void Renderer2D::Quad(const glm::vec3& position, const glm::vec2& scale, const Ref<Texture2D>& texture, float_t rotation) {
-		s_Storage->textureShader->bind();
-		glm::mat4 transform = glm::translate(glm::mat4(1.0f), position) * glm::rotate(glm::mat4(1.0f), glm::radians(rotation), { 0.0f, 0.0f, 1.0f }) * glm::scale(glm::mat4(1.0f), { scale.x, scale.y, 1.0f });
-		s_Storage->textureShader->setMat4("transform", transform);
+		
+		s_Storage->textureShader->setFloat4("colour", colour);
 
 		texture->bind();
 
+		glm::mat4 transform = glm::translate(glm::mat4(1.0f), position) * glm::rotate(glm::mat4(1.0f), glm::radians(rotation), { 0.0f, 0.0f, 1.0f }) * glm::scale(glm::mat4(1.0f), { scale.x, scale.y, 1.0f });
+		s_Storage->textureShader->setMat4("transform", transform);
+
+
 		s_Storage->vertexArray->bind();
 		RenderCommand::drawIndexed(s_Storage->vertexArray);
+	}
+
+	void Renderer2D::Quad(const glm::vec2& position, const glm::vec2& scale, const Ref<Texture2D>& texture, float_t rotation) {
+		Quad({ position.x, position.y, 0.0f }, scale, { 1.0f, 1.0f, 1.0f, 1.0f }, texture, rotation);
+	}
+
+	void Renderer2D::Quad(const glm::vec3& position, const glm::vec2& scale, const Ref<Texture2D>& texture, float_t rotation) {
+		Quad({ position.x, position.y, 0.0f }, scale, {1.0f, 1.0f, 1.0f, 1.0f}, texture, rotation);
 	}
 
 
