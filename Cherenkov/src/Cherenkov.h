@@ -22,4 +22,4 @@
 #include "Cherenkov/Renderer/Texture.h"
 #include "Cherenkov/Renderer/VertexArray.h"
 
-#include "Profiling/Timer.h"
+#include "Profiling/Instrumentor.h"

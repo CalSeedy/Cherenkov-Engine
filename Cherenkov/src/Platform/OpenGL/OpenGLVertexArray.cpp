@@ -49,7 +49,7 @@ namespace Cherenkov {
 		const auto& layout = vBuffer->getLayout();
 		for (auto& element : layout) {
 			glEnableVertexAttribArray(idx);
-			glVertexAttribPointer(idx, element.count(), getBaseType(element.Type), element.Normalised ? GL_TRUE : GL_FALSE, layout.stride(), (unsigned const void*)element.Offset);
+			glVertexAttribPointer(idx, element.count(), getBaseType(element.Type), element.Normalised ? GL_TRUE : GL_FALSE, layout.stride(), (const void*)element.Offset);
 			idx++;
 		}
 		m_VertexBuffers.push_back(vBuffer);

@@ -7,7 +7,7 @@
 
 namespace Cherenkov {
 
-	class CK_API Log
+	class Log
 	{
 	public:
 		static void init();

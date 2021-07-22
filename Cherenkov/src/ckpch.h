@@ -15,6 +15,9 @@
 #include <utility>
 #include <vector>
 
+#include "Cherenkov/Core/Log.h"
+#include "Profiling/Instrumentor.h"
+
 #ifdef CK_PLATFORM_WINDOWS
 	#include <Windows.h>
 #endif
