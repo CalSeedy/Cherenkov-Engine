@@ -2,16 +2,20 @@
 
 #include <algorithm>
 #include <chrono>
+#include <iomanip>
 #include <fstream>
 #include <string>
 #include <thread>
 
 namespace Cherenkov {
 
+	using FloatMicroseconds = std::chrono::duration<double, std::micro>;
+
 	struct ProfileResult {
-		std::string		Name;
-		long long		Start, End;
-		std::thread::id	Thread;
+		std::string					Name;
+		FloatMicroseconds			Start;
+		std::chrono::microseconds	Elapsed;
+		std::thread::id				Thread;
 	};
 
 	struct InstSession {
@@ -76,14 +80,15 @@ namespace Cherenkov {
 			std::string name = result.Name;
 			std::replace(name.begin(), name.end(), '"', '\'');
 
+			json << std::setprecision(3) << std::fixed;
 			json << ",{";
 			json << "\"cat\":\"function\",";
-			json << "\"dur\":" << (result.End - result.Start) << ',';
+			json << "\"dur\":" << result.Elapsed.count() << ',';
 			json << "\"name\":\"" << name << "\",";
 			json << "\"ph\":\"X\",";
 			json << "\"pid\":0,";
 			json << "\"tid\":" << result.Thread << ",";
-			json << "\"ts\":" << result.Start;
+			json << "\"ts\":" << result.Start.count();
 			json << "}";
 
 			std::lock_guard lock(m_Mutex);
@@ -106,7 +111,7 @@ namespace Cherenkov {
 
 	public:
 		Timer(const char* name) : m_Name{ name }, m_Stopped{ false } {
-			m_Start = std::chrono::high_resolution_clock::now();
+			m_Start = std::chrono::steady_clock::now();
 		}
 
 		~Timer() {
@@ -114,12 +119,11 @@ namespace Cherenkov {
 		}
 
 		void stop() {
-			auto end = std::chrono::high_resolution_clock::now();
+			auto end = std::chrono::steady_clock::now();
+			auto start = FloatMicroseconds{ m_Start.time_since_epoch() };
+			auto elapsed = std::chrono::time_point_cast<std::chrono::microseconds>(end).time_since_epoch() - std::chrono::time_point_cast<std::chrono::microseconds>(m_Start).time_since_epoch();
 
-			long long start_milliseconds = std::chrono::time_point_cast<std::chrono::microseconds>(m_Start).time_since_epoch().count();
-			long long end_milliseconds = std::chrono::time_point_cast<std::chrono::microseconds>(end).time_since_epoch().count();
-
-			Instrumentor::get().writeProfile({ m_Name, start_milliseconds, end_milliseconds, std::this_thread::get_id() });
+			Instrumentor::get().writeProfile({ m_Name, start, elapsed, std::this_thread::get_id() });
 			//float_t duration = (end_milliseconds - start_milliseconds) * 0.001f;
 			//std::cout << "[" << m_Name << "] Duration: " << duration << "ms\n";
 			m_Stopped = true;

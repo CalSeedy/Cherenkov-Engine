@@ -8,7 +8,7 @@ class Sandbox : public Cherenkov::Application {
 public:
 	Sandbox() {
 		//PushLayer(new ExampleLayer());
-		PushLayer(new Sandbox2D());
+		pushLayer(new Sandbox2D());
 	}
 
 	~Sandbox() {}
