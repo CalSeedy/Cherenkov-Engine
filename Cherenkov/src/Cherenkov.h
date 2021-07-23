@@ -7,7 +7,6 @@
 
 #include "Cherenkov/Core/TimeStep.h"
 
-#include "Cherenkov/CameraController.h"
 #include "Cherenkov/Core/Input.h"
 #include "Cherenkov/Core/KeyCodes.h"
 #include "Cherenkov/Core/MouseCodes.h"
@@ -15,6 +14,7 @@
 #include "Cherenkov/ImGui/ImGuiLayer.h"
 
 #include "Cherenkov/Renderer/Buffer.h"
+#include "Cherenkov/Renderer/CameraController.h"
 #include "Cherenkov/Renderer/Commands.h"
 #include "Cherenkov/Renderer/Renderer.h"
 #include "Cherenkov/Renderer/Renderer2D.h"

@@ -1,8 +1,8 @@
 #pragma once
-#include "Renderer/Camera.h"
-#include "Core/TimeStep.h"
-#include "Events/ApplicationEvent.h"
-#include "Events/MouseEvent.h"
+#include "Cherenkov/Renderer/Camera.h"
+#include "Cherenkov/Core/TimeStep.h"
+#include "Cherenkov/Events/ApplicationEvent.h"
+#include "Cherenkov/Events/MouseEvent.h"
 
 namespace Cherenkov {
 	class CameraController {

@@ -144,7 +144,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="src\Cherenkov.h" />
-    <ClInclude Include="src\Cherenkov\CameraController.h" />
+    <ClInclude Include="src\Cherenkov\Renderer\CameraController.h" />
     <ClInclude Include="src\Cherenkov\Core\Application.h" />
     <ClInclude Include="src\Cherenkov\Core\Core.h" />
     <ClInclude Include="src\Cherenkov\Core\EntryPoint.h" />
@@ -629,7 +629,7 @@
     <ClInclude Include="vendor\stb\tests\prerelease\stb_lib.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\Cherenkov\CameraController.cpp" />
+    <ClCompile Include="src\Cherenkov\Renderer\CameraController.cpp" />
     <ClCompile Include="src\Cherenkov\Core\Application.cpp" />
     <ClCompile Include="src\Cherenkov\Core\Layer.cpp" />
     <ClCompile Include="src\Cherenkov\Core\LayerStack.cpp" />

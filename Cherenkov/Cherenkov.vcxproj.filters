@@ -72,9 +72,6 @@
     <ClInclude Include="src\Cherenkov.h">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="src\Cherenkov\CameraController.h">
-      <Filter>src\Cherenkov</Filter>
-    </ClInclude>
     <ClInclude Include="src\Cherenkov\Core\Application.h">
       <Filter>src\Cherenkov\Core</Filter>
     </ClInclude>
@@ -1519,11 +1516,11 @@
     <ClInclude Include="src\Cherenkov\Core\MouseCodes.h">
       <Filter>src\Cherenkov\Core</Filter>
     </ClInclude>
+    <ClInclude Include="src\Cherenkov\Renderer\CameraController.h">
+      <Filter>src\Cherenkov</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\Cherenkov\CameraController.cpp">
-      <Filter>src\Cherenkov</Filter>
-    </ClCompile>
     <ClCompile Include="src\Cherenkov\Core\Application.cpp">
       <Filter>src\Cherenkov\Core</Filter>
     </ClCompile>
@@ -1597,5 +1594,8 @@
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="src\Cherenkov\Renderer\RendererContext.cpp" />
+    <ClCompile Include="src\Cherenkov\Renderer\CameraController.cpp">
+      <Filter>src\Cherenkov</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>
