@@ -17,8 +17,7 @@ namespace Cherenkov {
 		inline static float getMouseX() { return s_Instance->getMouseXImp(); }
 		inline static std::pair<float, float> getMousePos() { return s_Instance->getMousePosImp(); }
 
-
-
+		static Scope<Input> Create();
 
 	protected:
 		virtual bool isKeyPressedImp(KeyCode keyCode) = 0;

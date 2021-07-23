@@ -629,6 +629,8 @@
     <ClInclude Include="vendor\stb\tests\prerelease\stb_lib.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\Cherenkov\Core\Input.cpp" />
+    <ClCompile Include="src\Cherenkov\Core\Window.cpp" />
     <ClCompile Include="src\Cherenkov\Renderer\CameraController.cpp" />
     <ClCompile Include="src\Cherenkov\Core\Application.cpp" />
     <ClCompile Include="src\Cherenkov\Core\Layer.cpp" />

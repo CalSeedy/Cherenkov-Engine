@@ -21,11 +21,6 @@ namespace Cherenkov {
 		CK_CORE_ERROR("GLFW Error ({0}): {1}", error, description);
 	}
 
-	Scope<Window> Window::Create(const WindowProperties &properties) {
-	
-		return CreateScope<WindowsWindow>(properties);
-	}
-
 	WindowsWindow::WindowsWindow(const WindowProperties &properties){
 		CK_PROFILE_FUNCTION();
 		init(properties);

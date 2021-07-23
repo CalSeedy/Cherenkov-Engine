@@ -1597,5 +1597,7 @@
     <ClCompile Include="src\Cherenkov\Renderer\CameraController.cpp">
       <Filter>src\Cherenkov</Filter>
     </ClCompile>
+    <ClCompile Include="src\Cherenkov\Core\Input.cpp" />
+    <ClCompile Include="src\Cherenkov\Core\Window.cpp" />
   </ItemGroup>
 </Project>
