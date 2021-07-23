@@ -7,7 +7,4 @@ namespace Cherenkov {
 	
 	}
 
-	Layer::~Layer(){
-	
-	}
 }

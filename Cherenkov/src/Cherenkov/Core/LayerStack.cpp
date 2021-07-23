@@ -15,7 +15,6 @@ namespace Cherenkov {
 	void LayerStack::PushLayer(Layer* layer) {
 		m_Layers.emplace(m_Layers.begin() + m_LayerInsertIdx, layer);
 		m_LayerInsertIdx++;
-		layer->onAttach();
 	}
 
 	void LayerStack::PopLayer(Layer* layer) {
@@ -32,7 +31,6 @@ namespace Cherenkov {
 
 	void LayerStack::PushOverlay(Layer* overlay) {
 		m_Layers.emplace_back(overlay);
-		overlay->onAttach();
 	}
 
 	void LayerStack::PopOverlay(Layer* overlay) {

@@ -5,8 +5,9 @@
 #include "Input.h"
 
 #include "Cherenkov/Renderer/Renderer.h"
+#include "Cherenkov/Renderer/Renderer2D.h"
 #include <GLFW/glfw3.h>
-
+ 
 namespace Cherenkov {
 	
 	Application* Application::s_Instance = nullptr;
@@ -25,17 +26,20 @@ namespace Cherenkov {
 
 	}
 
-	Application::~Application()	{}
+	Application::~Application()	{
+		Renderer2D::shutdown();
+	}
 
 	void Application::PushLayer(Layer* layer) {
 	
 		m_LayerStack.PushLayer(layer);
+		layer->onAttach();
 	}
 
 	void Application::PushOverlay(Layer* overlay) {
 
 		m_LayerStack.PushLayer(overlay);
-
+		overlay->onAttach();
 	}
 
 	void Application::onEvent(Event &event) {

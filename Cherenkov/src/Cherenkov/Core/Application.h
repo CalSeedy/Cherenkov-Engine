@@ -11,11 +11,6 @@
 
 #include "Cherenkov/ImGui/ImGuiLayer.h"
 
-#include "Cherenkov/Renderer/Buffer.h"
-#include "Cherenkov/Renderer/Camera.h"
-#include "Cherenkov/Renderer/Shader.h"
-#include "Cherenkov/Renderer/VertexArray.h"
-
 namespace Cherenkov {
 
 	class CK_API Application

@@ -10,7 +10,7 @@ namespace Cherenkov {
 
 	public:
 		Layer(const std::string &name = "Layer");
-		virtual ~Layer();
+		virtual ~Layer() = default;
 
 		virtual void onAttach() {}
 		virtual void onDetach() {}
