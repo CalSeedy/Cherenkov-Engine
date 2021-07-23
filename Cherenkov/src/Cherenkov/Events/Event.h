@@ -30,7 +30,7 @@ namespace Cherenkov {
 
 #define EVENT_CLASS_CATEGORY(category) virtual int getCategoryFlags() const override { return category; }
 
-	class CK_API Event {
+	class Event {
 
 		friend class EventDispatcher;
 	public:

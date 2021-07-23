@@ -13,7 +13,7 @@
 
 namespace Cherenkov {
 
-	class CK_API Application
+	class Application
 	{
 		static Application*				s_Instance;
 

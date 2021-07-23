@@ -4,7 +4,7 @@
 
 namespace Cherenkov {
 
-	class CK_API WindowResizeEvent : public Event {
+	class WindowResizeEvent : public Event {
 		unsigned int m_Width, m_Height;
 	public:
 		WindowResizeEvent(unsigned int width, unsigned int height)
@@ -23,7 +23,7 @@ namespace Cherenkov {
 		EVENT_CLASS_TYPE(WindowResized)		
 	};
 
-	class CK_API WindowCloseEvent : public Event {
+	class WindowCloseEvent : public Event {
 
 	public:
 		WindowCloseEvent() {}
@@ -32,7 +32,7 @@ namespace Cherenkov {
 		EVENT_CLASS_TYPE(WindowClosed)
 	};
 
-	class CK_API AppTickEvent : public Event {
+	class AppTickEvent : public Event {
 
 	public:
 		AppTickEvent() {}
@@ -42,7 +42,7 @@ namespace Cherenkov {
 	};
 
 
-	class CK_API AppUpdateEvent : public Event {
+	class AppUpdateEvent : public Event {
 
 	public:
 		AppUpdateEvent() {}
@@ -51,7 +51,7 @@ namespace Cherenkov {
 		EVENT_CLASS_TYPE(AppUpdate)
 	};
 
-	class CK_API AppRenderEvent : public Event {
+	class AppRenderEvent : public Event {
 
 	public:
 		AppRenderEvent() {}

@@ -4,7 +4,7 @@
 
 namespace Cherenkov {
 
-	class CK_API LayerStack {
+	class LayerStack {
 
 	public:
 		LayerStack();

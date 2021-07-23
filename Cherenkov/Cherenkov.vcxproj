@@ -153,7 +153,7 @@
     <ClInclude Include="src\Cherenkov\Core\Layer.h" />
     <ClInclude Include="src\Cherenkov\Core\LayerStack.h" />
     <ClInclude Include="src\Cherenkov\Core\Log.h" />
-    <ClInclude Include="src\Cherenkov\Core\MouseButtonCodes.h" />
+    <ClInclude Include="src\Cherenkov\Core\MouseCodes.h" />
     <ClInclude Include="src\Cherenkov\Core\TimeStep.h" />
     <ClInclude Include="src\Cherenkov\Core\Window.h" />
     <ClInclude Include="src\Cherenkov\Events\ApplicationEvent.h" />

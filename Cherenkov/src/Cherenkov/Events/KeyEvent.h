@@ -1,25 +1,26 @@
 #pragma once
 
 #include "Event.h"
+#include "Cherenkov/Core/Input.h"
 
 namespace Cherenkov {
 
-	class CK_API KeyEvent : public Event {
+	class KeyEvent : public Event {
 
 	public:
-		inline int getKeyCode() const { return m_KeyCode; }
+		inline KeyCode getKeyCode() const { return m_KeyCode; }
 
 		EVENT_CLASS_CATEGORY(EventCategoryKeyBoard | EventCategoryInput)
 	protected:
-		KeyEvent(int code) : m_KeyCode(code) {}
+		KeyEvent(KeyCode code) : m_KeyCode(code) {}
 
-		int m_KeyCode;
+		KeyCode m_KeyCode;
 	};
 
-	class CK_API KeyPressedEvent : public KeyEvent {
+	class KeyPressedEvent : public KeyEvent {
 	
 	public:
-		KeyPressedEvent(int code, int repeats) 
+		KeyPressedEvent(KeyCode code, int repeats) 
 			: KeyEvent(code), m_Repeats(repeats) {}
 
 		inline int getRepeats() const { return m_Repeats; }
@@ -35,10 +36,10 @@ namespace Cherenkov {
 		int m_Repeats;
 	};
 
-	class CK_API KeyReleasedEvent : public KeyEvent {
+	class KeyReleasedEvent : public KeyEvent {
 
 	public:
-		KeyReleasedEvent(int code) : KeyEvent(code) {}
+		KeyReleasedEvent(KeyCode code) : KeyEvent(code) {}
 
 		std::string toStr() const override {
 			std::stringstream stream;
@@ -49,10 +50,10 @@ namespace Cherenkov {
 		EVENT_CLASS_TYPE(KeyReleased)
 	};
 
-	class CK_API KeyTypedEvent : public KeyEvent {
+	class KeyTypedEvent : public KeyEvent {
 
 	public:
-		KeyTypedEvent(int code)
+		KeyTypedEvent(KeyCode code)
 			: KeyEvent(code){}
 
 		std::string toStr() const override {

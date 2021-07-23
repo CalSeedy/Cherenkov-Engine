@@ -7,7 +7,7 @@
 
 namespace Cherenkov {
 
-	class CK_API ImGuiLayer : public Layer {
+	class ImGuiLayer : public Layer {
 		float m_Time = 0.0f;
 	public:
 		ImGuiLayer();

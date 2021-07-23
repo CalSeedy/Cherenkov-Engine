@@ -8,20 +8,20 @@
 namespace Cherenkov {
 	Scope<Input> Input::s_Instance = CreateScope<WindowsInput>();
 
-	bool WindowsInput::isKeyPressedImp(int keyCode){
+	bool WindowsInput::isKeyPressedImp(KeyCode keyCode) {
 		auto window = static_cast<GLFWwindow*>(Application::Get().GetWindow().getNativeWindow());
-		auto state = glfwGetKey(window, keyCode);
+		auto state = glfwGetKey(window, static_cast<int32_t>(keyCode));
 
 		return state == GLFW_PRESS || state == GLFW_REPEAT;
 	}
-	bool WindowsInput::isMouseButtonPressedImp(int button)
-	{
+
+	bool WindowsInput::isMouseButtonPressedImp(MouseCode button)	{
 		auto window = static_cast<GLFWwindow*>(Application::Get().GetWindow().getNativeWindow());
-		auto state = glfwGetMouseButton(window, button);
+		auto state = glfwGetMouseButton(window, static_cast<int32_t>(button));
 		return state == GLFW_PRESS;
 	}
-	std::pair<float, float> WindowsInput::getMousePosImp()
-	{
+
+	std::pair<float, float> WindowsInput::getMousePosImp() {
 		double xpos, ypos;
 		auto window = static_cast<GLFWwindow*>(Application::Get().GetWindow().getNativeWindow());
 		glfwGetCursorPos(window, &xpos, &ypos);

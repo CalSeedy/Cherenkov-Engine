@@ -5,7 +5,7 @@
 
 namespace Cherenkov {
 
-	struct CK_API WindowProperties
+	struct WindowProperties
 	{
 		std::string Title;
 		unsigned int Width;
@@ -18,7 +18,7 @@ namespace Cherenkov {
 		}
 	};
 
-	class CK_API Window {
+	class Window {
 
 	public:
 		using EventCallbackFn = std::function<void(Event&)>;
