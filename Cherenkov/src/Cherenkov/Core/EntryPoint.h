@@ -10,7 +10,7 @@ int main(int argc, char** argv) {
 	auto app = Cherenkov::createApplication();
 	CK_PROFILE_END();
 	CK_PROFILE_BEGIN("Runtime", "profiling-runtime.json");
-	app->Run();
+	app->run();
 	CK_PROFILE_END();
 	CK_PROFILE_BEGIN("Shutdown", "profiling-shutdown.json");
 	delete app;

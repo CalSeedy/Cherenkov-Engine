@@ -11,6 +11,8 @@
 
 #include "Cherenkov/ImGui/ImGuiLayer.h"
 
+int main(int argc, char** argv);
+
 namespace Cherenkov {
 
 	class Application
@@ -24,20 +26,22 @@ namespace Cherenkov {
 		bool							m_Minimized = false;
 		Scope<Window>					m_Window;
 
+		void run();
 		bool onWindowClose(WindowCloseEvent& event);
 		bool onWindowResize(WindowResizeEvent& event);
+
+		friend int ::main(int argc, char** argv);
 	public:
 		Application();
 		virtual ~Application();
 
-		void Run();
 
 		void onEvent(Event &event);
-		void PushLayer(Layer* layer);
-		void PushOverlay(Layer* overlay);
+		void pushLayer(Layer* layer);
+		void pushOverlay(Layer* overlay);
 
-		inline static Application& Get() { return *s_Instance; }
-		inline Window& GetWindow() { return *m_Window; }
+		inline static Application& get() { return *s_Instance; }
+		inline Window& getWindow() { return *m_Window; }
 	};
 
 	Application* createApplication();

@@ -34,8 +34,8 @@ namespace Cherenkov {
 			style.Colors[ImGuiCol_WindowBg].w = 1.0f;
 		}
 
-		Application& app = Application::Get();
-		GLFWwindow* window = static_cast<GLFWwindow*>(app.GetWindow().getNativeWindow());
+		Application& app = Application::get();
+		GLFWwindow* window = static_cast<GLFWwindow*>(app.getWindow().getNativeWindow());
 
 		ImGui_ImplGlfw_InitForOpenGL(window, true);
 		ImGui_ImplOpenGL3_Init("#version 410");
@@ -59,8 +59,8 @@ namespace Cherenkov {
 	void ImGuiLayer::stop()	{
 		CK_PROFILE_FUNCTION();
 		ImGuiIO& io = ImGui::GetIO();
-		Application& app = Application::Get();
-		io.DisplaySize = ImVec2((float)app.GetWindow().getWidth(), (float)app.GetWindow().getHeight());
+		Application& app = Application::get();
+		io.DisplaySize = ImVec2((float)app.getWindow().getWidth(), (float)app.getWindow().getHeight());
 
 		ImGui::Render();
 		ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());

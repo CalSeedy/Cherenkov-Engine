@@ -26,7 +26,7 @@ namespace Cherenkov {
 		Renderer::init();
 
 		m_ImGuiLayer = new ImGuiLayer();
-		PushOverlay(m_ImGuiLayer);
+		pushOverlay(m_ImGuiLayer);
 
 	}
 
@@ -35,13 +35,13 @@ namespace Cherenkov {
 		Renderer::shutdown();
 	}
 
-	void Application::PushLayer(Layer* layer) {
+	void Application::pushLayer(Layer* layer) {
 		CK_PROFILE_FUNCTION();
 		m_LayerStack.PushLayer(layer);
 		layer->onAttach();
 	}
 
-	void Application::PushOverlay(Layer* overlay) {
+	void Application::pushOverlay(Layer* overlay) {
 		CK_PROFILE_FUNCTION();
 		m_LayerStack.PushLayer(overlay);
 		overlay->onAttach();
@@ -63,7 +63,7 @@ namespace Cherenkov {
 
 	}
 
-	void Application::Run() {
+	void Application::run() {
 		CK_PROFILE_FUNCTION();
 		while (m_Running){
 			CK_PROFILE_SCOPE("Run Loop");

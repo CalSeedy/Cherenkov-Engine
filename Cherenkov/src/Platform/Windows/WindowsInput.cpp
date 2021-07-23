@@ -8,21 +8,21 @@
 namespace Cherenkov {
 
 	bool WindowsInput::isKeyPressedImp(KeyCode keyCode) {
-		auto window = static_cast<GLFWwindow*>(Application::Get().GetWindow().getNativeWindow());
+		auto window = static_cast<GLFWwindow*>(Application::get().getWindow().getNativeWindow());
 		auto state = glfwGetKey(window, static_cast<int32_t>(keyCode));
 
 		return state == GLFW_PRESS || state == GLFW_REPEAT;
 	}
 
 	bool WindowsInput::isMouseButtonPressedImp(MouseCode button)	{
-		auto window = static_cast<GLFWwindow*>(Application::Get().GetWindow().getNativeWindow());
+		auto window = static_cast<GLFWwindow*>(Application::get().getWindow().getNativeWindow());
 		auto state = glfwGetMouseButton(window, static_cast<int32_t>(button));
 		return state == GLFW_PRESS;
 	}
 
 	std::pair<float, float> WindowsInput::getMousePosImp() {
 		double xpos, ypos;
-		auto window = static_cast<GLFWwindow*>(Application::Get().GetWindow().getNativeWindow());
+		auto window = static_cast<GLFWwindow*>(Application::get().getWindow().getNativeWindow());
 		glfwGetCursorPos(window, &xpos, &ypos);
 		return std::pair<float, float>((float)xpos, (float)ypos);
 	}
