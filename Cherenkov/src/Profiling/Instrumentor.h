@@ -1,17 +1,17 @@
 #pragma once
 
-#include <string>
-#include <chrono>
 #include <algorithm>
+#include <chrono>
 #include <fstream>
+#include <string>
 #include <thread>
 
 namespace Cherenkov {
 
 	struct ProfileResult {
-		std::string Name;
-		long long	Start, End;
-		uint32_t	Thread;
+		std::string		Name;
+		long long		Start, End;
+		std::thread::id	Thread;
 	};
 
 	struct InstSession {
@@ -19,56 +19,78 @@ namespace Cherenkov {
 	};
 
 	class Instrumentor {
-		InstSession* m_Session;
+		std::mutex m_Mutex;
 		std::ofstream m_Output;
-		int m_Count;
-
-	public:
-		Instrumentor() : m_Session{ nullptr }, m_Count{ 0 } {
-			
-		}
-
-		void begin(const std::string& name, const std::string& filepath = "results.json") {
-			m_Output.open(filepath);
-			writeHeader();
-			m_Session = new InstSession{ name };
-		}
-
-		void end() {
-			writeFooter();
-			m_Output.close();
-			delete m_Session;
-			m_Session = nullptr;
-			m_Count = 0;
-		}
-
-		void writeProfile(const ProfileResult& result) {
-			if (m_Count++ > 0) m_Output << ", ";
-
-			std::string name = result.Name;
-			std::replace(name.begin(), name.end(), '"', '\'');
-
-			m_Output << "{";
-			m_Output << "\"cat\":\"function\",";
-			m_Output << "\"dur\":" << (result.End - result.Start) << ',';
-			m_Output << "\"name\":\"" << name << "\",";
-			m_Output << "\"ph\":\"X\",";
-			m_Output << "\"pid\":0,";
-			m_Output << "\"tid\":" << result.Thread << ',';
-			m_Output << "\"ts\":" << result.Start;
-			m_Output << "}";
-			
-			m_Output.flush();
-		}
+		InstSession* m_Session;
 
 		void writeHeader() {
-			m_Output << "{\"other\":{},\"traceEvents\": [";
+			m_Output << "{\"other\":{},\"traceEvents\": [{}";
 			m_Output.flush();
 		}
 
 		void writeFooter() {
 			m_Output << "]}";
 			m_Output.flush();
+		}
+
+		void internalEnd() {
+			if (m_Session) {
+				writeFooter();
+				m_Output.close();
+				delete m_Session;
+				m_Session = nullptr;
+			}
+		}
+
+	public:
+		Instrumentor() : m_Session{ nullptr } {}
+
+		void begin(const std::string& name, const std::string& filepath = "results.json") {
+
+			std::lock_guard lock(m_Mutex);
+			if (m_Session) {
+				if (Log::getCoreLogger()) {
+					CK_CORE_ERROR("Intrumentor::begin('{0}') called whilst another session ('{1}') is open.", name, m_Session->Name);
+				}
+				internalEnd();
+			}
+			m_Output.open(filepath);
+			if (m_Output.is_open()) {
+				m_Session = new InstSession{ name };
+				writeHeader();
+			} else {
+				if (Log::getCoreLogger()) {
+					CK_CORE_ERROR("Instrumentor could not open file '{0}'", filepath);
+				}
+			}
+		}
+
+		void end() {
+			std::lock_guard lock(m_Mutex);
+			internalEnd();	
+		}
+
+		void writeProfile(const ProfileResult& result) {
+			std::stringstream json;
+
+			std::string name = result.Name;
+			std::replace(name.begin(), name.end(), '"', '\'');
+
+			json << ",{";
+			json << "\"cat\":\"function\",";
+			json << "\"dur\":" << (result.End - result.Start) << ',';
+			json << "\"name\":\"" << name << "\",";
+			json << "\"ph\":\"X\",";
+			json << "\"pid\":0,";
+			json << "\"tid\":" << result.Thread << ",";
+			json << "\"ts\":" << result.Start;
+			json << "}";
+
+			std::lock_guard lock(m_Mutex);
+			if (m_Session) {
+				m_Output << json.str();
+				m_Output.flush();
+			}
 		}
 
 		static Instrumentor& get() {
@@ -97,8 +119,7 @@ namespace Cherenkov {
 			long long start_milliseconds = std::chrono::time_point_cast<std::chrono::microseconds>(m_Start).time_since_epoch().count();
 			long long end_milliseconds = std::chrono::time_point_cast<std::chrono::microseconds>(end).time_since_epoch().count();
 
-			uint32_t tID = std::hash<std::thread::id>{}(std::this_thread::get_id());
-			Instrumentor::get().writeProfile({ m_Name, start_milliseconds, end_milliseconds, tID });
+			Instrumentor::get().writeProfile({ m_Name, start_milliseconds, end_milliseconds, std::this_thread::get_id() });
 			//float_t duration = (end_milliseconds - start_milliseconds) * 0.001f;
 			//std::cout << "[" << m_Name << "] Duration: " << duration << "ms\n";
 			m_Stopped = true;
