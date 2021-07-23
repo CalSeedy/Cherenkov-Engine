@@ -37,8 +37,7 @@ public:
 			-0.5f,  0.5f, 0.0f, 0.0f, 1.0f
 		};
 
-		Cherenkov::Ref<Cherenkov::VertexBuffer> vertexBuffer;
-		vertexBuffer.reset(Cherenkov::VertexBuffer::init(verts, sizeof(verts) / sizeof(float_t)));
+		Cherenkov::Ref<Cherenkov::VertexBuffer> vertexBuffer = Cherenkov::VertexBuffer::init(verts, sizeof(verts) / sizeof(float_t));
 
 		Cherenkov::BufferLayout layout = {
 			{Cherenkov::ShaderDataType::Vec3f, "a_Pos"},
@@ -48,8 +47,7 @@ public:
 		m_VertexArray->addVertexBuffer(vertexBuffer);
 
 		uint32_t idxs[6] = { 0, 1, 2, 2, 3, 0 };
-		Cherenkov::Ref<Cherenkov::IndexBuffer> indexBuffer;
-		indexBuffer.reset(Cherenkov::IndexBuffer::init(idxs, sizeof(idxs) / sizeof(uint32_t)));
+		Cherenkov::Ref<Cherenkov::IndexBuffer> indexBuffer = Cherenkov::IndexBuffer::init(idxs, sizeof(idxs) / sizeof(uint32_t));
 		m_VertexArray->setIndexBuffer(indexBuffer);
 
 		std::string vertIn("../Cherenkov/src/Cherenkov/Shaders/shader.vert");

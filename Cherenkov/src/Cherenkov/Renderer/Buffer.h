@@ -110,9 +110,9 @@ namespace Cherenkov {
 		virtual const BufferLayout& getLayout() const = 0;
 		virtual void layout(const BufferLayout& layout) = 0;
 
-		static VertexBuffer* init(float_t* vertices, uint32_t count);
+		static Ref<VertexBuffer> init(float_t* vertices, uint32_t count);
 
-		virtual ~VertexBuffer() {}
+		virtual ~VertexBuffer() = default;
 	};
 
 	class IndexBuffer {
@@ -125,9 +125,9 @@ namespace Cherenkov {
 		virtual void unbind() const = 0;
 		virtual uint32_t count() const = 0;
 
-		static IndexBuffer* init(uint32_t* indices, uint32_t count);
+		static Ref<IndexBuffer> init(uint32_t* indices, uint32_t count);
 
 
-		virtual ~IndexBuffer() {}
+		virtual ~IndexBuffer() = default;
 	};
 }

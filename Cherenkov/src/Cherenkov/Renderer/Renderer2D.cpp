@@ -34,8 +34,7 @@ namespace Cherenkov {
 			-0.5f,  0.5f, 0.0f, 0.0f, 1.0
 		};
 
-		Ref<VertexBuffer> vertexBuffer;
-		vertexBuffer.reset(VertexBuffer::init(verts, sizeof(verts) / sizeof(float_t)));
+		Ref<VertexBuffer> vertexBuffer = VertexBuffer::init(verts, sizeof(verts) / sizeof(float_t));
 
 		BufferLayout layout = {
 			{ShaderDataType::Vec3f, "a_Pos"},
@@ -45,8 +44,7 @@ namespace Cherenkov {
 		s_Storage->vertexArray->addVertexBuffer(vertexBuffer);
 
 		uint32_t idxs[6] = { 0, 1, 2, 2, 3, 0 };
-		Ref<IndexBuffer> indexBuffer;
-		indexBuffer.reset(IndexBuffer::init(idxs, sizeof(idxs) / sizeof(uint32_t)));
+		Ref<IndexBuffer> indexBuffer = IndexBuffer::init(idxs, sizeof(idxs) / sizeof(uint32_t));
 		s_Storage->vertexArray->setIndexBuffer(indexBuffer);
 
 		s_Storage->Blank = Texture2D::init(1, 1);
