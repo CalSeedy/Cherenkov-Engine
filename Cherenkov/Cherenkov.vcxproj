@@ -642,6 +642,7 @@
     <ClCompile Include="src\Cherenkov\Renderer\Renderer.cpp" />
     <ClCompile Include="src\Cherenkov\Renderer\Renderer2D.cpp" />
     <ClCompile Include="src\Cherenkov\Renderer\RendererAPI.cpp" />
+    <ClCompile Include="src\Cherenkov\Renderer\RendererContext.cpp" />
     <ClCompile Include="src\Cherenkov\Renderer\Shader.cpp" />
     <ClCompile Include="src\Cherenkov\Renderer\Texture.cpp" />
     <ClCompile Include="src\Cherenkov\Renderer\VertexArray.cpp" />

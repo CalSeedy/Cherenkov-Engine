@@ -6,5 +6,7 @@ namespace Cherenkov {
 	public:
 		virtual void init() = 0;
 		virtual void swapBuffers() = 0;
+
+		static Scope<RendererContext> create(void* window);
 	};
 }

@@ -12,19 +12,19 @@
 
 namespace Cherenkov {
 
-	static bool s_GLFWInit = false;
+	static uint8_t s_GLFWCount = 0;
 
 	static void GLFWErrorCallback(int error, const char* description) {
 		CK_CORE_ERROR("GLFW Error ({0}): {1}", error, description);
 	}
 
-	Window* Window::Create(const WindowProperties &properties) {
+	Scope<Window> Window::Create(const WindowProperties &properties) {
 	
-		return new WindowsWindow(properties);
+		return CreateScope<WindowsWindow>(properties);
 	}
 
 	WindowsWindow::WindowsWindow(const WindowProperties &properties){
-	
+		
 		init(properties);
 	}
 
@@ -38,23 +38,23 @@ namespace Cherenkov {
 
 		CK_CORE_INFO("Creating a {0} x {1} window: \'{2}\'", properties.Width, properties.Height, properties.Title);
 
-		if (!s_GLFWInit) {
+		if (s_GLFWCount == 0) {
 			int success = glfwInit();
 			CK_CORE_ASSERT(success, "Could not successfully initialise GLFW!");
 			glfwSetErrorCallback(GLFWErrorCallback);
-			s_GLFWInit = true;
 		}
 
 		m_Window = glfwCreateWindow((int)properties.Width, (int)properties.Height, m_Data.Title.c_str(), nullptr, nullptr);
-		m_Ctx = CreateScope<OpenGLContext>(m_Window);
+		s_GLFWCount++;
 
+		m_Ctx = RendererContext::create(m_Window);
 		m_Ctx->init();
 		
 		glfwSetWindowUserPointer(m_Window, &m_Data);
-		setVSync(true);
+		setVSync(false);
 
-		glfwSetWindowSizeCallback(m_Window, [](GLFWwindow *window, int width, int height) {
-			WindowData &data = *(WindowData*)glfwGetWindowUserPointer(window);
+		glfwSetWindowSizeCallback(m_Window, [](GLFWwindow* window, int width, int height) {
+			WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);
 			data.Width = width;
 			data.Height = height;
 			
@@ -62,13 +62,13 @@ namespace Cherenkov {
 			data.EventCallback(event);
 		});
 
-		glfwSetWindowCloseCallback(m_Window, [](GLFWwindow *window) {
+		glfwSetWindowCloseCallback(m_Window, [](GLFWwindow* window) {
 			WindowData &data = *(WindowData*)glfwGetWindowUserPointer(window);
 			WindowCloseEvent event;
 			data.EventCallback(event);
 		});
 
-		glfwSetKeyCallback(m_Window, [](GLFWwindow *window, int key, int scancode, int action, int mods) {
+		glfwSetKeyCallback(m_Window, [](GLFWwindow* window, int key, int scancode, int action, int mods) {
 			WindowData &data = *(WindowData*)glfwGetWindowUserPointer(window);
 			
 			switch (action) {

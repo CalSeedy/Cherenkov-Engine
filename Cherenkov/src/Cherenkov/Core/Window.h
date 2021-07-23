@@ -35,7 +35,7 @@ namespace Cherenkov {
 
 		virtual void* getNativeWindow() const = 0;
 
-		static Window* Create(const WindowProperties &properties = WindowProperties());
+		static Scope<Window> Create(const WindowProperties &properties = WindowProperties());
 	}; 
 
 }

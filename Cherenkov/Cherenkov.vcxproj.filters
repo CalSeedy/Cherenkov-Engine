@@ -1596,5 +1596,6 @@
     <ClCompile Include="src\ckpch.cpp">
       <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="src\Cherenkov\Renderer\RendererContext.cpp" />
   </ItemGroup>
 </Project>
