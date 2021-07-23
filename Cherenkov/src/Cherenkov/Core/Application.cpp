@@ -16,7 +16,7 @@ namespace Cherenkov {
 	Application::Application() {
 		CK_CORE_ASSERT(!s_Instance, "Application already running!");
 		s_Instance = this;
-		m_Window = std::unique_ptr<Window>(Window::Create());
+		m_Window = Window::Create();
 		m_Window->setEventCallBack(BIND_EVENT_FUNC(onEvent));
 		m_Window->setVSync(true);
 
@@ -27,9 +27,7 @@ namespace Cherenkov {
 
 	}
 
-
-	Application::~Application()	{
-	}
+	Application::~Application()	{}
 
 	void Application::PushLayer(Layer* layer) {
 	
@@ -84,7 +82,6 @@ namespace Cherenkov {
 		Renderer::onWindowResize(ev.getWidth(), ev.getHeight());
 		return false;
 	}
-	
 
 	bool Application::onWindowClose(WindowCloseEvent &ev) {
 		m_Running = false;

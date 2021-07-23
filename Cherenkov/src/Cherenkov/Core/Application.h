@@ -27,7 +27,7 @@ namespace Cherenkov {
 		LayerStack						m_LayerStack;
 		bool							m_Running = true;
 		bool							m_Minimized = false;
-		Ref<Window>						m_Window;
+		Scope<Window>					m_Window;
 
 		bool onWindowClose(WindowCloseEvent& event);
 		bool onWindowResize(WindowResizeEvent& event);
