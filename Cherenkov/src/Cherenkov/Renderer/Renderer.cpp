@@ -8,8 +8,13 @@ namespace Cherenkov {
 	Scope<Renderer::Scene> Renderer::s_Scene = CreateScope<Renderer::Scene>();
 
 	void Renderer::init() {
+		CK_PROFILE_FUNCTION();
 		RenderCommand::init();
 		Renderer2D::init();
+	}
+
+	void Renderer::shutdown() {
+		Renderer2D::shutdown();
 	}
 
 	void Renderer::beginScene(OrthographicCamera& camera) {
@@ -17,7 +22,6 @@ namespace Cherenkov {
 	}
 
 	void Renderer::endScene() {
-
 	}
 
 	void Renderer::submit(const Ref<VertexArray>& vertexArray, const Ref<Shader>& shader, const glm::mat4& transform) {

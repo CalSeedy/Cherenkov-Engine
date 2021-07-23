@@ -13,11 +13,15 @@ namespace Cherenkov {
 	Application* Application::s_Instance = nullptr;
 	 
 	Application::Application() {
+		CK_PROFILE_FUNCTION();
 		CK_CORE_ASSERT(!s_Instance, "Application already running!");
 		s_Instance = this;
-		m_Window = Window::Create();
-		m_Window->setEventCallBack(CK_BIND_EVENT_FN(Application::onEvent));
-		m_Window->setVSync(false);
+		{
+			CK_PROFILE_SCOPE("Window Creation");
+			m_Window = Window::Create();
+			m_Window->setEventCallBack(CK_BIND_EVENT_FN(Application::onEvent));
+			m_Window->setVSync(false);
+		}
 
 		Renderer::init();
 
@@ -27,23 +31,24 @@ namespace Cherenkov {
 	}
 
 	Application::~Application()	{
-		Renderer2D::shutdown();
+		CK_PROFILE_FUNCTION();
+		Renderer::shutdown();
 	}
 
 	void Application::PushLayer(Layer* layer) {
-	
+		CK_PROFILE_FUNCTION();
 		m_LayerStack.PushLayer(layer);
 		layer->onAttach();
 	}
 
 	void Application::PushOverlay(Layer* overlay) {
-
+		CK_PROFILE_FUNCTION();
 		m_LayerStack.PushLayer(overlay);
 		overlay->onAttach();
 	}
 
 	void Application::onEvent(Event &event) {
-	
+		CK_PROFILE_FUNCTION();
 		EventDispatcher dispatcher(event);
 		dispatcher.Dispatch<WindowCloseEvent>(CK_BIND_EVENT_FN(Application::onWindowClose));
 		dispatcher.Dispatch<WindowResizeEvent>(CK_BIND_EVENT_FN(Application::onWindowResize));
@@ -59,22 +64,30 @@ namespace Cherenkov {
 	}
 
 	void Application::Run() {
-
+		CK_PROFILE_FUNCTION();
 		while (m_Running){
+			CK_PROFILE_SCOPE("Run Loop");
 			float_t time = (float_t)glfwGetTime();
 			Timestep dt = time - m_FrameTime;
 			m_FrameTime = time;
 
 			if (!m_Minimized) {
+				CK_PROFILE_SCOPE("App Layers onUpdate");
 				for (Layer* layer : m_LayerStack)
 					layer->onUpdate(dt);
 			}
-			m_ImGuiLayer->start();
-			for (Layer* layer : m_LayerStack) {
-				layer->onImGuiDraw();
+			{
+				CK_PROFILE_SCOPE("ImGUI Layer");
+				m_ImGuiLayer->start();
+				for (Layer* layer : m_LayerStack) {
+					layer->onImGuiDraw();
+				}
+				m_ImGuiLayer->stop(); 
 			}
-			m_ImGuiLayer->stop();
-			m_Window->onUpdate();
+			{
+				CK_PROFILE_SCOPE("Window Update");
+				m_Window->onUpdate();
+			}
 		}
 	}
 

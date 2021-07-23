@@ -19,7 +19,7 @@ namespace Cherenkov {
 	}
 
 	std::string getSource(const char* path) {
-
+		CK_PROFILE_FUNCTION();
 		std::ifstream file(path, std::ios::in | std::ios::binary);
 		if (file) {
 		
@@ -37,6 +37,7 @@ namespace Cherenkov {
 	}
 
 	void OpenGLShader::compile(const std::unordered_map<GLenum, std::string>& shaders) {
+		CK_PROFILE_FUNCTION();
 		CK_CORE_ASSERT(shaders.size() <= 5, "Maximum shader limit exceeded!");
 		std::array<GLenum, 5> shaderIDs;
 		int idx = 0;
@@ -102,6 +103,7 @@ namespace Cherenkov {
 	}
 
 	std::unordered_map<GLenum, std::string> OpenGLShader::parse(const std::string& src) {
+		CK_PROFILE_FUNCTION();
 		std::unordered_map<GLenum, std::string> shaders;
 		
 		const char* typeMarker = "#type";
@@ -124,6 +126,7 @@ namespace Cherenkov {
 	}
 
 	OpenGLShader::OpenGLShader(const std::string& name, const std::string& vertexPath, const std::string& fragmentPath) : m_Name{name}{
+		CK_PROFILE_FUNCTION();
 		std::unordered_map<GLenum, std::string> shaders;
 		shaders[GL_VERTEX_SHADER] = getSource(vertexPath.c_str());
 		shaders[GL_FRAGMENT_SHADER] = getSource(fragmentPath.c_str());
@@ -131,6 +134,7 @@ namespace Cherenkov {
 	}
 
 	OpenGLShader::OpenGLShader(const std::string& filepath)	{
+		CK_PROFILE_FUNCTION();
 		std::string source = getSource(filepath.c_str());
 		auto shaders = parse(source);
 		compile(shaders);
@@ -143,42 +147,52 @@ namespace Cherenkov {
 	}
 
 	OpenGLShader::~OpenGLShader() {
+		CK_PROFILE_FUNCTION();
 		glDeleteProgram(m_ID);
 	}
 
 	void OpenGLShader::bind() const {
+		CK_PROFILE_FUNCTION();
 		glUseProgram(m_ID);
 	}
 
 	void OpenGLShader::unbind() const {
+		CK_PROFILE_FUNCTION();
 		glUseProgram(0);
 	}
 
 	void OpenGLShader::setInt(const std::string& name, int32_t value) {
+		CK_PROFILE_FUNCTION();
 		uploadUniformInt(name, value);
 	}
 
 	void OpenGLShader::setFloat(const std::string& name, float_t value) {
+		CK_PROFILE_FUNCTION();
 		uploadUniformFloat(name, value);
 	}
 
 	void OpenGLShader::setFloat2(const std::string& name, const glm::vec2& vector) {
+		CK_PROFILE_FUNCTION();
 		uploadUniformFloat2(name, vector);
 	}
 
 	void OpenGLShader::setFloat3(const std::string& name, const glm::vec3& vector) {
+		CK_PROFILE_FUNCTION();
 		uploadUniformFloat3(name, vector);
 	}
 
 	void OpenGLShader::setFloat4(const std::string& name, const glm::vec4& vector) {
+		CK_PROFILE_FUNCTION();
 		uploadUniformFloat4(name, vector);
 	}
 
 	void OpenGLShader::setMat3(const std::string& name, const glm::mat3& matrix) {
+		CK_PROFILE_FUNCTION();
 		uploadUniformMat3(name, matrix);
 	}
 
 	void OpenGLShader::setMat4(const std::string& name, const glm::mat4& matrix) {
+		CK_PROFILE_FUNCTION();
 		uploadUniformMat4(name, matrix);
 	}
 

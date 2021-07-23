@@ -37,10 +37,12 @@ void Sandbox2D::onImGuiDraw() {
 }
 
 void Sandbox2D::onEvent(Cherenkov::Event& ev) {
+	CK_PROFILE_FUNCTION();
 	m_CameraController.onEvent(ev);
 }
 
 void Sandbox2D::onAttach() {
+	CK_PROFILE_FUNCTION();
 	m_Texture = Cherenkov::Texture2D::init("assets/Textures/checkerboardSq.png");
 }
 

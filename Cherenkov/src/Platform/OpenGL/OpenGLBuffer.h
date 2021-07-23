@@ -14,7 +14,7 @@ namespace Cherenkov {
 		virtual void unbind() const override;
 
 		virtual const BufferLayout& getLayout() const override { return m_Layout; }
-		virtual void layout(const BufferLayout& layout) override { m_Layout = layout; }
+		virtual void setLayout(const BufferLayout& layout) override { m_Layout = layout; }
 	};
 
 	class OpenGLIndexBuffer : public IndexBuffer {

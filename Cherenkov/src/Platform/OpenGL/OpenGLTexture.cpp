@@ -9,9 +9,14 @@
 
 namespace Cherenkov {
 	OpenGLTexture2D::OpenGLTexture2D(const std::string& path) : m_Path{ path } {
+		CK_PROFILE_FUNCTION();
 		int width, height, channels;
 		stbi_set_flip_vertically_on_load(true);
-		stbi_uc* data = stbi_load(path.c_str(), &width, &height, &channels, 0);
+		stbi_uc* data = nullptr;
+		{
+			CK_PROFILE_SCOPE("Texture2D Load");
+			data = stbi_load(path.c_str(), &width, &height, &channels, 0);
+		}
 		CK_CORE_ASSERT(data, "Failed to load Texture2D @ {0}", path.c_str());
 		m_Width = width;
 		m_Height = height;
@@ -26,6 +31,8 @@ namespace Cherenkov {
 			m_Format.GLFormat = GL_RGBA;
 			break;
 		default:
+			m_Format.InternalFormat = NULL;
+			m_Format.GLFormat = NULL;
 			break;
 		}
 
@@ -43,7 +50,7 @@ namespace Cherenkov {
 	}
 
 	OpenGLTexture2D::OpenGLTexture2D(uint32_t width, uint32_t height) : m_Width{ width }, m_Height{ height } {
-
+		CK_PROFILE_FUNCTION();
 		m_Format.InternalFormat = GL_RGBA8;
 		m_Format.GLFormat = GL_RGBA;
 
@@ -59,14 +66,17 @@ namespace Cherenkov {
 	}
 
 	OpenGLTexture2D::~OpenGLTexture2D() {
+		CK_PROFILE_FUNCTION();
 		glDeleteTextures(1, &m_RendererID);
 	}
 
 	void OpenGLTexture2D::bind(uint32_t slot) const {
+		CK_PROFILE_FUNCTION();
 		glBindTextureUnit(slot, m_RendererID);
 	}
 
 	void OpenGLTexture2D::setData(void* data, uint32_t size) {
+		CK_PROFILE_FUNCTION();
 		glTextureSubImage2D(m_RendererID, 0, 0, 0, m_Width, m_Height, m_Format.GLFormat, GL_UNSIGNED_BYTE, data);
 	}
 

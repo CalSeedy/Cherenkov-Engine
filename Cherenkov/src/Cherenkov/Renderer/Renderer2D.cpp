@@ -24,6 +24,7 @@ namespace Cherenkov {
 	static Scope<Storage> s_Storage;
 
 	void Renderer2D::init()	{
+		CK_PROFILE_FUNCTION();
 		s_Storage = CreateScope<Storage>();
 		s_Storage->vertexArray = VertexArray::init();
 
@@ -40,33 +41,39 @@ namespace Cherenkov {
 			{ShaderDataType::Vec3f, "a_Pos"},
 			{ShaderDataType::Vec2f, "a_TexCoord"}
 		};
-		vertexBuffer->layout(layout);
+		vertexBuffer->setLayout(layout);
 		s_Storage->vertexArray->addVertexBuffer(vertexBuffer);
 
 		uint32_t idxs[6] = { 0, 1, 2, 2, 3, 0 };
 		Ref<IndexBuffer> indexBuffer = IndexBuffer::init(idxs, sizeof(idxs) / sizeof(uint32_t));
 		s_Storage->vertexArray->setIndexBuffer(indexBuffer);
-
-		s_Storage->Blank = Texture2D::init(1, 1);
-		uint32_t blankData = 0xffffffff;
-		s_Storage->Blank->setData(&blankData, sizeof(blankData));
-
-		s_Storage->textureShader = Shader::init("assets/Shaders/Texture.glsl");
-		s_Storage->textureShader->bind();
-		s_Storage->textureShader->setInt("tex", 0);
+		{
+			CK_PROFILE_SCOPE("Blank Texture");
+			s_Storage->Blank = Texture2D::init(1, 1);
+			uint32_t blankData = 0xffffffff;
+			s_Storage->Blank->setData(&blankData, sizeof(blankData));
+		}
+		{
+			CK_PROFILE_SCOPE("Texture Shader");
+			s_Storage->textureShader = Shader::init("assets/Shaders/Texture.glsl");
+			s_Storage->textureShader->bind();
+			s_Storage->textureShader->setInt("tex", 0);
+		}
 	}
 
 	void Renderer2D::shutdown()	{
+		CK_PROFILE_FUNCTION();
 		s_Storage.reset(nullptr);
 	}
 
 	void Renderer2D::beginScene(const OrthographicCamera& camera) {
+		CK_PROFILE_FUNCTION();
 		s_Storage->textureShader->bind();
 		s_Storage->textureShader->setMat4("viewProjection", camera.getViewProjection());
 	}
 
 	void Renderer2D::endScene() {
-
+		CK_PROFILE_FUNCTION();
 	}
 
 	void Renderer2D::Quad(const glm::vec2& position, const glm::vec2& scale, const glm::vec4& colour, float_t rotation) {
@@ -83,7 +90,7 @@ namespace Cherenkov {
 
 	// all other Quads call this with default values
 	void Renderer2D::Quad(const glm::vec3& position, const glm::vec2& scale, const glm::vec4& colour, const Ref<Texture2D>& texture, float_t rotation) {
-		
+		CK_PROFILE_FUNCTION();
 		s_Storage->textureShader->setFloat4("colour", colour);
 
 		texture->bind();

@@ -12,6 +12,7 @@ namespace Cherenkov {
 		CK_CORE_ASSERT(window, "Null window!");
 	}
 	void OpenGLContext::init() {
+		CK_PROFILE_FUNCTION();
 		glfwMakeContextCurrent(m_Window);
 		int status = gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
 		CK_CORE_ASSERT(status, "Failed to initialise Glad!");
@@ -26,6 +27,7 @@ namespace Cherenkov {
 	#endif
 	}
 	void OpenGLContext::swapBuffers() {
+		CK_PROFILE_FUNCTION();
 		glfwSwapBuffers(m_Window);
 	}
 

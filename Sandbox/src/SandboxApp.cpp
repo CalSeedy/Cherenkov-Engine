@@ -43,7 +43,7 @@ public:
 			{Cherenkov::ShaderDataType::Vec3f, "a_Pos"},
 			{Cherenkov::ShaderDataType::Vec2f, "a_TexCoord"}
 		};
-		vertexBuffer->layout(layout);
+		vertexBuffer->setLayout(layout);
 		m_VertexArray->addVertexBuffer(vertexBuffer);
 
 		uint32_t idxs[6] = { 0, 1, 2, 2, 3, 0 };

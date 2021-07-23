@@ -27,6 +27,7 @@ namespace Cherenkov {
     }
 
     void OrthographicCameraController::onUpdate(Timestep dt) {
+        CK_PROFILE_FUNCTION();
         if (Input::isKeyPressed(CK_KEY_W)) {
             m_CameraPos.x += sin(glm::radians(m_CameraRotation)) * m_PanSpeed * dt;
             m_CameraPos.y += cos(glm::radians(m_CameraRotation)) * m_PanSpeed * dt;
@@ -56,6 +57,7 @@ namespace Cherenkov {
     }
 
     void OrthographicCameraController::onEvent(Event& ev) {
+        CK_PROFILE_FUNCTION();
         EventDispatcher dis(ev);
         dis.Dispatch<MouseScrollEvent>(CK_BIND_EVENT_FN(OrthographicCameraController::onMouseScrolled));
         dis.Dispatch<WindowResizeEvent>(CK_BIND_EVENT_FN(OrthographicCameraController::onWindowResize));

@@ -16,6 +16,7 @@ namespace Cherenkov {
 		inline static RendererAPI::API getAPI() { return RendererAPI::getAPI(); }
 
 		static void init();
+		static void shutdown();
 		static void beginScene(OrthographicCamera& camera);
 		static void endScene();
 		static void submit(const Ref<VertexArray>& vertexArray, const Ref<Shader>& shader, const glm::mat4& transform = glm::mat4(1.0f));

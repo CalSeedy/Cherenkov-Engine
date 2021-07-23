@@ -108,7 +108,7 @@ namespace Cherenkov {
 		virtual void bind()	const = 0;
 		virtual void unbind() const = 0;
 		virtual const BufferLayout& getLayout() const = 0;
-		virtual void layout(const BufferLayout& layout) = 0;
+		virtual void setLayout(const BufferLayout& layout) = 0;
 
 		static Ref<VertexBuffer> init(float_t* vertices, uint32_t count);
 

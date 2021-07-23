@@ -24,14 +24,17 @@ namespace Cherenkov {
 	}
 
 	WindowsWindow::WindowsWindow(const WindowProperties &properties){
-		
+		CK_PROFILE_FUNCTION();
 		init(properties);
 	}
 
-	WindowsWindow::~WindowsWindow() { shutDown(); }
+	WindowsWindow::~WindowsWindow() { 
+		CK_PROFILE_FUNCTION();
+		shutDown();
+	}
 
-	void WindowsWindow::init(const WindowProperties &properties) {
-	
+	void WindowsWindow::init(const WindowProperties& properties) {
+		CK_PROFILE_FUNCTION();
 		m_Data.Title = properties.Title;
 		m_Data.Width = properties.Width;
 		m_Data.Height = properties.Height;
@@ -43,8 +46,10 @@ namespace Cherenkov {
 			CK_CORE_ASSERT(success, "Could not successfully initialise GLFW!");
 			glfwSetErrorCallback(GLFWErrorCallback);
 		}
-
-		m_Window = glfwCreateWindow((int)properties.Width, (int)properties.Height, m_Data.Title.c_str(), nullptr, nullptr);
+		{
+			CK_PROFILE_SCOPE("glfwCreateWindow");
+			m_Window = glfwCreateWindow((int)properties.Width, (int)properties.Height, m_Data.Title.c_str(), nullptr, nullptr);
+		}
 		s_GLFWCount++;
 
 		m_Ctx = RendererContext::create(m_Window);
@@ -143,7 +148,7 @@ namespace Cherenkov {
 	}
 
 	void WindowsWindow::onUpdate() {
-	
+		CK_PROFILE_FUNCTION();
 		glfwPollEvents();
 		m_Ctx->swapBuffers();
 	}

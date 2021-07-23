@@ -30,16 +30,20 @@ namespace Cherenkov {
 	}
 
 	OpenGLVertexArray::OpenGLVertexArray() {
+		CK_PROFILE_FUNCTION();
 		glCreateVertexArrays(1, &m_RendererID);
 	}
 
 	void OpenGLVertexArray::bind() const {
+		CK_PROFILE_FUNCTION();
 		glBindVertexArray(m_RendererID);
 	}
 	void OpenGLVertexArray::unbind() const{
+		CK_PROFILE_FUNCTION();
 		glBindVertexArray(0);
 	}
 	void OpenGLVertexArray::addVertexBuffer(const Ref<VertexBuffer>& vBuffer) {
+		CK_PROFILE_FUNCTION();
 		glBindVertexArray(m_RendererID);
 		vBuffer->bind();
 
@@ -55,12 +59,14 @@ namespace Cherenkov {
 		m_VertexBuffers.push_back(vBuffer);
 	}
 	void OpenGLVertexArray::setIndexBuffer(const Ref<IndexBuffer>& iBuffer){
+		CK_PROFILE_FUNCTION();
 		glBindVertexArray(m_RendererID);
 		iBuffer->bind();
 		m_IndexBuffer = iBuffer;
 	}
 
 	OpenGLVertexArray::~OpenGLVertexArray()	{
+		CK_PROFILE_FUNCTION();
 		glDeleteVertexArrays(1, &m_RendererID);
 	}
 

@@ -8,19 +8,15 @@
 namespace Cherenkov {
 
 	class CK_API ImGuiLayer : public Layer {
-
+		float m_Time = 0.0f;
 	public:
 		ImGuiLayer();
-		~ImGuiLayer();
+		~ImGuiLayer() = default;
 
 		virtual void onAttach() override;
 		virtual void onDetach() override;
-		virtual void onImGuiDraw() override;
 
 		void start();
 		void stop();
-	private:
-		float m_Time = 0.0f;
-
 	};
 }
