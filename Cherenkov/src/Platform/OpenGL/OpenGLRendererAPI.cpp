@@ -3,8 +3,28 @@
 
 #include <glad/glad.h>
 namespace Cherenkov {
+
+	void OpenGLCallback(unsigned source, unsigned type, unsigned id, unsigned severity, int length, const char* message, const void* userParam) {
+		switch (severity){
+		case GL_DEBUG_SEVERITY_HIGH:			CK_CORE_FATAL(message); return;
+		case GL_DEBUG_SEVERITY_MEDIUM:			CK_CORE_ERROR(message); return;
+		case GL_DEBUG_SEVERITY_LOW:				CK_CORE_WARN(message); return;
+		case GL_DEBUG_SEVERITY_NOTIFICATION:	CK_CORE_TRACE(message); return;
+		default:								CK_CORE_ASSERT(false, "Unknown severity!");
+		}
+	}
+
+
 	void OpenGLRendererAPI::init() {
 		CK_PROFILE_FUNCTION();
+
+		#ifdef CK_DEBUG
+			glEnable(GL_DEBUG_OUTPUT);
+			glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS);
+			glDebugMessageCallback(OpenGLCallback, nullptr);
+			glDebugMessageControl(GL_DONT_CARE, GL_DONT_CARE, GL_DEBUG_SEVERITY_NOTIFICATION, 0, NULL, GL_FALSE);
+		#endif
+
 		glEnable(GL_BLEND);
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 

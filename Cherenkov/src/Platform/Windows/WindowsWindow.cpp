@@ -6,6 +6,8 @@
 #include "Cherenkov/Events/ApplicationEvent.h"
 #include "Cherenkov/Events/MouseEvent.h"
 
+#include "Cherenkov/Renderer/Renderer.h"
+
 #include "Platform/OpenGL/OpenGLContext.h"
 
 
@@ -48,6 +50,10 @@ namespace Cherenkov {
 		}
 		{
 			CK_PROFILE_SCOPE("glfwCreateWindow");
+			#if defined(CK_DEBUG)
+			if (Renderer::getAPI() == RendererAPI::API::OpenGL)
+				glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, GLFW_TRUE);
+			#endif
 			m_Window = glfwCreateWindow((int)properties.Width, (int)properties.Height, m_Data.Title.c_str(), nullptr, nullptr);
 		}
 		s_GLFWCount++;
