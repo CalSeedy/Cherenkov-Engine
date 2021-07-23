@@ -8,8 +8,6 @@
 #include <GLFW/glfw3.h>
 
 namespace Cherenkov {
-
-#define BIND_EVENT_FUNC(x) std::bind(&Application::x, this, std::placeholders::_1)
 	
 	Application* Application::s_Instance = nullptr;
 	 
@@ -17,8 +15,8 @@ namespace Cherenkov {
 		CK_CORE_ASSERT(!s_Instance, "Application already running!");
 		s_Instance = this;
 		m_Window = Window::Create();
-		m_Window->setEventCallBack(BIND_EVENT_FUNC(onEvent));
-		m_Window->setVSync(true);
+		m_Window->setEventCallBack(CK_BIND_EVENT_FN(Application::onEvent));
+		m_Window->setVSync(false);
 
 		Renderer::init();
 
@@ -43,8 +41,8 @@ namespace Cherenkov {
 	void Application::onEvent(Event &event) {
 	
 		EventDispatcher dispatcher(event);
-		dispatcher.Dispatch<WindowCloseEvent>(BIND_EVENT_FUNC(onWindowClose));
-		dispatcher.Dispatch<WindowResizeEvent>(BIND_EVENT_FUNC(onWindowResize));
+		dispatcher.Dispatch<WindowCloseEvent>(CK_BIND_EVENT_FN(Application::onWindowClose));
+		dispatcher.Dispatch<WindowResizeEvent>(CK_BIND_EVENT_FN(Application::onWindowResize));
 		//CK_CORE_TRACE("{0}", event);
 
 		for (auto it = m_LayerStack.end(); it != m_LayerStack.begin();) {
