@@ -108,13 +108,31 @@ namespace Cherenkov {
 
 #define CK_PROFILE 1
 #if CK_PROFILE
-#define CK_PROFILE_BEGIN(name, filepath) ::Cherenkov::Instrumentor::get().begin(name, filepath)
-#define CK_PROFILE_END() ::Cherenkov::Instrumentor::get().end()
-#define CK_PROFILE_SCOPE(name) ::Cherenkov::Timer timer##__LINE__(name);
-#define CK_PROFILE_FUNCTION() CK_PROFILE_SCOPE(__FUNCSIG__)
+	#if defined(__GNUC__) || (defined(__MWERKS__) && (__MWERKS__ >= 0x3000)) || (defined(__ICC) && (__ICC >= 600)) || defined(__ghs__)
+		#define CK_FUNC_SIG __PRETTY_FUNCTION__
+	#elif defined(__DMC__) && (__DMC__ >= 0x810)
+		#define CK_FUNC_SIG __PRETTY_FUNCTION__
+	#elif defined(__FUNCSIG__)
+		#define CK_FUNC_SIG __FUNCSIG__
+	#elif (defined(__INTEL_COMPILER) && (__INTEL_COMPILER >= 600)) || (defined(__IBMCPP__) && (__IBMCPP__ >= 500))
+		#define CK_FUNC_SIG __FUNCTION__
+	#elif defined(__BORLANDC__) && (__BORLANDC__ >= 0x550)
+		#define CK_FUNC_SIG __FUNC__
+	#elif defined(__STDC_VERSION__) && (__STDC_VERSION__ >= 199901)
+		#define CK_FUNC_SIG __func__
+	#elif defined(__cplusplus) && (__cplusplus >= 201103)
+		#define CK_FUNC_SIG __func__
+	#else
+	#define CK_FUNC_SIG "CK_FUNC_SIG unknown!"
+	#endif
+
+	#define CK_PROFILE_BEGIN(name, filepath) ::Cherenkov::Instrumentor::get().begin(name, filepath)
+	#define CK_PROFILE_END() ::Cherenkov::Instrumentor::get().end()
+	#define CK_PROFILE_SCOPE(name) ::Cherenkov::Timer timer##__LINE__(name);
+	#define CK_PROFILE_FUNCTION() CK_PROFILE_SCOPE(CK_FUNC_SIG)
 #else
-#define CK_PROFILE_BEGIN(name, filepath)
-#define CK_PROFILE_END()
-#define CK_PROFILE_SCOPE(name)
-#define CK_PROFILE_FUNCTION()
+	#define CK_PROFILE_BEGIN(name, filepath)
+	#define CK_PROFILE_END()
+	#define CK_PROFILE_SCOPE(name)
+	#define CK_PROFILE_FUNCTION()
 #endif

@@ -54,9 +54,9 @@ namespace Cherenkov {
 		dispatcher.Dispatch<WindowResizeEvent>(CK_BIND_EVENT_FN(Application::onWindowResize));
 		//CK_CORE_TRACE("{0}", event);
 
-		for (auto it = m_LayerStack.end(); it != m_LayerStack.begin();) {
+		for (auto it = m_LayerStack.rbegin(); it != m_LayerStack.rend(); ++it) {
 		
-			(*--it)->onEvent(event);
+			(*it)->onEvent(event);
 			if (event.isHandled())
 				break;
 		}
