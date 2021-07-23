@@ -21,11 +21,12 @@ layout(location = 0) out vec4 c;
 
 uniform vec4 colour;
 uniform sampler2D tex;
+uniform float tilingFactor;
 
 in vec2 texCoord;
 
 void main(){
 	
-	c = texture(tex, texCoord) * colour;
+	c = texture(tex, texCoord * tilingFactor) * colour;
 
 }
