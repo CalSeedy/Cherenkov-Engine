@@ -1,5 +1,6 @@
 #pragma once
 #include "Cherenkov/Renderer/Texture.h"
+
 #include <glad/glad.h>
 
 namespace Cherenkov {

@@ -1,6 +1,6 @@
 #pragma once
-#include "Camera.h"
-#include "Texture.h"
+#include "Cherenkov/Renderer/Camera.h"
+#include "Cherenkov/Renderer/Texture.h"
 
 namespace Cherenkov {
 

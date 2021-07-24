@@ -1,7 +1,7 @@
 #include "ckpch.h"
-#include "Shader.h"
+#include "Cherenkov/Renderer/Shader.h"
+#include "Cherenkov/Renderer/Renderer.h"
 
-#include "Renderer.h"
 #include "Platform/OpenGL/OpenGLShader.h"
 
 namespace Cherenkov {

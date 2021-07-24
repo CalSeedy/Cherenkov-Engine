@@ -1,6 +1,5 @@
 #include "ckpch.h"
-#include "VertexArray.h"
-
+#include "Cherenkov/Renderer/VertexArray.h"
 #include "Cherenkov/Renderer/Renderer.h"
 
 #include "Platform/OpenGL/OpenGLVertexArray.h"

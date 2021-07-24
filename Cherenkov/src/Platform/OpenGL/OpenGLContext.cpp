@@ -1,10 +1,9 @@
 #include "ckpch.h"
-#include "OpenGLContext.h"
-
-#include "Cherenkov/Core/Log.h"
+#include "Platform/OpenGL/OpenGLContext.h"
 
 #include <GLFW/glfw3.h>
 #include <glad/glad.h>
+#include <gl/GL.h>
 
 namespace Cherenkov {
 

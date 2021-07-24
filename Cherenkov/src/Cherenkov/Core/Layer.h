@@ -1,8 +1,8 @@
 #pragma once
 
 #include "Cherenkov/Core/Core.h"
-#include "Cherenkov/Events/Event.h"
 #include "Cherenkov/Core/TimeStep.h"
+#include "Cherenkov/Events/Event.h"
 
 namespace Cherenkov {
 

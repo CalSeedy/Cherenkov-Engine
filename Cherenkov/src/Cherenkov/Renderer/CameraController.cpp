@@ -1,5 +1,5 @@
 #include "ckpch.h"
-#include "CameraController.h"
+#include "Cherenkov/Renderer/CameraController.h"
 #include "Cherenkov/Core/Input.h"
 #include "Cherenkov/Core/KeyCodes.h"
 

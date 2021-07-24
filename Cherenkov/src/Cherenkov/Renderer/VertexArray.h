@@ -1,5 +1,6 @@
 #pragma once
 
+#include <memory>
 #include "Cherenkov/Renderer/Buffer.h"
 
 namespace Cherenkov {

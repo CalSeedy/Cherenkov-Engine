@@ -1,6 +1,5 @@
 #pragma once
 
-
 namespace Cherenkov {
 	typedef enum class MouseCode{
 		Button_1         = 0,

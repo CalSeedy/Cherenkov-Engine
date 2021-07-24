@@ -1,7 +1,5 @@
 #pragma once
 #include "Cherenkov/Renderer/RendererContext.h"
-#include <glad/glad.h>
-
 
 struct GLFWwindow;
 

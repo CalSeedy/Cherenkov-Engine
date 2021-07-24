@@ -1,5 +1,7 @@
 #pragma once
-#include "Cherenkov/Core/Core.h"
+#include <string>
+#include <unordered_map>
+
 #include <glm/glm.hpp>
 
 namespace Cherenkov {

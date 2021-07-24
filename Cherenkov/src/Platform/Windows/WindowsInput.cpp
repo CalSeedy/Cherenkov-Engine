@@ -1,6 +1,6 @@
 #include "ckpch.h"
+#include "Platform/Windows/WindowsInput.h"
 
-#include "WindowsInput.h"
 #include "Cherenkov/Core/Application.h"
 
 #include <GLFW/glfw3.h>

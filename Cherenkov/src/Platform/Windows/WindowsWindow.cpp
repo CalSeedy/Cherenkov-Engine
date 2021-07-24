@@ -1,6 +1,6 @@
 #include "ckpch.h"
-#include "WindowsWindow.h"
-#include "Cherenkov/Core/Log.h"
+#include "Platform/Windows/WindowsWindow.h"
+
 #include "Cherenkov/Core/Input.h"
 
 #include "Cherenkov/Events/KeyEvent.h"

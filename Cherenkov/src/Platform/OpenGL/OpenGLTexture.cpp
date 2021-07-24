@@ -1,11 +1,7 @@
 #include "ckpch.h"
-#include "OpenGLTexture.h"
+#include "Platform/OpenGL/OpenGLTexture.h"
 
-#pragma warning(push)
-#pragma warning(disable : ALL_CODE_ANALYSIS_WARNINGS)
-#include <glad/glad.h>
 #include <stb_image.h>
-#pragma warning(pop)
 
 namespace Cherenkov {
 	OpenGLTexture2D::OpenGLTexture2D(const std::string& path) : m_Path{ path } {

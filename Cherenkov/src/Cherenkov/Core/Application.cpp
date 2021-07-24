@@ -1,11 +1,12 @@
 #include "ckpch.h"
-#include "Application.h"
+#include "Cherenkov/Core/Application.h"
 
-#include "Log.h"
-#include "Input.h"
+#include "Cherenkov/Core/Log.h"
 
 #include "Cherenkov/Renderer/Renderer.h"
-#include "Cherenkov/Renderer/Renderer2D.h"
+
+#include "Cherenkov/Core/Input.h"
+
 #include <GLFW/glfw3.h>
  
 namespace Cherenkov {

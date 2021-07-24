@@ -1,7 +1,7 @@
 #include "ckpch.h"
-#include "RendererContext.h"
-#include "Renderer.h"
+#include "Cherenkov/Renderer/RendererContext.h"
 
+#include "Cherenkov/Renderer/Renderer.h"
 #include "Platform/OpenGL/OpenGLContext.h"
 
 namespace Cherenkov {

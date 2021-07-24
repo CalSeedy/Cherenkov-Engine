@@ -1,7 +1,7 @@
 #include "ckpch.h"
-#include "Buffer.h"
+#include "Cherenkov/Renderer/Buffer.h"
+#include "Cherenkov/Renderer/Renderer.h"
 
-#include "Renderer.h"
 #include "Platform/OpenGL/OpenGLBuffer.h"
 
 namespace Cherenkov {

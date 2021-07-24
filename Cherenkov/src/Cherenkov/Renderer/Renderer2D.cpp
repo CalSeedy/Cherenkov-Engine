@@ -1,12 +1,10 @@
 #include "ckpch.h"
-#include "Renderer2D.h"
-
-#include "Commands.h"
-#include "Shader.h"
-
-#include "Cherenkov/Core/Core.h"
+#include "Cherenkov/Renderer/Renderer2D.h"
 
 #include "Cherenkov/Renderer/VertexArray.h"
+#include "Cherenkov/Renderer/Shader.h"
+#include "Cherenkov/Renderer/Commands.h"
+
 
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>

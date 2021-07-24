@@ -1,7 +1,6 @@
 #pragma once
 
 #include "Cherenkov/Core/Core.h"
-
 #include "Cherenkov/Core/KeyCodes.h"
 #include "Cherenkov/Core/MouseCodes.h"
 

@@ -1,4 +1,5 @@
 #pragma once
+#include "Cherenkov/Core/Core.h"
 
 #ifdef CK_PLATFORM_WINDOWS
 

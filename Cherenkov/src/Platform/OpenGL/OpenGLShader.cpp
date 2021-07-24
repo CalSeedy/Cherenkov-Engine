@@ -1,7 +1,7 @@
 #include "ckpch.h"
-#include "OpenGLShader.h"
+#include "Platform/OpenGL/OpenGLShader.h"
 
-#include "Cherenkov/Core/Log.h"
+#include <fstream>
 #include <glad/glad.h>
 #include <glm/gtc/type_ptr.hpp>
 

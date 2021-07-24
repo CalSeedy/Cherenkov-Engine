@@ -1,9 +1,8 @@
 #pragma once
-
 #include "Cherenkov/Core/Core.h"
-#include "Window.h"
-#include "LayerStack.h"
 
+#include "Cherenkov/Core/Window.h"
+#include "Cherenkov/Core/LayerStack.h"
 #include "Cherenkov/Events/Event.h"
 #include "Cherenkov/Events/ApplicationEvent.h"
 

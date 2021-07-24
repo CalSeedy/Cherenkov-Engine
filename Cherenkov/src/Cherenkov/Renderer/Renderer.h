@@ -1,9 +1,8 @@
 #pragma once
-#include "Camera.h"
-#include "Commands.h"
-#include "Shader.h"
+#include "Cherenkov/Renderer/Camera.h"
+#include "Cherenkov/Renderer/Commands.h"
+#include "Cherenkov/Renderer/Shader.h"
 
-#include "Platform/OpenGL/OpenGLShader.h"
 namespace Cherenkov {
 
 	class Renderer {

@@ -1,5 +1,4 @@
 #pragma once
-#include "Cherenkov/Core/Core.h"
 
 namespace Cherenkov {
 

@@ -1,5 +1,5 @@
 #include "ckpch.h"
-#include "Camera.h"
+#include "Cherenkov/Renderer/Camera.h"
 
 #include <glm/gtc/matrix_transform.hpp>
 
