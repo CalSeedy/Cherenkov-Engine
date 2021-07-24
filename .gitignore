@@ -1,8 +1,13 @@
 #Dirs
 .vs/
-bin/
-bin-int/
+**/bin/
+**/bin-int/
 Cherenkov/vendor/
 
 #Files
-*.user
+*.log
+
+**.sln
+**.vcxproj
+**.vcxproj.filters
+**.vcxproj.user
