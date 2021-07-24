@@ -7,18 +7,26 @@
 
 namespace Cherenkov {
 
-	std::shared_ptr<spdlog::logger> Log::s_CoreLogger;
-	std::shared_ptr<spdlog::logger> Log::s_ClientLogger;
+	Ref<spdlog::logger> Log::s_CoreLogger;
+	Ref<spdlog::logger> Log::s_ClientLogger;
 
-	void Log::init()
-	{
-		spdlog::set_pattern("%^[%T] %n: %v%$");
+	void Log::init() {
+		std::vector<spdlog::sink_ptr> logSinks;
+		logSinks.emplace_back(CreateRef<spdlog::sinks::stdout_color_sink_mt>());
+		logSinks.emplace_back(CreateRef<spdlog::sinks::basic_file_sink_mt>("Cherenkov.log", true));
 
-		s_CoreLogger = spdlog::stdout_color_mt("CHERENKOV");
-		s_ClientLogger = spdlog::stdout_color_mt("APP");
+		logSinks[0]->set_pattern("%^[%T] %n: %v%$");
+		logSinks[1]->set_pattern("[%T] [%l] %n: %v");
 
-		s_ClientLogger->set_level(spdlog::level::trace);
+		s_CoreLogger = CreateRef<spdlog::logger>("CHERENKOV", begin(logSinks), end(logSinks));
+		spdlog::register_logger(s_CoreLogger);
 		s_CoreLogger->set_level(spdlog::level::trace);
+		s_CoreLogger->flush_on(spdlog::level::trace);
+
+		s_ClientLogger = CreateRef<spdlog::logger>("APP", begin(logSinks), end(logSinks));
+		spdlog::register_logger(s_ClientLogger);
+		s_ClientLogger->set_level(spdlog::level::trace);
+		s_ClientLogger->flush_on(spdlog::level::trace);
 
 	}
 }

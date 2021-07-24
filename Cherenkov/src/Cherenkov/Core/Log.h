@@ -8,20 +8,17 @@
 
 namespace Cherenkov {
 
-	class Log
-	{
+	class Log {
+		static Ref<spdlog::logger> s_CoreLogger;
+		static Ref<spdlog::logger> s_ClientLogger;
 	public:
 		static void init();
-		inline static std::shared_ptr<spdlog::logger>& getCoreLogger() { return s_CoreLogger; }
-		inline static std::shared_ptr<spdlog::logger>& getClientLogger() { return s_ClientLogger; }
+		inline static Ref<spdlog::logger>& getCoreLogger() { return s_CoreLogger; }
+		inline static Ref<spdlog::logger>& getClientLogger() { return s_ClientLogger; }
 
-	private:
-		static std::shared_ptr<spdlog::logger> s_CoreLogger;
-		static std::shared_ptr<spdlog::logger> s_ClientLogger;
 	};
 
 }
-
 
 #define CK_CORE_TRACE(...)	::Cherenkov::Log::getCoreLogger()->trace(__VA_ARGS__)
 #define CK_CORE_INFO(...)	::Cherenkov::Log::getCoreLogger()->info(__VA_ARGS__)
