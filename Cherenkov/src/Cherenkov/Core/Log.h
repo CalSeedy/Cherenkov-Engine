@@ -13,8 +13,8 @@ namespace Cherenkov {
 		static Ref<spdlog::logger> s_ClientLogger;
 	public:
 		static void init();
-		inline static Ref<spdlog::logger>& getCoreLogger() { return s_CoreLogger; }
-		inline static Ref<spdlog::logger>& getClientLogger() { return s_ClientLogger; }
+		static Ref<spdlog::logger>& getCoreLogger() { return s_CoreLogger; }
+		static Ref<spdlog::logger>& getClientLogger() { return s_ClientLogger; }
 
 	};
 

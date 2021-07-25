@@ -79,7 +79,7 @@ namespace Cherenkov {
 	class BufferLayout {
 		std::vector<BufferElement> m_Elements;
 		uint32_t m_Stride = 0;
-		inline void calculateOffsets() {
+		void calculateOffsets() {
 			uint32_t offset = 0;
 			for (auto& e : m_Elements) {
 				e.Offset = offset;
@@ -90,8 +90,8 @@ namespace Cherenkov {
 	public:
 		BufferLayout() {}
 		BufferLayout(const std::initializer_list<BufferElement>& elements) : m_Elements{ elements } { calculateOffsets(); }
-		inline std::vector<BufferElement>& elements() { return m_Elements; }
-		inline uint32_t stride() const { return m_Stride; }
+		std::vector<BufferElement>& elements() { return m_Elements; }
+		uint32_t stride() const { return m_Stride; }
 		std::vector<BufferElement>::iterator begin() { return m_Elements.begin(); }
 		std::vector<BufferElement>::iterator end() { return m_Elements.end(); }
 		std::vector<BufferElement>::const_iterator begin() const { return m_Elements.begin(); }

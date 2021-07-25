@@ -15,14 +15,14 @@ namespace Cherenkov {
 
 		void onUpdate() override;
 
-		inline unsigned int getWidth() const override { return m_Data.Width; }
-		inline unsigned int getHeight() const override { return m_Data.Height; }
+		unsigned int getWidth() const override { return m_Data.Width; }
+		unsigned int getHeight() const override { return m_Data.Height; }
 
 		inline void setEventCallBack(const EventCallbackFn &callback) override { m_Data.EventCallback = callback; }
 		void setVSync(bool enabled) override;
 		bool isVSync() const override;
 	
-		inline virtual void* getNativeWindow() const { return m_Window; }
+		virtual void* getNativeWindow() const { return m_Window; }
 
 	private:
 		virtual void init(const WindowProperties &properties);

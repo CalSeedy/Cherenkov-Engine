@@ -8,7 +8,7 @@ namespace Cherenkov {
 	class KeyEvent : public Event {
 
 	public:
-		inline KeyCode getKeyCode() const { return m_KeyCode; }
+		KeyCode getKeyCode() const { return m_KeyCode; }
 
 		EVENT_CLASS_CATEGORY(EventCategoryKeyBoard | EventCategoryInput)
 	protected:
@@ -23,7 +23,7 @@ namespace Cherenkov {
 		KeyPressedEvent(KeyCode code, int repeats) 
 			: KeyEvent(code), m_Repeats(repeats) {}
 
-		inline int getRepeats() const { return m_Repeats; }
+		int getRepeats() const { return m_Repeats; }
 
 		std::string toStr() const override {
 			std::stringstream stream;

@@ -39,8 +39,8 @@ namespace Cherenkov {
 		void pushLayer(Layer* layer);
 		void pushOverlay(Layer* overlay);
 
-		inline static Application& get() { return *s_Instance; }
-		inline Window& getWindow() { return *m_Window; }
+		static Application& get() { return *s_Instance; }
+		Window& getWindow() { return *m_Window; }
 	};
 
 	Application* createApplication();

@@ -12,7 +12,7 @@ namespace Cherenkov {
 		static Scope<Scene> s_Scene;
 
 	public:
-		inline static RendererAPI::API getAPI() { return RendererAPI::getAPI(); }
+		static RendererAPI::API getAPI() { return RendererAPI::getAPI(); }
 
 		static void init();
 		static void shutdown();

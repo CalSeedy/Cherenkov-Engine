@@ -39,12 +39,9 @@ namespace Cherenkov {
 		virtual int getCategoryFlags() const = 0;
 		virtual std::string toStr() const { return getEventName(); }
 
-		inline bool inCategory(EventCategory category){
-			
-			return getCategoryFlags() & category;
-		}
+		bool inCategory(EventCategory category){ return getCategoryFlags() & category; }
 
-		inline bool isHandled() { return m_handled; }
+		bool isHandled() { return m_handled; }
 	protected:
 		bool m_handled = false;
 	};
@@ -53,11 +50,10 @@ namespace Cherenkov {
 
 		template<typename T>
 		using EventFn = std::function<bool(T&)>;
-
+		Event& m_Event;
 	public:
 
-		EventDispatcher(Event& event) : m_Event(event) {
-		}
+		EventDispatcher(Event& event) : m_Event(event) {}
 
 		template<typename T, typename F>
 		bool Dispatch(const F& func) {
@@ -70,15 +66,7 @@ namespace Cherenkov {
 			return false;
 		}
 
-	private:
-		Event& m_Event;
-
 	};
 
-	inline std::ostream& operator<<(std::ostream& os, const Event& e)
-	{
-		return os << e.toStr();
-	}
-
-
+	inline std::ostream& operator<<(std::ostream& os, const Event& e){ return os << e.toStr(); }
 }
