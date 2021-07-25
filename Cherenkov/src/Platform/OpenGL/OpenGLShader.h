@@ -21,7 +21,8 @@ namespace Cherenkov {
 		void bind() const override;
 		void unbind() const override;
 
-		void setInt(const std::string& name, int32_t vector) override;
+		void setInt(const std::string& name, int32_t value) override;
+		void setIntArray(const std::string& name, int32_t* values, uint32_t count) override;
 		void setFloat(const std::string& name, float_t vector) override;
 		void setFloat2(const std::string& name, const glm::vec2& vector) override;
 		void setFloat3(const std::string& name, const glm::vec3& vector) override;
@@ -32,6 +33,7 @@ namespace Cherenkov {
 		const std::string& name() const override { return m_Name; }
 		
 		void uploadUniformInt(const std::string& id, int32_t value) const;
+		void uploadUniformIntArray(const std::string& id, int32_t* values, uint32_t count) const;
 		
 		void uploadUniformMat3(const std::string& id, const glm::mat3& matrix) const;
 		void uploadUniformMat4(const std::string& id, const glm::mat4& matrix) const;

@@ -171,6 +171,11 @@ namespace Cherenkov {
 		uploadUniformInt(name, value);
 	}
 
+	void OpenGLShader::setIntArray(const std::string& name, int32_t* values, uint32_t count) {
+		CK_PROFILE_FUNCTION();
+		uploadUniformIntArray(name, values, count);
+	}
+
 	void OpenGLShader::setFloat(const std::string& name, float_t value) {
 		CK_PROFILE_FUNCTION();
 		uploadUniformFloat(name, value);
@@ -204,6 +209,11 @@ namespace Cherenkov {
 	void OpenGLShader::uploadUniformInt(const std::string& id, int32_t value) const {
 		GLint loc = glGetUniformLocation(m_ID, id.c_str());
 		glUniform1i(loc, value);
+	}
+
+	void OpenGLShader::uploadUniformIntArray(const std::string& id, int32_t* values, uint32_t count) const {
+		GLint loc = glGetUniformLocation(m_ID, id.c_str());
+		glUniform1iv(loc, count, values);
 	}
 
 	void OpenGLShader::uploadUniformMat3(const std::string& id, const glm::mat3& matrix) const {

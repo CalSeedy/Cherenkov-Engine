@@ -5,8 +5,6 @@
 namespace Cherenkov {
 	
 	class Texture {
-
-
 	public:
 		virtual uint32_t width() const = 0;
 		virtual uint32_t height() const = 0;
@@ -14,6 +12,8 @@ namespace Cherenkov {
 		
 		virtual void bind(uint32_t slot = 0) const = 0;
 		virtual void setData(void* data, uint32_t size) = 0;
+
+		virtual bool operator==(const Texture& other) const = 0;
 	};
 
 
@@ -25,5 +25,6 @@ namespace Cherenkov {
 		virtual ~Texture2D() = default;
 
 		virtual void setData(void* data, uint32_t size) = 0;
+		virtual bool operator==(const Texture& other) const = 0;
 	};
 }

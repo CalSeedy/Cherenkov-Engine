@@ -39,7 +39,7 @@ ExampleLayer::ExampleLayer() : Layer("Test!"), m_CameraController{ 1920.0f / 108
 		m_Texture2 = Cherenkov::Texture2D::init("assets/Textures/ChernoLogo.png");
 
 		m_TextureShader->bind();
-		m_TextureShader->setInt("tex", 0);
+		m_TextureShader->setInt("texture", 0);
 	}
 
 void ExampleLayer::onAttach(){}

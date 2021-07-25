@@ -15,6 +15,8 @@ namespace Cherenkov {
 		glm::vec3 Position;
 		glm::vec4 Colour;
 		glm::vec2 TextureCoord;
+		float TextureIdx;
+		float TilingFactor;
 	};
 
 	struct Storage {
@@ -22,6 +24,8 @@ namespace Cherenkov {
 		CK_CORE_ASSERT(maxQuads * 6 <= UINT32_MAX, "Maximum Quads exceeds the maximum value for uint32_t!");
 		const uint32_t maxVertices  = maxQuads * 4;
 		const uint32_t maxIndices   = maxQuads * 6;
+		static const uint32_t maxTextures = 32;
+		
 		uint32_t quadIndices = 0;
 		
 		Ref<VertexArray> quadVertexArray;
@@ -31,6 +35,9 @@ namespace Cherenkov {
 
 		QuadVertex* quadVertBufferBase = nullptr;
 		QuadVertex* quadVertBufferPtr = nullptr;
+
+		std::array<Ref<Texture2D>, maxTextures> boundTextures;
+		uint32_t textureSlotIdx = 1;	// ^^ 0 - blank texture/ colour!
 	};
 
 	static Storage s_Storage;
@@ -44,7 +51,9 @@ namespace Cherenkov {
 		s_Storage.quadVertexBuffer->setLayout({
 			{ShaderDataType::Vec3f, "in_Position"},
 			{ShaderDataType::Vec4f, "in_Colour"},
-			{ShaderDataType::Vec2f, "in_TextureCoord"}
+			{ShaderDataType::Vec2f, "in_TextureCoord"},
+			{ShaderDataType::Float, "in_TextureIdx"},
+			{ShaderDataType::Float, "in_TilingFactor"}
 			});
 		s_Storage.quadVertexArray->addVertexBuffer(s_Storage.quadVertexBuffer);
 
@@ -74,11 +83,15 @@ namespace Cherenkov {
 			uint32_t blankData = 0xffffffff;
 			s_Storage.Blank->setData(&blankData, sizeof(blankData));
 		}
+		int32_t textures [s_Storage.maxTextures];
+		for (int32_t i = 0; i < s_Storage.maxTextures; i++) textures[i] = i;
 		{
 			CK_PROFILE_SCOPE("Texture Shader");
 			s_Storage.textureShader = Shader::init("assets/Shaders/Texture.glsl");
 			s_Storage.textureShader->bind();
-			s_Storage.textureShader->setInt("tex", 0);
+			s_Storage.textureShader->setIntArray("textures", textures, s_Storage.maxTextures);
+
+			s_Storage.boundTextures[0] = s_Storage.Blank;
 		}
 	}
 
@@ -93,10 +106,14 @@ namespace Cherenkov {
 
 		s_Storage.quadIndices = 0;
 		s_Storage.quadVertBufferPtr = s_Storage.quadVertBufferBase;
+
+		s_Storage.textureSlotIdx = 1;
 	}
 
 	void Renderer2D::flush() {
 		CK_PROFILE_FUNCTION();
+
+		for (uint32_t i = 0; i < s_Storage.textureSlotIdx; i++) s_Storage.boundTextures[i]->bind(i);
 		RenderCommand::drawIndexed(s_Storage.quadVertexArray, s_Storage.quadIndices);
 	}
 
@@ -116,28 +133,50 @@ namespace Cherenkov {
 	void Renderer2D::Quad(const glm::vec2& scale, const Ref<Texture2D>& texture, const QuadProperties& properties) {
 		CK_PROFILE_FUNCTION();
 
+		float textureIndex = 0.0f;
+		for (uint32_t i = 1; i < s_Storage.textureSlotIdx; i++) {
+			if (*s_Storage.boundTextures[i].get() == *texture.get()) {
+				textureIndex = (float)i;
+				break;
+			}
+		}
+
+		if (textureIndex == 0.0f) {
+			textureIndex = (float)s_Storage.textureSlotIdx;
+			s_Storage.boundTextures[s_Storage.textureSlotIdx] = texture;
+			s_Storage.textureSlotIdx++;
+		}
+
 		// Bottom Left
 		s_Storage.quadVertBufferPtr->Position = { properties.Position.x, properties.Position.y, properties.Position.z };
 		s_Storage.quadVertBufferPtr->Colour = properties.Colour;
 		s_Storage.quadVertBufferPtr->TextureCoord = { 0.0f, 0.0f };
+		s_Storage.quadVertBufferPtr->TextureIdx = textureIndex;
+		s_Storage.quadVertBufferPtr->TilingFactor = properties.TileFactor;
 		s_Storage.quadVertBufferPtr++;
 
 		//Bottom Right
 		s_Storage.quadVertBufferPtr->Position = { properties.Position.x + scale.x, properties.Position.y, properties.Position.z };
 		s_Storage.quadVertBufferPtr->Colour = properties.Colour;
 		s_Storage.quadVertBufferPtr->TextureCoord = { 1.0f, 0.0f };
+		s_Storage.quadVertBufferPtr->TextureIdx = textureIndex;
+		s_Storage.quadVertBufferPtr->TilingFactor = properties.TileFactor;
 		s_Storage.quadVertBufferPtr++;
 
 		// Top Right
 		s_Storage.quadVertBufferPtr->Position = { properties.Position.x + scale.x, properties.Position.y + scale.y, properties.Position.z };
 		s_Storage.quadVertBufferPtr->Colour = properties.Colour;
 		s_Storage.quadVertBufferPtr->TextureCoord = { 1.0f, 1.0f };
+		s_Storage.quadVertBufferPtr->TextureIdx = textureIndex;
+		s_Storage.quadVertBufferPtr->TilingFactor = properties.TileFactor;
 		s_Storage.quadVertBufferPtr++;
 
 		//Top Left
 		s_Storage.quadVertBufferPtr->Position = { properties.Position.x, properties.Position.y + scale.y, properties.Position.z };
 		s_Storage.quadVertBufferPtr->Colour = properties.Colour;
 		s_Storage.quadVertBufferPtr->TextureCoord = { 0.0f, 1.0f };
+		s_Storage.quadVertBufferPtr->TextureIdx = textureIndex;
+		s_Storage.quadVertBufferPtr->TilingFactor = properties.TileFactor;
 		s_Storage.quadVertBufferPtr++;
 
 		s_Storage.quadIndices += 6;

@@ -15,6 +15,7 @@ namespace Cherenkov {
 		virtual void unbind() const = 0;
 
 		virtual void setInt(const std::string& name, int32_t vector) = 0;
+		virtual void setIntArray(const std::string& name, int32_t* values, uint32_t count) = 0;
 		virtual void setFloat(const std::string& name, float_t vector) = 0;
 		virtual void setFloat2(const std::string& name, const glm::vec2& vector) = 0;
 		virtual void setFloat3(const std::string& name, const glm::vec3& vector) = 0;

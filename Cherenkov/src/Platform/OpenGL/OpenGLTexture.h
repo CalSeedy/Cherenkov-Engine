@@ -28,5 +28,7 @@ namespace Cherenkov {
 		virtual uint32_t width() const override { return m_Width; }
 
 		void setData(void* data, uint32_t size) override;
+
+		virtual bool operator==(const Texture& other) const override { return m_RendererID == ((OpenGLTexture2D&)other).m_RendererID; }
 	};
 }
