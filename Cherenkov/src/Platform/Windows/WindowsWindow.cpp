@@ -52,7 +52,7 @@ namespace Cherenkov {
 			#endif
 			m_Window = glfwCreateWindow((int)properties.Width, (int)properties.Height, m_Data.Title.c_str(), nullptr, nullptr);
 		}
-		s_GLFWCount++;
+		++s_GLFWCount;
 
 		m_Ctx = RendererContext::create(m_Window);
 		m_Ctx->init();

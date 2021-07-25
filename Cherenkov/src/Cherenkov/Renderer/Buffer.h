@@ -99,26 +99,23 @@ namespace Cherenkov {
 	};
 
 	class VertexBuffer {
-		std::vector<float> m_Data;
 	public:
+		virtual ~VertexBuffer() = default;
 
-		void loadData(std::vector<float> data);
+		virtual void loadData(const void* data, uint32_t size) = 0;
 
 		virtual void bind()	const = 0;
 		virtual void unbind() const = 0;
 		virtual const BufferLayout& getLayout() const = 0;
 		virtual void setLayout(const BufferLayout& layout) = 0;
 
-		static Ref<VertexBuffer> init(float_t* vertices, uint32_t count);
+		static Ref<VertexBuffer> init(uint32_t size);
+		static Ref<VertexBuffer> init(float_t* vertices, uint32_t size);
 
-		virtual ~VertexBuffer() = default;
 	};
 
 	class IndexBuffer {
-		std::vector<unsigned int> m_Data;
 	public:
-
-		void loadData(std::vector<unsigned int> data);
 
 		virtual void bind()	const = 0;
 		virtual void unbind() const = 0;

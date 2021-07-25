@@ -15,26 +15,21 @@ void Sandbox2D::onUpdate(Cherenkov::Timestep dt) {
 		CK_PROFILE_SCOPE("Render Clear");
 		Cherenkov::RenderCommand::clear({ 1.0f, 0.0f, 1.0f, 1.0f });
 	}
-	Cherenkov::QuadProperties q1, q2, q3;
-	q1.Position = { 0.0f, 0.0f };
-	q1.Colour = { 1.0f, 1.0f, 0.0f, 1.0f };
-	q1.zPosition = -0.5f;
+	Cherenkov::QuadProperties q1, q2;
+	q1.Position = { 1.0f, 0.0f };
+	q1.Colour = { 0.0f, 1.0f, 0.0f, 1.0f };
 
-	q2.Position = { -1.0f, 0.0f };
-	q2.TileFactor = 10.0f;
-	q2.zPosition = -0.99f;
+	q2.Colour = {0.1f, 0.9f, 0.7f, 0.5f};
+	q2.Position = { 0.0f, 0.0f, -0.5f };
 
-	q3.Position = { 1.0f, -1.0f };
-	q3.Colour = { 0.5f, 0.2f, 0.8f, 1.0f };
-	q3.Rotation = 10.0f;
-	q3.zPosition = 1.0f;
 	{
 		CK_PROFILE_SCOPE("Draw Scene");
 		Cherenkov::Renderer2D::beginScene(m_CameraController.getCamera());
 
 		Cherenkov::Renderer2D::Quad({ 2.0f, 2.0f }, q1);
+
 		Cherenkov::Renderer2D::Quad({ 10.0f, 10.0f }, m_Texture, q2);
-		Cherenkov::Renderer2D::Quad({ 1.0f, 1.0f }, m_Texture, q3);
+		//Cherenkov::Renderer2D::Quad({ 1.0f, 1.0f }, m_Texture, q3);
 
 		Cherenkov::Renderer2D::endScene();
 	}

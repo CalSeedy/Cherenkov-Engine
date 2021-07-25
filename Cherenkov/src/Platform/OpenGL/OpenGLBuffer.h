@@ -7,9 +7,11 @@ namespace Cherenkov {
 		uint32_t m_RendererID;
 		BufferLayout m_Layout;
 	public:
-		OpenGLVertexBuffer(float_t* vertices, uint32_t count);
+		OpenGLVertexBuffer(uint32_t size);
+		OpenGLVertexBuffer(float_t* vertices, uint32_t size);
 		virtual ~OpenGLVertexBuffer();
 
+		virtual void loadData(const void* data, uint32_t size) override;
 		virtual void bind() const override;
 		virtual void unbind() const override;
 

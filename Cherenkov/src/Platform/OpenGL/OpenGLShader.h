@@ -10,8 +10,9 @@ namespace Cherenkov {
 		uint32_t m_ID;
 		std::string m_Name;
 
+		static std::string readFile(const char* filepath);
 		void compile(const std::unordered_map<GLenum, std::string>& shaders);
-		std::unordered_map<GLenum, std::string> parse(const std::string& src);
+		std::unordered_map<GLenum, std::string> preProcess(const std::string& src);
 	public:
 		OpenGLShader(const std::string& name, const std::string& vertexPath, const std::string& fragmentPath);
 		OpenGLShader(const std::string& filepath);

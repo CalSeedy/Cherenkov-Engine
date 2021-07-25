@@ -10,7 +10,7 @@ namespace Cherenkov {
 		case GL_DEBUG_SEVERITY_MEDIUM:			CK_CORE_ERROR(message); return;
 		case GL_DEBUG_SEVERITY_LOW:				CK_CORE_WARN(message); return;
 		case GL_DEBUG_SEVERITY_NOTIFICATION:	CK_CORE_TRACE(message); return;
-		default:								CK_CORE_ASSERT(false, "Unknown severity!");
+		default:								CK_CORE_ASSERT(false, "Unknown severity!"); return;
 		}
 	}
 
@@ -36,8 +36,10 @@ namespace Cherenkov {
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	}
 
-	void OpenGLRendererAPI::drawIndexed(const Ref<VertexArray>& vertexArray) {
-		glDrawElements(GL_TRIANGLES, vertexArray->getIndexBuffer()->count(), GL_UNSIGNED_INT, nullptr);
+	void OpenGLRendererAPI::drawIndexed(const Ref<VertexArray>& vertexArray, uint32_t idxCount) {
+		uint32_t count = idxCount ? vertexArray->getIndexBuffer()->count() : idxCount;
+		glDrawElements(GL_TRIANGLES, count, GL_UNSIGNED_INT, nullptr);
+		glBindTexture(GL_TEXTURE_2D, 0);
 	}
 	void OpenGLRendererAPI::setViewport(uint32_t x1, uint32_t y1, uint32_t x2, uint32_t y2)	{
 		glViewport(x1, y1, x2, y2);
