@@ -37,6 +37,20 @@ void Sandbox2D::onUpdate(Cherenkov::Timestep dt) {
 
 		Cherenkov::Renderer2D::Quad({ 10.0f, 10.0f }, m_Texture, q2);
 		Cherenkov::Renderer2D::Quad({ 6.0f, 6.0f }, m_Texture, q3);
+		//glm::vec2 scale = { 1.0f, 1.0f };
+		//
+		//for (int i = 0; i < 20; i++) {
+		//	for (int j = 0; j < 20; j++) {
+		//		Cherenkov::QuadProperties props;
+		//		props.Position.setPos({ (i * scale.x * 1.1f),(j * scale.y * 1.1f), 0.0f });
+		//
+		//		props.Colour = { 10.0f * props.Position.x / 256, 1.0f, 0.0f, 1.0f };
+		//
+		//		Cherenkov::Renderer2D::Quad(scale, props);
+		//	}
+		//}
+
+
 
 
 
