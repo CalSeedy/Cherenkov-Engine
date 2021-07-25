@@ -38,8 +38,6 @@ void Sandbox2D::onUpdate(Cherenkov::Timestep dt) {
 		Cherenkov::Renderer2D::Quad({ 10.0f, 10.0f }, m_Texture, q2);
 		Cherenkov::Renderer2D::Quad({ 6.0f, 6.0f }, m_Texture, q3);
 
-
-
 		Cherenkov::Renderer2D::endScene();
 	}
 }
