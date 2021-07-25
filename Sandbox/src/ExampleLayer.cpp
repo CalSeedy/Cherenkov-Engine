@@ -24,8 +24,8 @@ ExampleLayer::ExampleLayer() : Layer("Test!"), m_CameraController{ 1920.0f / 108
 		vertexBuffer->setLayout(layout);
 		m_VertexArray->addVertexBuffer(vertexBuffer);
 
-		uint32_t idxs[6] = { 0, 1, 2, 2, 3, 0 };
-		Cherenkov::Ref<Cherenkov::IndexBuffer> indexBuffer = Cherenkov::IndexBuffer::init(idxs, sizeof(idxs) / sizeof(uint32_t));
+		uint32_t idxs[] = { 0, 1, 2, 2, 3, 0 };
+		Cherenkov::Ref<Cherenkov::IndexBuffer> indexBuffer = Cherenkov::IndexBuffer::init(idxs, sizeof(idxs)/sizeof(uint32_t));
 		m_VertexArray->setIndexBuffer(indexBuffer);
 
 		std::string vertIn("../Cherenkov/src/Cherenkov/Shaders/shader.vert");

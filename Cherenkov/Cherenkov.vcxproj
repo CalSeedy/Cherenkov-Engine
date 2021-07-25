@@ -144,7 +144,6 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="src\Cherenkov.h" />
-    <ClInclude Include="src\Cherenkov\Renderer\CameraController.h" />
     <ClInclude Include="src\Cherenkov\Core\Application.h" />
     <ClInclude Include="src\Cherenkov\Core\Core.h" />
     <ClInclude Include="src\Cherenkov\Core\EntryPoint.h" />
@@ -163,6 +162,7 @@
     <ClInclude Include="src\Cherenkov\ImGui\ImGuiLayer.h" />
     <ClInclude Include="src\Cherenkov\Renderer\Buffer.h" />
     <ClInclude Include="src\Cherenkov\Renderer\Camera.h" />
+    <ClInclude Include="src\Cherenkov\Renderer\CameraController.h" />
     <ClInclude Include="src\Cherenkov\Renderer\Commands.h" />
     <ClInclude Include="src\Cherenkov\Renderer\Renderer.h" />
     <ClInclude Include="src\Cherenkov\Renderer\Renderer2D.h" />
@@ -179,8 +179,8 @@
     <ClInclude Include="src\Platform\OpenGL\OpenGLVertexArray.h" />
     <ClInclude Include="src\Platform\Windows\WindowsInput.h" />
     <ClInclude Include="src\Platform\Windows\WindowsWindow.h" />
-    <ClInclude Include="src\ckpch.h" />
     <ClInclude Include="src\Profiling\Instrumentor.h" />
+    <ClInclude Include="src\ckpch.h" />
     <ClInclude Include="vendor\glm\glm\common.hpp" />
     <ClInclude Include="vendor\glm\glm\detail\_features.hpp" />
     <ClInclude Include="vendor\glm\glm\detail\_fixes.hpp" />
@@ -629,17 +629,17 @@
     <ClInclude Include="vendor\stb\tests\prerelease\stb_lib.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\Cherenkov\Core\Input.cpp" />
-    <ClCompile Include="src\Cherenkov\Core\Window.cpp" />
-    <ClCompile Include="src\Cherenkov\Renderer\CameraController.cpp" />
     <ClCompile Include="src\Cherenkov\Core\Application.cpp" />
+    <ClCompile Include="src\Cherenkov\Core\Input.cpp" />
     <ClCompile Include="src\Cherenkov\Core\Layer.cpp" />
     <ClCompile Include="src\Cherenkov\Core\LayerStack.cpp" />
     <ClCompile Include="src\Cherenkov\Core\Log.cpp" />
+    <ClCompile Include="src\Cherenkov\Core\Window.cpp" />
     <ClCompile Include="src\Cherenkov\ImGui\ImGuiBuild.cpp" />
     <ClCompile Include="src\Cherenkov\ImGui\ImGuiLayer.cpp" />
     <ClCompile Include="src\Cherenkov\Renderer\Buffer.cpp" />
     <ClCompile Include="src\Cherenkov\Renderer\Camera.cpp" />
+    <ClCompile Include="src\Cherenkov\Renderer\CameraController.cpp" />
     <ClCompile Include="src\Cherenkov\Renderer\Commands.cpp" />
     <ClCompile Include="src\Cherenkov\Renderer\Renderer.cpp" />
     <ClCompile Include="src\Cherenkov\Renderer\Renderer2D.cpp" />

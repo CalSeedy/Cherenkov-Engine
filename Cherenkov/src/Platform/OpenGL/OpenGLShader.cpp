@@ -18,30 +18,35 @@ namespace Cherenkov {
 		return 0;
 	}
 
-	std::string getSource(const char* path) {
+	std::string OpenGLShader::readFile(const char* path) {
 		CK_PROFILE_FUNCTION();
+		std::string code;
 		std::ifstream file(path, std::ios::in | std::ios::binary);
 		if (file) {
-		
+			file.seekg(0, std::ios::end);
+			size_t size = file.tellg();
+			if (size != -1) {
+				code.resize(size);
+				file.seekg(0, std::ios::beg);
+				file.read(&code[0], size);
+				file.close();
+			} else {
+				CK_CORE_ERROR("Failed to read from '{0}'.", path);
+			}
 		} else {
-			CK_CORE_ERROR("Failed to load shader @ {0}", path);
+			CK_CORE_ERROR("Failed to load shader @ '{0}'", path);
 		}
-		std::string code;
 
-		file.seekg(0, std::ios::end);
-		code.reserve(file.tellg());
-		file.seekg(0, std::ios::beg);
-		code.assign((std::istreambuf_iterator<char>(file)), std::istreambuf_iterator<char>());
-		file.close();
 		return code;
 	}
-
+	const uint8_t MAX_SHADERS = 2;
 	void OpenGLShader::compile(const std::unordered_map<GLenum, std::string>& shaders) {
 		CK_PROFILE_FUNCTION();
-		CK_CORE_ASSERT(shaders.size() <= 5, "Maximum shader limit exceeded!");
-		std::array<GLenum, 5> shaderIDs;
+
+		GLuint programID = glCreateProgram();
+		CK_CORE_ASSERT(shaders.size() <= MAX_SHADERS, "Maximum shader limit exceeded!");
+		std::array<GLenum, MAX_SHADERS> shaderIDs;
 		int idx = 0;
-		GLuint id = glCreateProgram();
 		for (auto& kv : shaders) {
 			GLenum type = kv.first;
 			const std::string& src = kv.second;
@@ -49,7 +54,7 @@ namespace Cherenkov {
 			GLuint shader = glCreateShader(type);
 
 			const GLchar* source = src.c_str();
-			glShaderSource(shader, 1, &source, nullptr);
+			glShaderSource(shader, 1, &source, 0);
 
 			glCompileShader(shader);
 
@@ -70,23 +75,24 @@ namespace Cherenkov {
 				break;
 			}
 
-			glAttachShader(id, shader);
+			glAttachShader(programID, shader);
 			shaderIDs[idx++] = shader;
 		}		
+		m_ID = programID;
 
-		glLinkProgram(id);
+		glLinkProgram(programID);
 
 		GLint isLinked = 0;
-		glGetProgramiv(id, GL_LINK_STATUS, (int*)&isLinked);
+		glGetProgramiv(programID, GL_LINK_STATUS, (int*)&isLinked);
 		if (isLinked == GL_FALSE)
 		{
 			GLint maxLength = 0;
-			glGetProgramiv(id, GL_INFO_LOG_LENGTH, &maxLength);
+			glGetProgramiv(programID, GL_INFO_LOG_LENGTH, &maxLength);
 
 			std::vector<GLchar> infoLog(maxLength);
-			glGetProgramInfoLog(id, maxLength, &maxLength, &infoLog[0]);
+			glGetProgramInfoLog(programID, maxLength, &maxLength, &infoLog[0]);
 
-			glDeleteProgram(id);
+			glDeleteProgram(programID);
 			for (auto sID : shaderIDs)
 				glDeleteShader(sID);
 
@@ -96,13 +102,12 @@ namespace Cherenkov {
 		}
 
 		for (auto sID : shaderIDs) {
-			glDetachShader(id, sID);
+			glDetachShader(programID, sID);
 			glDeleteShader(sID);
 		}
-		m_ID = id;
 	}
 
-	std::unordered_map<GLenum, std::string> OpenGLShader::parse(const std::string& src) {
+	std::unordered_map<GLenum, std::string> OpenGLShader::preProcess(const std::string& src) {
 		CK_PROFILE_FUNCTION();
 		std::unordered_map<GLenum, std::string> shaders;
 		
@@ -128,22 +133,22 @@ namespace Cherenkov {
 	OpenGLShader::OpenGLShader(const std::string& name, const std::string& vertexPath, const std::string& fragmentPath) : m_Name{name}{
 		CK_PROFILE_FUNCTION();
 		std::unordered_map<GLenum, std::string> shaders;
-		shaders[GL_VERTEX_SHADER] = getSource(vertexPath.c_str());
-		shaders[GL_FRAGMENT_SHADER] = getSource(fragmentPath.c_str());
+		shaders[GL_VERTEX_SHADER] = readFile(vertexPath.c_str());
+		shaders[GL_FRAGMENT_SHADER] = readFile(fragmentPath.c_str());
 		compile(shaders);
 	}
 
 	OpenGLShader::OpenGLShader(const std::string& filepath)	{
 		CK_PROFILE_FUNCTION();
-		std::string source = getSource(filepath.c_str());
-		auto shaders = parse(source);
+		std::string source = readFile(filepath.c_str());
+		auto shaders = preProcess(source);
 		compile(shaders);
 
 		size_t lastSlash = filepath.find_last_of("/\\");
 		lastSlash = lastSlash == std::string::npos ? 0 : lastSlash + 1;
 		size_t lastDot = filepath.rfind('.') - 1;
-
-		m_Name = filepath.substr(lastSlash, lastDot - lastSlash);
+		auto count = lastDot == std::string::npos ? filepath.size() - lastSlash : lastDot - lastSlash;
+		m_Name = filepath.substr(lastSlash, count);
 	}
 
 	OpenGLShader::~OpenGLShader() {

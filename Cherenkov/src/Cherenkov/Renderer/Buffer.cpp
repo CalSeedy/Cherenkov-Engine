@@ -6,16 +6,22 @@
 
 namespace Cherenkov {
 
-	void VertexBuffer::loadData(std::vector<float> data) {
-		m_Data = data;
-	}
-
-	Ref<VertexBuffer> VertexBuffer::init(float_t* vertices, uint32_t count) {
+	Ref<VertexBuffer> VertexBuffer::init(float_t* vertices, uint32_t size) {
 		switch (Renderer::getAPI()) {
 		case RendererAPI::API::None:		return nullptr;
-		case RendererAPI::API::OpenGL:		return CreateRef<OpenGLVertexBuffer>(vertices, count);
+		case RendererAPI::API::OpenGL:		return CreateRef<OpenGLVertexBuffer>(vertices, size);
 		default:
 			CK_CORE_ASSERT(false, "Unknown Renderer!");
+			return nullptr;
+		}
+	}
+
+	Cherenkov::Ref<Cherenkov::VertexBuffer> VertexBuffer::init(uint32_t size) {
+		switch (Renderer::getAPI()) {
+		case RendererAPI::API::None:		return nullptr;
+		case RendererAPI::API::OpenGL:		return CreateRef<OpenGLVertexBuffer>(size);
+		default:
+			CK_ASSERT(false, "Unknown Renderer!");
 			return nullptr;
 		}
 	}
@@ -29,10 +35,5 @@ namespace Cherenkov {
 			return nullptr;
 		}
 	}
-
-	void IndexBuffer::loadData(std::vector<unsigned int> data) {
-		m_Data = data;
-	}
-
 
 }

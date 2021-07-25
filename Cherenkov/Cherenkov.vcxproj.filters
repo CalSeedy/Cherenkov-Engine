@@ -28,6 +28,9 @@
     <Filter Include="src\Platform\Windows">
       <UniqueIdentifier>{5B054582-4794-CE4B-F0B2-E246DC20DFF1}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\Profiling">
+      <UniqueIdentifier>{E6A32224-5264-9E5A-1B9F-E7D7871EE336}</UniqueIdentifier>
+    </Filter>
     <Filter Include="vendor">
       <UniqueIdentifier>{B3738122-9F15-ACF8-88D0-BF4C74113349}</UniqueIdentifier>
     </Filter>
@@ -96,6 +99,9 @@
     <ClInclude Include="src\Cherenkov\Core\Log.h">
       <Filter>src\Cherenkov\Core</Filter>
     </ClInclude>
+    <ClInclude Include="src\Cherenkov\Core\MouseCodes.h">
+      <Filter>src\Cherenkov\Core</Filter>
+    </ClInclude>
     <ClInclude Include="src\Cherenkov\Core\TimeStep.h">
       <Filter>src\Cherenkov\Core</Filter>
     </ClInclude>
@@ -121,6 +127,9 @@
       <Filter>src\Cherenkov\Renderer</Filter>
     </ClInclude>
     <ClInclude Include="src\Cherenkov\Renderer\Camera.h">
+      <Filter>src\Cherenkov\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Cherenkov\Renderer\CameraController.h">
       <Filter>src\Cherenkov\Renderer</Filter>
     </ClInclude>
     <ClInclude Include="src\Cherenkov\Renderer\Commands.h">
@@ -170,6 +179,9 @@
     </ClInclude>
     <ClInclude Include="src\Platform\Windows\WindowsWindow.h">
       <Filter>src\Platform\Windows</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Profiling\Instrumentor.h">
+      <Filter>src\Profiling</Filter>
     </ClInclude>
     <ClInclude Include="src\ckpch.h">
       <Filter>src</Filter>
@@ -1512,16 +1524,12 @@
     <ClInclude Include="vendor\stb\tests\prerelease\stb_lib.h">
       <Filter>vendor\stb\tests\prerelease</Filter>
     </ClInclude>
-    <ClInclude Include="src\Profiling\Instrumentor.h" />
-    <ClInclude Include="src\Cherenkov\Core\MouseCodes.h">
-      <Filter>src\Cherenkov\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Cherenkov\Renderer\CameraController.h">
-      <Filter>src\Cherenkov</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Cherenkov\Core\Application.cpp">
+      <Filter>src\Cherenkov\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Cherenkov\Core\Input.cpp">
       <Filter>src\Cherenkov\Core</Filter>
     </ClCompile>
     <ClCompile Include="src\Cherenkov\Core\Layer.cpp">
@@ -1531,6 +1539,9 @@
       <Filter>src\Cherenkov\Core</Filter>
     </ClCompile>
     <ClCompile Include="src\Cherenkov\Core\Log.cpp">
+      <Filter>src\Cherenkov\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Cherenkov\Core\Window.cpp">
       <Filter>src\Cherenkov\Core</Filter>
     </ClCompile>
     <ClCompile Include="src\Cherenkov\ImGui\ImGuiBuild.cpp">
@@ -1545,6 +1556,9 @@
     <ClCompile Include="src\Cherenkov\Renderer\Camera.cpp">
       <Filter>src\Cherenkov\Renderer</Filter>
     </ClCompile>
+    <ClCompile Include="src\Cherenkov\Renderer\CameraController.cpp">
+      <Filter>src\Cherenkov\Renderer</Filter>
+    </ClCompile>
     <ClCompile Include="src\Cherenkov\Renderer\Commands.cpp">
       <Filter>src\Cherenkov\Renderer</Filter>
     </ClCompile>
@@ -1555,6 +1569,9 @@
       <Filter>src\Cherenkov\Renderer</Filter>
     </ClCompile>
     <ClCompile Include="src\Cherenkov\Renderer\RendererAPI.cpp">
+      <Filter>src\Cherenkov\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Cherenkov\Renderer\RendererContext.cpp">
       <Filter>src\Cherenkov\Renderer</Filter>
     </ClCompile>
     <ClCompile Include="src\Cherenkov\Renderer\Shader.cpp">
@@ -1593,11 +1610,5 @@
     <ClCompile Include="src\ckpch.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="src\Cherenkov\Renderer\RendererContext.cpp" />
-    <ClCompile Include="src\Cherenkov\Renderer\CameraController.cpp">
-      <Filter>src\Cherenkov</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Cherenkov\Core\Input.cpp" />
-    <ClCompile Include="src\Cherenkov\Core\Window.cpp" />
   </ItemGroup>
 </Project>
