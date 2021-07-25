@@ -10,7 +10,7 @@ class Sandbox2D : public Cherenkov::Layer {
 	Cherenkov::Ref<Cherenkov::Texture2D>		m_Texture;
 
 	glm::vec4									m_ObjColour{ 0.906f, 0.227f, 0.137f, 1.0f };
-
+	glm::vec3									m_SqPos{ 0.0f, 0.0f, 0.0f };
 	Cherenkov::Ref<Cherenkov::VertexArray>		m_VertexArray;
 
 	struct ProfileResult {

@@ -16,7 +16,7 @@ namespace Cherenkov {
 			X(float_t _x, float_t _y, float_t _z) { x = _x; y = _y; z = _z; }
 		} Position = {};
 		glm::vec4 Colour = { 1.0f, 1.0f, 1.0f, 1.0f };
-		float_t Rotation = 0.0f;
+		float_t Angle = 0.0f;
 		float_t TileFactor = 1.0f;
 	};
 

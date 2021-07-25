@@ -16,13 +16,18 @@ void Sandbox2D::onUpdate(Cherenkov::Timestep dt) {
 		Cherenkov::RenderCommand::clear({ 1.0f, 0.0f, 1.0f, 1.0f });
 	}
 	Cherenkov::QuadProperties q1, q2, q3;
-	q1.Position = { 1.0f, 0.0f };
+	q1.Position = m_SqPos;
 	q1.Colour = { 0.0f, 1.0f, 0.0f, 1.0f };
+	q1.Angle = 30.0f;
 
 	q2.Position = { 0.0f, 0.0f, -0.5f };
 	q2.TileFactor = 4.0f;
 
+	static float rotation = 0.0f;
+	rotation += dt * 5.0f;
 	q3.Position = { -1.0f, -1.0f };
+	q3.Colour = { 1.0f, 0.2f, 0.2f, 1.0f };
+	q3.Angle = rotation;
 	q3.TileFactor = 5.0f;
 	{
 		CK_PROFILE_SCOPE("Draw Scene");
@@ -33,6 +38,8 @@ void Sandbox2D::onUpdate(Cherenkov::Timestep dt) {
 		Cherenkov::Renderer2D::Quad({ 10.0f, 10.0f }, m_Texture, q2);
 		Cherenkov::Renderer2D::Quad({ 6.0f, 6.0f }, m_Texture, q3);
 
+
+
 		Cherenkov::Renderer2D::endScene();
 	}
 }
@@ -41,7 +48,7 @@ void Sandbox2D::onImGuiDraw() {
 	CK_PROFILE_FUNCTION();
 	ImGui::Begin("Settings");
 	ImGui::ColorPicker4("Sq. Colour", glm::value_ptr(m_ObjColour));
-
+	ImGui::DragFloat3("Sq. Position", glm::value_ptr(m_SqPos), 0.01f);
 	ImGui::End();
 }
 

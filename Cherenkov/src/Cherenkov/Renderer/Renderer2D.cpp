@@ -38,6 +38,9 @@ namespace Cherenkov {
 
 		std::array<Ref<Texture2D>, maxTextures> boundTextures;
 		uint32_t textureSlotIdx = 1;	// ^^ 0 - blank texture/ colour!
+
+		glm::vec4 quadVertexPositions[4];
+		glm::vec2 quadDefaultTexCoords[4];
 	};
 
 	static Storage s_Storage;
@@ -93,6 +96,16 @@ namespace Cherenkov {
 
 			s_Storage.boundTextures[0] = s_Storage.Blank;
 		}
+
+		s_Storage.quadVertexPositions[0] = { -0.5f, -0.5f, 0.0f, 1.0f };
+		s_Storage.quadVertexPositions[1] = {  0.5f, -0.5f, 0.0f, 1.0f };
+		s_Storage.quadVertexPositions[2] = {  0.5f,  0.5f, 0.0f, 1.0f };
+		s_Storage.quadVertexPositions[3] = { -0.5f,  0.5f, 0.0f, 1.0f };
+
+		s_Storage.quadDefaultTexCoords[0] = {  0.0f, 0.0f };
+		s_Storage.quadDefaultTexCoords[1] = {  1.0f, 0.0f };
+		s_Storage.quadDefaultTexCoords[2] = {  1.0f, 1.0f };
+		s_Storage.quadDefaultTexCoords[3] = {  0.0f, 1.0f };
 	}
 
 	void Renderer2D::shutdown()	{
@@ -147,51 +160,30 @@ namespace Cherenkov {
 			s_Storage.textureSlotIdx++;
 		}
 
-		// Bottom Left
-		s_Storage.quadVertBufferPtr->Position = { properties.Position.x, properties.Position.y, properties.Position.z };
-		s_Storage.quadVertBufferPtr->Colour = properties.Colour;
-		s_Storage.quadVertBufferPtr->TextureCoord = { 0.0f, 0.0f };
-		s_Storage.quadVertBufferPtr->TextureIdx = textureIndex;
-		s_Storage.quadVertBufferPtr->TilingFactor = properties.TileFactor;
-		s_Storage.quadVertBufferPtr++;
+		glm::mat4 transform = glm::mat4(1.0f);
+		//	Translation
+		if ((properties.Position.x != 0.0f) || (properties.Position.y != 0.0f) || (properties.Position.z != 0.0f)) {
+			transform *= glm::translate(glm::mat4(1.0f), { properties.Position.x, properties.Position.y, properties.Position.z });
+		}
+		//	Rotation
+		if (properties.Angle != 0.0f) {
+			transform *= glm::rotate(glm::mat4(1.0f), properties.Angle, { 0.0f, 0.0f,1.0f });
+		}
+		//	Scale
+		if ((scale.x != 1.0f) || (scale.y != 1.0f)) {
+			transform *= glm::scale(glm::mat4(1.0f), { scale.x, scale.y, 1.0f });
+		}
 
-		//Bottom Right
-		s_Storage.quadVertBufferPtr->Position = { properties.Position.x + scale.x, properties.Position.y, properties.Position.z };
-		s_Storage.quadVertBufferPtr->Colour = properties.Colour;
-		s_Storage.quadVertBufferPtr->TextureCoord = { 1.0f, 0.0f };
-		s_Storage.quadVertBufferPtr->TextureIdx = textureIndex;
-		s_Storage.quadVertBufferPtr->TilingFactor = properties.TileFactor;
-		s_Storage.quadVertBufferPtr++;
-
-		// Top Right
-		s_Storage.quadVertBufferPtr->Position = { properties.Position.x + scale.x, properties.Position.y + scale.y, properties.Position.z };
-		s_Storage.quadVertBufferPtr->Colour = properties.Colour;
-		s_Storage.quadVertBufferPtr->TextureCoord = { 1.0f, 1.0f };
-		s_Storage.quadVertBufferPtr->TextureIdx = textureIndex;
-		s_Storage.quadVertBufferPtr->TilingFactor = properties.TileFactor;
-		s_Storage.quadVertBufferPtr++;
-
-		//Top Left
-		s_Storage.quadVertBufferPtr->Position = { properties.Position.x, properties.Position.y + scale.y, properties.Position.z };
-		s_Storage.quadVertBufferPtr->Colour = properties.Colour;
-		s_Storage.quadVertBufferPtr->TextureCoord = { 0.0f, 1.0f };
-		s_Storage.quadVertBufferPtr->TextureIdx = textureIndex;
-		s_Storage.quadVertBufferPtr->TilingFactor = properties.TileFactor;
-		s_Storage.quadVertBufferPtr++;
+		for (int i = 0; i < 4; i++) {
+			s_Storage.quadVertBufferPtr->Position = transform * s_Storage.quadVertexPositions[i];
+			s_Storage.quadVertBufferPtr->Colour = properties.Colour;
+			s_Storage.quadVertBufferPtr->TextureCoord = s_Storage.quadDefaultTexCoords[i];
+			s_Storage.quadVertBufferPtr->TextureIdx = textureIndex;
+			s_Storage.quadVertBufferPtr->TilingFactor = properties.TileFactor;
+			s_Storage.quadVertBufferPtr++;
+		}
 
 		s_Storage.quadIndices += 6;
-		/*
-		s_Storage.textureShader->setFloat("tilingFactor", properties.TileFactor);
-
-		texture->bind();
-
-		glm::mat4 transform = glm::translate(glm::mat4(1.0f), s_Storage.quadVertBufferPtr->Position) * glm::rotate(glm::mat4(1.0f), glm::radians(properties.Rotation), { 0.0f, 0.0f, 1.0f }) * glm::scale(glm::mat4(1.0f), { scale.x, scale.y, 1.0f });
-		s_Storage.textureShader->setMat4("transform", transform);
-
-
-		s_Storage.quadVertexArray->bind();
-		RenderCommand::drawIndexed(s_Storage.quadVertexArray);
-		*/
 	}
 }
 
