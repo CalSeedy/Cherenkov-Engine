@@ -50,6 +50,12 @@ namespace Cherenkov {
 		ImGui::DestroyContext();
 	}
 
+	void ImGuiLayer::onEvent(Event& e)	{
+		ImGuiIO& io = ImGui::GetIO();
+		e.m_Handled |= e.inCategory(EventCategoryMouse) & io.WantCaptureMouse;
+		e.m_Handled |= e.inCategory(EventCategoryKeyBoard) & io.WantCaptureKeyboard;
+	}
+
 	void ImGuiLayer::start() {
 		CK_PROFILE_FUNCTION();
 		ImGui_ImplOpenGL3_NewFrame();
@@ -73,5 +79,4 @@ namespace Cherenkov {
 			glfwMakeContextCurrent(curr_ctx);
 		}
 	}
-
 }

@@ -57,9 +57,9 @@ namespace Cherenkov {
 
 		for (auto it = m_LayerStack.rbegin(); it != m_LayerStack.rend(); ++it) {
 		
-			(*it)->onEvent(event);
-			if (event.isHandled())
+			if (event.m_Handled)
 				break;
+			(*it)->onEvent(event);
 		}
 
 	}

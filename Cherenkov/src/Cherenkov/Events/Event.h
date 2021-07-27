@@ -31,8 +31,6 @@ namespace Cherenkov {
 #define EVENT_CLASS_CATEGORY(category) virtual int getCategoryFlags() const override { return category; }
 
 	class Event {
-
-		friend class EventDispatcher;
 	public:
 		virtual EventType getEventType() const = 0;
 		virtual const char* getEventName() const = 0;
@@ -41,9 +39,7 @@ namespace Cherenkov {
 
 		bool inCategory(EventCategory category){ return getCategoryFlags() & category; }
 
-		bool isHandled() { return m_handled; }
-	protected:
-		bool m_handled = false;
+		bool m_Handled = false;
 	};
 
 	class EventDispatcher {
@@ -60,7 +56,7 @@ namespace Cherenkov {
 		
 			if (m_Event.getEventType() == T::getStaticType()) {
 			
-				m_Event.m_handled = func(static_cast<T&>(m_Event));
+				m_Event.m_Handled = func(static_cast<T&>(m_Event));
 				return true;
 			}
 			return false;
