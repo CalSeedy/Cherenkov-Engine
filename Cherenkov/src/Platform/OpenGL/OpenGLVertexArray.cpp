@@ -50,14 +50,45 @@ namespace Cherenkov {
 
 		CK_CORE_ASSERT(vBuffer->getLayout().elements().size(), "Empty vertex buffer layout!");
 
-		uint32_t idx = 0;
 		const auto& layout = vBuffer->getLayout();
 		for (auto& element : layout) {
-			glEnableVertexAttribArray(idx);
-			glVertexAttribPointer(idx, element.count(), getBaseType(element.Type), element.Normalised ? GL_TRUE : GL_FALSE, layout.stride(), (const void*)(element.Offset));
-			idx++;
+			switch (element.Type) {
+			case Cherenkov::ShaderDataType::None:	
+			case Cherenkov::ShaderDataType::Bool:	
+			//case Cherenkov::ShaderDataType::Struct
+			case Cherenkov::ShaderDataType::Float:	
+			case Cherenkov::ShaderDataType::Vec2f:	
+			case Cherenkov::ShaderDataType::Vec3f:	
+			case Cherenkov::ShaderDataType::Vec4f:	
+			case Cherenkov::ShaderDataType::Int:	
+			case Cherenkov::ShaderDataType::Vec2i:	
+			case Cherenkov::ShaderDataType::Vec3i:
+			case Cherenkov::ShaderDataType::Vec4i: {
+				glEnableVertexAttribArray(m_VBufferIdx);
+				glVertexAttribPointer(m_VBufferIdx, element.count(), getBaseType(element.Type), element.Normalised ? GL_TRUE : GL_FALSE, layout.stride(), (const void*)(element.Offset));
+				m_VBufferIdx++;
+				break;
+			}
+			case Cherenkov::ShaderDataType::Mat2f:
+			case Cherenkov::ShaderDataType::Mat3f:
+			case Cherenkov::ShaderDataType::Mat4f:
+			case Cherenkov::ShaderDataType::Mat2i:
+			case Cherenkov::ShaderDataType::Mat3i:
+			case Cherenkov::ShaderDataType::Mat4i: {
+				uint8_t count = element.count();
+				for (uint8_t i = 0; i < count; i++) {
+					glEnableVertexAttribArray(m_VBufferIdx);
+					glVertexAttribPointer(m_VBufferIdx, count, getBaseType(element.Type), element.Normalised ? GL_TRUE : GL_FALSE, layout.stride(), (const void*)(sizeof(float) * count * i));
+					glVertexAttribDivisor(m_VBufferIdx, 1);
+					m_VBufferIdx++;
+				}
+				break;
+			}
+			default:								CK_CORE_ASSERT(false, "Unknown ShaderDataType!");
+			}
 		}
 		m_VertexBuffers.push_back(vBuffer);
+
 	}
 	void OpenGLVertexArray::setIndexBuffer(const Ref<IndexBuffer>& iBuffer){
 		CK_PROFILE_FUNCTION();

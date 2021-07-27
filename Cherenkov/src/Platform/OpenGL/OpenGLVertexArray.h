@@ -7,6 +7,7 @@ namespace Cherenkov {
 		std::vector<Ref<VertexBuffer>> m_VertexBuffers;
 		Ref<IndexBuffer> m_IndexBuffer;
 		uint32_t m_RendererID;
+		uint32_t m_VBufferIdx = 0;
 	public:
 		OpenGLVertexArray();
 		virtual void bind()	const override;

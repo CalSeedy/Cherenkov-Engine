@@ -14,28 +14,25 @@ namespace Cherenkov {
 	};
 
 	static uint32_t TypeSize(ShaderDataType type) {
-		switch (type)
-		{
-		case Cherenkov::ShaderDataType::None:			return 0;
-		case Cherenkov::ShaderDataType::Float:			return sizeof(float);
-		case Cherenkov::ShaderDataType::Int:			return sizeof(int);
-		case Cherenkov::ShaderDataType::Bool:			return sizeof(bool);
-		//case Cherenkov::ShaderDataType::Struct:			return sizeof(struct);
-		case Cherenkov::ShaderDataType::Vec2f:			return 2 * sizeof(float);
-		case Cherenkov::ShaderDataType::Vec3f:			return 3 * sizeof(float);
-		case Cherenkov::ShaderDataType::Vec4f:			return 4 * sizeof(float);
-		case Cherenkov::ShaderDataType::Mat2f:			return 2 * 2 * sizeof(float);
-		case Cherenkov::ShaderDataType::Mat3f:			return 4 * 3 * sizeof(float);
-		case Cherenkov::ShaderDataType::Mat4f:			return 4 * 4 * sizeof(float);
-		case Cherenkov::ShaderDataType::Vec2i:			return 2 * sizeof(int);
-		case Cherenkov::ShaderDataType::Vec3i:			return 3 * sizeof(int);
-		case Cherenkov::ShaderDataType::Vec4i:			return 4 * sizeof(int);
-		case Cherenkov::ShaderDataType::Mat2i:			return 2 * 2 * sizeof(int);
-		case Cherenkov::ShaderDataType::Mat3i:			return 4 * 3 * sizeof(int);
-		case Cherenkov::ShaderDataType::Mat4i:			return 4 * 4 * sizeof(int);
-		default:
-			CK_CORE_ASSERT(false, "Unknown DataType {0}!", type);
-			return 0;
+		switch (type) {
+		case Cherenkov::ShaderDataType::None:		return 0;
+		case Cherenkov::ShaderDataType::Float:		return sizeof(float);
+		case Cherenkov::ShaderDataType::Int:		return sizeof(int);
+		case Cherenkov::ShaderDataType::Bool:		return sizeof(bool);
+		//case Cherenkov::ShaderDataType::Struct:		return sizeof(struct);
+		case Cherenkov::ShaderDataType::Vec2f:		return 2 * sizeof(float);
+		case Cherenkov::ShaderDataType::Vec3f:		return 3 * sizeof(float);
+		case Cherenkov::ShaderDataType::Vec4f:		return 4 * sizeof(float);
+		case Cherenkov::ShaderDataType::Mat2f:		return 2 * 2 * sizeof(float);
+		case Cherenkov::ShaderDataType::Mat3f:		return 4 * 3 * sizeof(float);
+		case Cherenkov::ShaderDataType::Mat4f:		return 4 * 4 * sizeof(float);
+		case Cherenkov::ShaderDataType::Vec2i:		return 2 * sizeof(int);
+		case Cherenkov::ShaderDataType::Vec3i:		return 3 * sizeof(int);
+		case Cherenkov::ShaderDataType::Vec4i:		return 4 * sizeof(int);
+		case Cherenkov::ShaderDataType::Mat2i:		return 2 * 2 * sizeof(int);
+		case Cherenkov::ShaderDataType::Mat3i:		return 4 * 3 * sizeof(int);
+		case Cherenkov::ShaderDataType::Mat4i:		return 4 * 4 * sizeof(int);
+		default:									CK_CORE_ASSERT(false, "Unknown DataType {0}!", type); return 0;
 		}
 	}
 
@@ -45,33 +42,31 @@ namespace Cherenkov {
 		uint32_t Size;
 		uint32_t Offset;
 		bool Normalised;
-		BufferElement() {}
+		BufferElement() = default;
 		BufferElement(ShaderDataType type, const std::string name, bool normalised = false) : Identifier{ name }, Type{ type }, Size{ TypeSize(type) }, Offset{ 0 }, Normalised{ normalised }{
 		}
 
 		uint32_t count() const {
 			switch (Type)
 			{
-			case Cherenkov::ShaderDataType::None:				return 0;
-			case Cherenkov::ShaderDataType::Float:				return 1;
-			case Cherenkov::ShaderDataType::Int:				return 1;
-			case Cherenkov::ShaderDataType::Bool:				return 1;
-			//case Cherenkov::ShaderDataType::Struct:			break;
-			case Cherenkov::ShaderDataType::Vec2f:				return 2;
-			case Cherenkov::ShaderDataType::Vec3f:				return 3;
-			case Cherenkov::ShaderDataType::Vec4f:				return 4;
-			case Cherenkov::ShaderDataType::Mat2f:				return 4;
-			case Cherenkov::ShaderDataType::Mat3f:				return 9;
-			case Cherenkov::ShaderDataType::Mat4f:				return 16;
-			case Cherenkov::ShaderDataType::Vec2i:				return 2;
-			case Cherenkov::ShaderDataType::Vec3i:				return 3;
-			case Cherenkov::ShaderDataType::Vec4i:				return 4;
-			case Cherenkov::ShaderDataType::Mat2i:				return 4;
-			case Cherenkov::ShaderDataType::Mat3i:				return 9;
-			case Cherenkov::ShaderDataType::Mat4i:				return 16;
-			default:
-				CK_CORE_ASSERT(false, "Unknown DataType {0}!", type);
-				return 0;
+			case Cherenkov::ShaderDataType::None:		return 0;
+			case Cherenkov::ShaderDataType::Float:		return 1;
+			case Cherenkov::ShaderDataType::Int:		return 1;
+			case Cherenkov::ShaderDataType::Bool:		return 1;
+			//case Cherenkov::ShaderDataType::Struct	:break;
+			case Cherenkov::ShaderDataType::Vec2f:		return 2;
+			case Cherenkov::ShaderDataType::Vec3f:		return 3;
+			case Cherenkov::ShaderDataType::Vec4f:		return 4;
+			case Cherenkov::ShaderDataType::Mat2f:		return 4;
+			case Cherenkov::ShaderDataType::Mat3f:		return 3;
+			case Cherenkov::ShaderDataType::Mat4f:		return 4;
+			case Cherenkov::ShaderDataType::Vec2i:		return 2;
+			case Cherenkov::ShaderDataType::Vec3i:		return 3;
+			case Cherenkov::ShaderDataType::Vec4i:		return 4;
+			case Cherenkov::ShaderDataType::Mat2i:		return 4;
+			case Cherenkov::ShaderDataType::Mat3i:		return 3;
+			case Cherenkov::ShaderDataType::Mat4i:		return 4;
+			default:									CK_CORE_ASSERT(false, "Unknown DataType {0}!", type); return 0;
 			}
 		}
 	};
