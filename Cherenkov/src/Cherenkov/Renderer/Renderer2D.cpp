@@ -112,6 +112,8 @@ namespace Cherenkov {
 
 	void Renderer2D::shutdown()	{
 		CK_PROFILE_FUNCTION();
+
+		delete[] s_Storage.quadVertBufferBase;
 	}
 
 	void Renderer2D::beginScene(const OrthographicCamera& camera) {
@@ -167,6 +169,9 @@ namespace Cherenkov {
 		}
 
 		if (textureIndex == 0.0f) {
+
+			if (s_Storage.textureSlotIdx >= Storage::maxTextures) flushAndReset();
+
 			textureIndex = (float)s_Storage.textureSlotIdx;
 			s_Storage.boundTextures[s_Storage.textureSlotIdx] = texture;
 			s_Storage.textureSlotIdx++;
