@@ -37,7 +37,7 @@ namespace Cherenkov {
 	}
 
 	void OpenGLRendererAPI::drawIndexed(const Ref<VertexArray>& vertexArray, uint32_t idxCount) {
-		uint32_t count = idxCount ? vertexArray->getIndexBuffer()->count() : idxCount;
+		uint32_t count = idxCount ?  idxCount : vertexArray->getIndexBuffer()->count();
 		glDrawElements(GL_TRIANGLES, count, GL_UNSIGNED_INT, nullptr);
 		glBindTexture(GL_TEXTURE_2D, 0);
 	}

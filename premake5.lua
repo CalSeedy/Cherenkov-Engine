@@ -99,6 +99,12 @@ project "Cherenkov"
 		"%{prj.name}/vendor/stb/**.h"
 	}
 
+	defines
+	{
+		"CK_PLATFORM_WINDOWS",
+		"GLFW_INCLUDE_NONE"
+	}
+
 	includedirs
 	{
 		"%{prj.name}/src",
@@ -123,11 +129,6 @@ project "Cherenkov"
 
 		defines
 		{
-			"CK_PLATFORM_WINDOWS",
-			"CK_BUILD_DLL",
-			"GLFW_INCLUDE_NONE",
-			"_CRT_SECURE_NO_WARNINGS",
-			"STB_IMAGE_IMPLEMENTATION"
 		}
 
 	filter "configurations:Debug"

@@ -20,10 +20,10 @@ namespace Cherenkov {
 	};
 
 	struct Storage {
-		const uint32_t maxQuads = 10000;
+		static const uint32_t maxQuads = 10000;
 		CK_CORE_ASSERT(maxQuads * 6 <= UINT32_MAX, "Maximum Quads exceeds the maximum value for uint32_t!");
-		const uint32_t maxVertices  = maxQuads * 4;
-		const uint32_t maxIndices   = maxQuads * 6;
+		static const uint32_t maxVertices  = maxQuads * 4;
+		static const uint32_t maxIndices   = maxQuads * 6;
 		static const uint32_t maxTextures = 32;
 		
 		uint32_t quadIndices = 0;
@@ -41,6 +41,8 @@ namespace Cherenkov {
 
 		glm::vec4 quadVertexPositions[4];
 		glm::vec2 quadDefaultTexCoords[4];
+
+		Renderer2D::Statistics stats;
 	};
 
 	static Storage s_Storage;
@@ -128,11 +130,19 @@ namespace Cherenkov {
 
 		for (uint32_t i = 0; i < s_Storage.textureSlotIdx; i++) s_Storage.boundTextures[i]->bind(i);
 		RenderCommand::drawIndexed(s_Storage.quadVertexArray, s_Storage.quadIndices);
+		s_Storage.stats.draws++;
+	}
+
+	void Renderer2D::flushAndReset() {
+		endScene();
+		s_Storage.quadIndices = 0;
+		s_Storage.quadVertBufferPtr = s_Storage.quadVertBufferBase;
+		s_Storage.textureSlotIdx = 1;
 	}
 
 	void Renderer2D::endScene() {
 		CK_PROFILE_FUNCTION();
-		uint32_t size = (uint8_t*)s_Storage.quadVertBufferPtr - (uint8_t*)s_Storage.quadVertBufferBase;
+		uint32_t size = (uint32_t)((uint8_t*)s_Storage.quadVertBufferPtr - (uint8_t*)s_Storage.quadVertBufferBase);
 		s_Storage.quadVertexBuffer->loadData(s_Storage.quadVertBufferBase, size);
 
 		flush();
@@ -145,6 +155,8 @@ namespace Cherenkov {
 	// all other Quads call this with default values
 	void Renderer2D::Quad(const glm::vec2& scale, const Ref<Texture2D>& texture, const QuadProperties& properties) {
 		CK_PROFILE_FUNCTION();
+
+		if (s_Storage.quadIndices >= Storage::maxIndices) flushAndReset();
 
 		float textureIndex = 0.0f;
 		for (uint32_t i = 1; i < s_Storage.textureSlotIdx; i++) {
@@ -184,7 +196,14 @@ namespace Cherenkov {
 		}
 
 		s_Storage.quadIndices += 6;
+		s_Storage.stats.quads++;
 	}
+
+	void Renderer2D::resetStats() {
+		memset(&s_Storage.stats, 0, sizeof(Statistics));
+	}
+
+	Renderer2D::Statistics Renderer2D::getStats() { return s_Storage.stats; }
 }
 
 

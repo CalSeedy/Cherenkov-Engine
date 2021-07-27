@@ -31,23 +31,23 @@
 	#error "Unknown platform!"
 #endif
 
-#ifdef CK_PLATFORM_WINDOWS
-#if CK_IS_DLL
-#ifdef CK_BUILD_DLL
-#define CK_API __declspec(dllexport)
+#ifdef CK_DEBUG
+	#if defined(CK_PLATFORM_WINDOWS)
+		#define CK_DEBUGBREAK() __debugbreak()
+	#elif defined(CK_PLATFORM_LINUX)
+		#include <signal.h>
+		#define CK_DEBUGBREAK() raise(SIGTRAP)
+	#else
+		#error "Platform debugbreak is not supported!"
+	#endif
 #else
-#define CK_API __declspec(dllimport)
-#endif
-#else
-#define CK_API 
-#endif
-#else
-#error Engine only supports Windows!
-#endif
+	#define CK_DEBUGBREAK() 
+#endif // CK_DEBUG
+
 
 #ifdef CK_ENABLE_ASSERTS
-	#define CK_ASSERT(x, ...){if (!(x)){CK_ERROR("Assertion Failed!: (0)", __VA_ARGS__);__debugbreak();}}
-	#define CK_CORE_ASSERT(x, ...){if (!(x)){CK_CORE_ERROR("Assertion Failed!: (0)", __VA_ARGS__);__debugbreak();}}
+	#define CK_ASSERT(x, ...){if (!(x)){CK_ERROR("Assertion Failed!: (0)", __VA_ARGS__); CK_DEBUGBREAK();}}
+	#define CK_CORE_ASSERT(x, ...){if (!(x)){CK_CORE_ERROR("Assertion Failed!: (0)", __VA_ARGS__); CK_DEBUGBREAK();}}
 #else
 	#define CK_ASSERT(x, ...)
 	#define CK_CORE_ASSERT(x, ...)

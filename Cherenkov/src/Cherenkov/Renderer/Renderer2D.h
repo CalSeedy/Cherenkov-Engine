@@ -5,15 +5,15 @@
 namespace Cherenkov {
 
 	struct QuadProperties {
-		union X {
+		union Pos {
 			struct {
 				float_t x, y, z;
 			};
-			X() { x = 0.0f; y = 0.0f; z = 0.0f; }
-			X(glm::vec2 pos) { x = pos.x; y = pos.y; z = 0.0f; }
-			X(glm::vec3 pos) { x = pos.x; y = pos.y; z = pos.z; }
-			X(float_t _x, float_t _y) { x = _x; y = _y; z = 0.0f; }
-			X(float_t _x, float_t _y, float_t _z) { x = _x; y = _y; z = _z; }
+			Pos() { x = 0.0f; y = 0.0f; z = 0.0f; }
+			Pos(const glm::vec2& pos) { x = pos.x; y = pos.y; z = 0.0f; }
+			Pos(const glm::vec3& pos) { x = pos.x; y = pos.y; z = pos.z; }
+			Pos(float_t _x, float_t _y) { x = _x; y = _y; z = 0.0f; }
+			Pos(float_t _x, float_t _y, float_t _z) { x = _x; y = _y; z = _z; }
 		} Position = {};
 		glm::vec4 Colour = { 1.0f, 1.0f, 1.0f, 1.0f };
 		float_t Angle = 0.0f;
@@ -21,7 +21,7 @@ namespace Cherenkov {
 	};
 
 	class Renderer2D {
-
+		static void flushAndReset();
 	public:
 		static void init();
 		static void shutdown();
@@ -32,5 +32,15 @@ namespace Cherenkov {
 
 		static void Quad(const glm::vec2& scale, const QuadProperties& properties = QuadProperties());
 		static void Quad(const glm::vec2& scale, const Ref<Texture2D>& texture, const QuadProperties& properties = QuadProperties());
+
+		struct Statistics {
+			uint32_t draws = 0;
+			uint32_t quads = 0;
+
+			uint32_t getTotalVertices() { return quads * 4; }
+			uint32_t getTotalIndices() { return quads * 6; }
+		};
+		static void resetStats();
+		static Statistics getStats();
 	};
 }
