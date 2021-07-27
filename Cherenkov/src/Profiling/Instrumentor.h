@@ -129,6 +129,35 @@ namespace Cherenkov {
 			m_Stopped = true;
 		}
 	};
+
+	namespace InstrumentorUtils {
+
+		template <size_t N>
+		struct ChangeResult
+		{
+			char Data[N];
+		};
+
+		template <size_t N, size_t K>
+		constexpr auto cleanupOutput(const char(&expr)[N], const char(&remove)[K])
+		{
+			ChangeResult<N> result = {};
+
+			size_t srcIndex = 0;
+			size_t dstIndex = 0;
+			while (srcIndex < N)
+			{
+				size_t matchIndex = 0;
+				while (matchIndex < K - 1 && srcIndex + matchIndex < N - 1 && expr[srcIndex + matchIndex] == remove[matchIndex])
+					matchIndex++;
+				if (matchIndex == K - 1)
+					srcIndex += matchIndex;
+				result.Data[dstIndex++] = expr[srcIndex] == '"' ? '\'' : expr[srcIndex];
+				srcIndex++;
+			}
+			return result;
+		}
+	}
 }
 
 #define CK_PROFILE 1
@@ -137,7 +166,7 @@ namespace Cherenkov {
 		#define CK_FUNC_SIG __PRETTY_FUNCTION__
 	#elif defined(__DMC__) && (__DMC__ >= 0x810)
 		#define CK_FUNC_SIG __PRETTY_FUNCTION__
-	#elif defined(__FUNCSIG__)
+	#elif defined(__FUNCSIG__) || (_MSC_VER)
 		#define CK_FUNC_SIG __FUNCSIG__
 	#elif (defined(__INTEL_COMPILER) && (__INTEL_COMPILER >= 600)) || (defined(__IBMCPP__) && (__IBMCPP__ >= 500))
 		#define CK_FUNC_SIG __FUNCTION__
@@ -153,7 +182,7 @@ namespace Cherenkov {
 
 	#define CK_PROFILE_BEGIN(name, filepath) ::Cherenkov::Instrumentor::get().begin(name, filepath)
 	#define CK_PROFILE_END() ::Cherenkov::Instrumentor::get().end()
-	#define CK_PROFILE_SCOPE(name) ::Cherenkov::Timer timer##__LINE__(name);
+	#define CK_PROFILE_SCOPE(name) constexpr auto fixedName = ::Cherenkov::InstrumentorUtils::cleanupOutput(name, "__cdecl "); ::Cherenkov::Timer timer##__LINE__(fixedName.Data)
 	#define CK_PROFILE_FUNCTION() CK_PROFILE_SCOPE(CK_FUNC_SIG)
 #else
 	#define CK_PROFILE_BEGIN(name, filepath)
