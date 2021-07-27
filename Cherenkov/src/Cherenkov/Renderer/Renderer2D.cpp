@@ -129,7 +129,7 @@ namespace Cherenkov {
 
 	void Renderer2D::flush() {
 		CK_PROFILE_FUNCTION();
-
+		if (s_Storage.quadIndices == 0) return;
 		for (uint32_t i = 0; i < s_Storage.textureSlotIdx; i++) s_Storage.boundTextures[i]->bind(i);
 		RenderCommand::drawIndexed(s_Storage.quadVertexArray, s_Storage.quadIndices);
 		s_Storage.stats.draws++;
