@@ -11,8 +11,8 @@ namespace Cherenkov {
 		std::string	m_Path;
 		uint32_t	m_RendererID;
 		uint32_t	m_Width;
-		
-		struct { 
+
+		struct {
 			GLenum	GLFormat;
 			GLenum	InternalFormat;
 		} m_Format;
@@ -26,6 +26,7 @@ namespace Cherenkov {
 
 		virtual uint32_t height() const override { return m_Height; }
 		virtual uint32_t width() const override { return m_Width; }
+		virtual uint32_t rendererID() const override { return m_RendererID; }
 
 		void setData(void* data, uint32_t size) override;
 

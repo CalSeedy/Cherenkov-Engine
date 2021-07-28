@@ -43,9 +43,9 @@ void Sandbox2D::onUpdate(Cherenkov::Timestep dt) {
 		
 		Cherenkov::QuadProperties p;
 		Cherenkov::Renderer2D::beginScene(m_CameraController.getCamera());
-		for (float x = -10.0; x < 10.0f; x += 0.5f) {
-			for (float y = -10.0; y < 10.0f; y += 0.5f) {
-				p.Colour = { (x + 10.0f) / 10.0f, (y + 10.0f) / 10.0f, 0.4f, 1.0f };
+		for (float x = -5.0; x < 5.0f; x += 0.5f) {
+			for (float y = -5.0; y < 5.0f; y += 0.5f) {
+				p.Colour = { (x + 5.0f) / 5.0f, (y + 5.0f) / 5.0f, 0.4f, 1.0f };
 				p.Position = { x, y };
 				Cherenkov::Renderer2D::Quad({ 0.45f, 0.45f }, p);
 			}
@@ -57,18 +57,83 @@ void Sandbox2D::onUpdate(Cherenkov::Timestep dt) {
 
 void Sandbox2D::onImGuiDraw() {
 	CK_PROFILE_FUNCTION();
-	auto stats = Cherenkov::Renderer2D::getStats();
-	ImGui::Begin("Settings");
-	ImGui::ColorPicker4("Sq. Colour", glm::value_ptr(m_ObjColour));
-	ImGui::DragFloat3("Sq. Position", glm::value_ptr(m_SqPos), 0.01f);
 
-	ImGui::Text("Renderer2D Stats:");
-	ImGui::Text("Draw Calls: %d", stats.draws);
-	ImGui::Text("Quads: %d", stats.quads);
-	ImGui::Text("Vertices: %d", stats.getTotalVertices());
-	ImGui::Text("Indices: %d", stats.getTotalIndices());
-	ImGui::End();
-}
+	static bool docking = true;
+
+	if (docking) {
+		static bool open = true;
+		static bool persist = true;
+		bool fullscreen = true;
+		static ImGuiDockNodeFlags dockingFlags = ImGuiDockNodeFlags_None;
+
+		ImGuiWindowFlags windowFlags = ImGuiWindowFlags_MenuBar | ImGuiWindowFlags_NoDocking;
+
+		if (fullscreen) {
+			ImGuiViewport* viewport = ImGui::GetMainViewport();
+			ImGui::SetNextWindowPos(viewport->Pos);
+			ImGui::SetNextWindowSize(viewport->Size);
+			ImGui::SetNextWindowViewport(viewport->ID);
+			ImGui::PushStyleVar(ImGuiStyleVar_WindowBorderSize, 0.0f);
+			ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 0.0f);
+			windowFlags |= ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoNavFocus;
+		}
+
+		if (dockingFlags & ImGuiDockNodeFlags_PassthruCentralNode) windowFlags |= ImGuiWindowFlags_NoBackground;
+
+		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2{ 0.0f, 0.0f });
+		ImGui::Begin("Dockspace", &docking, windowFlags);
+		ImGui::PopStyleVar();
+
+		if (fullscreen)	ImGui::PopStyleVar(2);
+
+		ImGuiIO& io = ImGui::GetIO();
+
+		if (io.ConfigFlags & ImGuiConfigFlags_DockingEnable) {
+			ImGuiID dockID = ImGui::GetID("MyDockSpace");
+			ImGui::DockSpace(dockID, ImVec2{ 0.0f, 0.0f }, dockingFlags);
+		}
+
+		if (ImGui::BeginMenuBar()) {
+			if (ImGui::BeginMenu("File")) {
+				if (ImGui::MenuItem("Exit")) Cherenkov::Application::get().close();
+				ImGui::EndMenu();
+			}
+			ImGui::EndMenuBar();
+		}
+
+		auto stats = Cherenkov::Renderer2D::getStats();
+		ImGui::Begin("Settings");
+		ImGui::ColorPicker4("Sq. Colour", glm::value_ptr(m_ObjColour));
+		ImGui::DragFloat3("Sq. Position", glm::value_ptr(m_SqPos), 0.01f);
+
+		ImGui::Text("Renderer2D Stats:");
+		ImGui::Text("Draw Calls: %d", stats.draws);
+		ImGui::Text("Quads: %d", stats.quads);
+		ImGui::Text("Vertices: %d", stats.getTotalVertices());
+		ImGui::Text("Indices: %d", stats.getTotalIndices());
+
+
+		uint32_t tID = m_Texture->rendererID();
+		ImGui::Image((void*)tID, ImVec2{ 256.0f, 256.0f });
+
+		ImGui::End();
+		ImGui::End();
+
+	} else {
+		auto stats = Cherenkov::Renderer2D::getStats();
+		ImGui::Begin("Settings");
+		ImGui::ColorPicker4("Sq. Colour", glm::value_ptr(m_ObjColour));
+		ImGui::DragFloat3("Sq. Position", glm::value_ptr(m_SqPos), 0.01f);
+
+		ImGui::Text("Renderer2D Stats:");
+		ImGui::Text("Draw Calls: %d", stats.draws);
+		ImGui::Text("Quads: %d", stats.quads);
+		ImGui::Text("Vertices: %d", stats.getTotalVertices());
+		ImGui::Text("Indices: %d", stats.getTotalIndices());
+		ImGui::End();
+
+	}
+	}
 
 void Sandbox2D::onEvent(Cherenkov::Event& ev) {
 	CK_PROFILE_FUNCTION();

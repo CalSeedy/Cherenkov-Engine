@@ -34,13 +34,14 @@ namespace Cherenkov {
 		Application();
 		virtual ~Application();
 
-
 		void onEvent(Event &event);
 		void pushLayer(Layer* layer);
 		void pushOverlay(Layer* overlay);
 
 		static Application& get() { return *s_Instance; }
 		Window& getWindow() { return *m_Window; }
+
+		void close();
 	};
 
 	Application* createApplication();

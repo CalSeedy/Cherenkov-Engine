@@ -48,7 +48,11 @@ namespace Cherenkov {
 		overlay->onAttach();
 	}
 
-	void Application::onEvent(Event &event) {
+	void Application::close() {
+		m_Running = false;
+	}
+
+	void Application::onEvent(Event& event) {
 		CK_PROFILE_FUNCTION();
 		EventDispatcher dispatcher(event);
 		dispatcher.Dispatch<WindowCloseEvent>(CK_BIND_EVENT_FN(Application::onWindowClose));

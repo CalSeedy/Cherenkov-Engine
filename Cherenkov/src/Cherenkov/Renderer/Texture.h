@@ -14,6 +14,7 @@ namespace Cherenkov {
 		virtual void setData(void* data, uint32_t size) = 0;
 
 		virtual bool operator==(const Texture& other) const = 0;
+		virtual uint32_t rendererID() const = 0;
 	};
 
 

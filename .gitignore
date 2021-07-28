@@ -6,6 +6,7 @@ Cherenkov/vendor/
 
 #Files
 *.log
+*.json
 
 **.sln
 **.vcxproj
