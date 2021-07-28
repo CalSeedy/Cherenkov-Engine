@@ -164,6 +164,7 @@
     <ClInclude Include="src\Cherenkov\Renderer\Camera.h" />
     <ClInclude Include="src\Cherenkov\Renderer\CameraController.h" />
     <ClInclude Include="src\Cherenkov\Renderer\Commands.h" />
+    <ClInclude Include="src\Cherenkov\Renderer\Framebuffer.h" />
     <ClInclude Include="src\Cherenkov\Renderer\Renderer.h" />
     <ClInclude Include="src\Cherenkov\Renderer\Renderer2D.h" />
     <ClInclude Include="src\Cherenkov\Renderer\RendererAPI.h" />
@@ -173,6 +174,7 @@
     <ClInclude Include="src\Cherenkov\Renderer\VertexArray.h" />
     <ClInclude Include="src\Platform\OpenGL\OpenGLBuffer.h" />
     <ClInclude Include="src\Platform\OpenGL\OpenGLContext.h" />
+    <ClInclude Include="src\Platform\OpenGL\OpenGLFramebuffer.h" />
     <ClInclude Include="src\Platform\OpenGL\OpenGLRendererAPI.h" />
     <ClInclude Include="src\Platform\OpenGL\OpenGLShader.h" />
     <ClInclude Include="src\Platform\OpenGL\OpenGLTexture.h" />
@@ -641,6 +643,7 @@
     <ClCompile Include="src\Cherenkov\Renderer\Camera.cpp" />
     <ClCompile Include="src\Cherenkov\Renderer\CameraController.cpp" />
     <ClCompile Include="src\Cherenkov\Renderer\Commands.cpp" />
+    <ClCompile Include="src\Cherenkov\Renderer\Framebuffer.cpp" />
     <ClCompile Include="src\Cherenkov\Renderer\Renderer.cpp" />
     <ClCompile Include="src\Cherenkov\Renderer\Renderer2D.cpp" />
     <ClCompile Include="src\Cherenkov\Renderer\RendererAPI.cpp" />
@@ -650,6 +653,7 @@
     <ClCompile Include="src\Cherenkov\Renderer\VertexArray.cpp" />
     <ClCompile Include="src\Platform\OpenGL\OpenGLBuffer.cpp" />
     <ClCompile Include="src\Platform\OpenGL\OpenGLContext.cpp" />
+    <ClCompile Include="src\Platform\OpenGL\OpenGLFramebuffer.cpp" />
     <ClCompile Include="src\Platform\OpenGL\OpenGLRendererAPI.cpp" />
     <ClCompile Include="src\Platform\OpenGL\OpenGLShader.cpp" />
     <ClCompile Include="src\Platform\OpenGL\OpenGLTexture.cpp" />

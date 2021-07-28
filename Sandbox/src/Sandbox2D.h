@@ -6,6 +6,7 @@
 class Sandbox2D : public Cherenkov::Layer {
 	Cherenkov::OrthographicCameraController		m_CameraController;
 
+	Cherenkov::Ref<Cherenkov::Framebuffer>		m_Framebuffer;
 	Cherenkov::Ref<Cherenkov::Shader>			m_Shader;
 	Cherenkov::Ref<Cherenkov::Texture2D>		m_Texture;
 

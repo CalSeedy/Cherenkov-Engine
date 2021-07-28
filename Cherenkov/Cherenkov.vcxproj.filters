@@ -1524,6 +1524,8 @@
     <ClInclude Include="vendor\stb\tests\prerelease\stb_lib.h">
       <Filter>vendor\stb\tests\prerelease</Filter>
     </ClInclude>
+    <ClInclude Include="src\Cherenkov\Renderer\Framebuffer.h" />
+    <ClInclude Include="src\Platform\OpenGL\OpenGLFramebuffer.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Cherenkov\Core\Application.cpp">
@@ -1610,5 +1612,7 @@
     <ClCompile Include="src\ckpch.cpp">
       <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="src\Cherenkov\Renderer\Framebuffer.cpp" />
+    <ClCompile Include="src\Platform\OpenGL\OpenGLFramebuffer.cpp" />
   </ItemGroup>
 </Project>
