@@ -1,5 +1,5 @@
 workspace "Cherenkov"
-	architecture "x64"
+	architecture "x86_64"
 	startproject "Sandbox"
 
 	configurations
@@ -7,6 +7,11 @@ workspace "Cherenkov"
 		"Debug",
 		"Release",
 		"Distribution"
+	}
+
+	flags
+	{
+		"MultiProcessorCompile"
 	}
 
 outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
@@ -21,61 +26,6 @@ IncludeDir["stb"] = "Cherenkov/vendor/stb"
 include "Cherenkov/vendor/GLFW"
 include "Cherenkov/vendor/Glad"
 include "Cherenkov/vendor/imgui"
-
-
-project "Sandbox"
-	location "Sandbox"
-	kind "ConsoleApp"
-	language "C++"
-	cppdialect "C++17"
-	staticruntime "off"
-
-	targetdir ("bin/" .. outputdir .. "/%{prj.name}")
-	objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
-
-	files
-	{
-		"%{prj.name}/src/**.h",
-		"%{prj.name}/src/**.cpp"
-	}
-
-	includedirs
-	{
-		"Cherenkov/vendor/spdlog/include",
-		"Cherenkov/src",
-		"Cherenkov/vendor",
-		"%{IncludeDir.glm}",
-		"%{IncludeDir.stb}"
-	}
-
-	links
-	{
-		"Cherenkov"
-	}
-
-	defines
-	{
-		"CK_PLATFORM_WINDOWS"
-	}
-
-	filter "system:windows"
-		systemversion "latest"
-
-	filter "configurations:Debug"
-		defines "CK_DEBUG"
-		buildoptions "/MDd"
-		symbols "on"
-
-	filter "configurations:Release"
-		defines "CK_RELEASE"
-		buildoptions "/MD"
-		optimize "on"
-
-	filter "configurations:Distribution"
-		defines "CK_DISTRIBUTION"
-		buildoptions "/MD"
-		optimize "on"
-
 
 project "Cherenkov"
 	location "Cherenkov"
@@ -101,7 +51,7 @@ project "Cherenkov"
 
 	defines
 	{
-		"CK_PLATFORM_WINDOWS",
+		"_CRT_SECURE_NO_WARNINGS",
 		"GLFW_INCLUDE_NONE"
 	}
 
@@ -133,15 +83,64 @@ project "Cherenkov"
 
 	filter "configurations:Debug"
 		defines "CK_DEBUG"
-		buildoptions "/MDd"
+		runtime "Debug"
 		symbols "on"
 
 	filter "configurations:Release"
 		defines "CK_RELEASE"
-		buildoptions "/MD"
+		runtime "Release"
 		optimize "on"
 
 	filter "configurations:Distribution"
 		defines "CK_DISTRIBUTION"
-		buildoptions "/MD"
+		runtime "Release"
+		optimize "on"
+
+
+project "Sandbox"
+	location "Sandbox"
+	kind "ConsoleApp"
+	language "C++"
+	cppdialect "C++17"
+	staticruntime "on"
+
+	targetdir ("bin/" .. outputdir .. "/%{prj.name}")
+	objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
+
+	files
+	{
+		"%{prj.name}/src/**.h",
+		"%{prj.name}/src/**.cpp"
+	}
+
+	includedirs
+	{
+		"Cherenkov/vendor/spdlog/include",
+		"Cherenkov/src",
+		"Cherenkov/vendor",
+		"%{IncludeDir.glm}",
+		"%{IncludeDir.stb}"
+	}
+
+	links
+	{
+		"Cherenkov"
+	}
+
+	filter "system:windows"
+		systemversion "latest"
+
+	filter "configurations:Debug"
+		defines "CK_DEBUG"
+		runtime "Debug"
+		symbols "on"
+
+	filter "configurations:Release"
+		defines "CK_RELEASE"
+		runtime "Release"
+		optimize "on"
+
+	filter "configurations:Distribution"
+		defines "CK_DISTRIBUTION"
+		runtime "Release"
 		optimize "on"
