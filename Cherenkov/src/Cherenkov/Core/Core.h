@@ -4,7 +4,7 @@
 
 #ifdef _WIN32
 	#ifdef _WIN64
-		#define CK_PLATOFRM_WINDOWS
+		#define CK_PLATFORM_WINDOWS
 	#else
 		#error "x86 Builds not supported!" 
 	#endif
