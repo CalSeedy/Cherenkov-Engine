@@ -31,7 +31,7 @@ namespace Cherenkov {
 
 		friend int ::main(int argc, char** argv);
 	public:
-		Application();
+		Application(const std::string& title = "Cherenkov App");
 		virtual ~Application();
 
 		void onEvent(Event &event);

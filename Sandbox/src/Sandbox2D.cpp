@@ -13,7 +13,6 @@ void Sandbox2D::onUpdate(Cherenkov::Timestep dt) {
 	Cherenkov::Renderer2D::resetStats();
 	{
 		CK_PROFILE_SCOPE("Render Clear");
-		m_Framebuffer->bind();
 		Cherenkov::RenderCommand::clear({ 1.0f, 0.0f, 1.0f, 1.0f });
 	}
 	Cherenkov::QuadProperties q1, q2, q3;
@@ -53,65 +52,11 @@ void Sandbox2D::onUpdate(Cherenkov::Timestep dt) {
 		}
 
 		Cherenkov::Renderer2D::endScene();
-		m_Framebuffer->unbind();
 	}
 }
 
 void Sandbox2D::onImGuiDraw() {
 	CK_PROFILE_FUNCTION();
-
-	static bool open = true;
-	static bool persist = true;
-	bool fullscreen = true;
-	static ImGuiDockNodeFlags dockingFlags = ImGuiDockNodeFlags_None;
-
-	ImGuiWindowFlags windowFlags = ImGuiWindowFlags_MenuBar | ImGuiWindowFlags_NoDocking;
-
-	if (fullscreen) {
-		ImGuiViewport* viewport = ImGui::GetMainViewport();
-		ImGui::SetNextWindowPos(viewport->Pos);
-		ImGui::SetNextWindowSize(viewport->Size);
-		ImGui::SetNextWindowViewport(viewport->ID);
-		ImGui::PushStyleVar(ImGuiStyleVar_WindowBorderSize, 0.0f);
-		ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 0.0f);
-		windowFlags |= ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoNavFocus;
-	}
-
-	if (dockingFlags & ImGuiDockNodeFlags_PassthruCentralNode) windowFlags |= ImGuiWindowFlags_NoBackground;
-
-	ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2{ 0.0f, 0.0f });
-
-	ImGui::Begin("Dockspace", &open, windowFlags);
-	ImGui::PopStyleVar();
-
-	if (fullscreen)	ImGui::PopStyleVar(2);
-
-	ImGuiIO& io = ImGui::GetIO();
-
-	if (io.ConfigFlags & ImGuiConfigFlags_DockingEnable) {
-		ImGuiID dockID = ImGui::GetID("MyDockSpace");
-		ImGui::DockSpace(dockID, ImVec2{ 0.0f, 0.0f }, dockingFlags);
-	}
-
-	if (ImGui::BeginMenuBar()) {
-		if (ImGui::BeginMenu("File")) {
-			if (ImGui::MenuItem("Exit")) Cherenkov::Application::get().close();
-			ImGui::EndMenu();
-		}
-		ImGui::EndMenuBar();
-	}
-	ImGui::Begin("Renderer");
-	auto& window = Cherenkov::Application::get().getWindow();
-	uint32_t tID = m_Framebuffer->getColourAttachment();
-	ImGui::Image((void*)tID, ImVec2{ (float)window.getWidth(), (float)window.getHeight() });
-	ImGui::End();
-
-	ImGui::Begin("Settings");
-	ImGui::ColorPicker4("Sq. Colour", glm::value_ptr(m_ObjColour));
-	ImGui::DragFloat3("Sq. Position", glm::value_ptr(m_SqPos), 0.01f);
-	ImGui::End();
-
-
 	auto stats = Cherenkov::Renderer2D::getStats();
 	ImGui::Begin("Stats");
 
@@ -120,7 +65,6 @@ void Sandbox2D::onImGuiDraw() {
 	ImGui::Text("Quads: %d", stats.quads);
 	ImGui::Text("Vertices: %d", stats.getTotalVertices());
 	ImGui::Text("Indices: %d", stats.getTotalIndices());
-	ImGui::End();
 	ImGui::End();
 }
 
@@ -133,11 +77,6 @@ void Sandbox2D::onAttach() {
 	CK_PROFILE_FUNCTION();
 	m_Texture = Cherenkov::Texture2D::init("assets/Textures/checkerboardSq.png");
 
-	Cherenkov::Specification defaultSpec;
-	auto& window = Cherenkov::Application::get().getWindow();
-	defaultSpec.Width = window.getWidth();
-	defaultSpec.Height = window.getHeight();
-	m_Framebuffer = Cherenkov::Framebuffer::init(defaultSpec);
 }
 
 void Sandbox2D::onDetach() {

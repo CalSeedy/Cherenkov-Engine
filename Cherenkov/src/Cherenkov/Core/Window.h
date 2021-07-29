@@ -8,12 +8,12 @@ namespace Cherenkov {
 	struct WindowProperties
 	{
 		std::string Title;
-		unsigned int Width;
-		unsigned int Height;
+		uint32_t Width;
+		uint32_t Height;
 
-		WindowProperties(const std::string &title = "Cherenkov Engine",
-			unsigned int width = 1280,
-			unsigned int height = 720) : Title(title), Width(width), Height(height)
+		WindowProperties(const std::string& title = "Cherenkov Engine",
+			uint32_t width = 1280,
+			uint32_t height = 720) : Title(title), Width(width), Height(height)
 		{
 		}
 	};
@@ -26,8 +26,8 @@ namespace Cherenkov {
 		virtual ~Window() {}
 		virtual void onUpdate() = 0;
 
-		virtual unsigned int getWidth() const = 0;
-		virtual unsigned int getHeight() const = 0;
+		virtual uint32_t getWidth() const = 0;
+		virtual uint32_t getHeight() const = 0;
 
 		virtual void setEventCallBack(const EventCallbackFn &callback) = 0;
 		virtual void setVSync(bool enabled) = 0;

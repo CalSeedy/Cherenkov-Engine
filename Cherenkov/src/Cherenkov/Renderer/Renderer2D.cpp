@@ -40,7 +40,6 @@ namespace Cherenkov {
 		uint32_t textureSlotIdx = 1;	// ^^ 0 - blank texture/ colour!
 
 		glm::vec4 quadVertexPositions[4];
-		glm::vec2 quadDefaultTexCoords[4];
 
 		Renderer2D::Statistics stats;
 	};
@@ -100,14 +99,10 @@ namespace Cherenkov {
 		}
 
 		s_Storage.quadVertexPositions[0] = { -0.5f, -0.5f, 0.0f, 1.0f };
-		s_Storage.quadVertexPositions[1] = {  0.5f, -0.5f, 0.0f, 1.0f };
-		s_Storage.quadVertexPositions[2] = {  0.5f,  0.5f, 0.0f, 1.0f };
+		s_Storage.quadVertexPositions[1] = { 0.5f, -0.5f, 0.0f, 1.0f };
+		s_Storage.quadVertexPositions[2] = { 0.5f,  0.5f, 0.0f, 1.0f };
 		s_Storage.quadVertexPositions[3] = { -0.5f,  0.5f, 0.0f, 1.0f };
 
-		s_Storage.quadDefaultTexCoords[0] = {  0.0f, 0.0f };
-		s_Storage.quadDefaultTexCoords[1] = {  1.0f, 0.0f };
-		s_Storage.quadDefaultTexCoords[2] = {  1.0f, 1.0f };
-		s_Storage.quadDefaultTexCoords[3] = {  0.0f, 1.0f };
 	}
 
 	void Renderer2D::shutdown()	{
@@ -157,7 +152,7 @@ namespace Cherenkov {
 	// all other Quads call this with default values
 	void Renderer2D::Quad(const glm::vec2& scale, const Ref<Texture2D>& texture, const QuadProperties& properties) {
 		CK_PROFILE_FUNCTION();
-
+		constexpr glm::vec2 quadDefaultTexCoords[] = { { 0.0f, 0.0f }, { 1.0f, 0.0f }, { 1.0f, 1.0f }, { 0.0f, 1.0f }};
 		if (s_Storage.quadIndices >= Storage::maxIndices) flushAndReset();
 
 		float textureIndex = 0.0f;
@@ -194,7 +189,7 @@ namespace Cherenkov {
 		for (int i = 0; i < 4; i++) {
 			s_Storage.quadVertBufferPtr->Position = transform * s_Storage.quadVertexPositions[i];
 			s_Storage.quadVertBufferPtr->Colour = properties.Colour;
-			s_Storage.quadVertBufferPtr->TextureCoord = s_Storage.quadDefaultTexCoords[i];
+			s_Storage.quadVertBufferPtr->TextureCoord = quadDefaultTexCoords[i];
 			s_Storage.quadVertBufferPtr->TextureIdx = textureIndex;
 			s_Storage.quadVertBufferPtr->TilingFactor = properties.TileFactor;
 			s_Storage.quadVertBufferPtr++;

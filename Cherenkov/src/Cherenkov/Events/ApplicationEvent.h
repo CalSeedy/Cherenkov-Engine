@@ -5,13 +5,13 @@
 namespace Cherenkov {
 
 	class WindowResizeEvent : public Event {
-		unsigned int m_Width, m_Height;
+		uint32_t m_Width, m_Height;
 	public:
-		WindowResizeEvent(unsigned int width, unsigned int height)
+		WindowResizeEvent(uint32_t width, uint32_t height)
 			: m_Width(width), m_Height(height) {}
 
-		unsigned int getWidth() const { return m_Width; }
-		unsigned int getHeight() const { return m_Height; }
+		uint32_t getWidth() const { return m_Width; }
+		uint32_t getHeight() const { return m_Height; }
 
 		std::string toStr() const override {
 			std::stringstream stream;

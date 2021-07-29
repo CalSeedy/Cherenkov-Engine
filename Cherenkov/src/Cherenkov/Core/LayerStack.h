@@ -27,6 +27,6 @@ namespace Cherenkov {
 	
 	private:
 		std::vector<Layer*> m_Layers;
-		unsigned int m_LayerInsertIdx = 0;
+		uint32_t m_LayerInsertIdx = 0;
 	};
 }

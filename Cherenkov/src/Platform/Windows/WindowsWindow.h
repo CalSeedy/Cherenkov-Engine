@@ -8,15 +8,30 @@
 namespace Cherenkov {
 
 	class WindowsWindow : public Window {
+		virtual void init(const WindowProperties& properties);
+		virtual void shutDown();
 
+		GLFWwindow* m_Window;
+		Scope<RendererContext> m_Ctx;
+
+		struct WindowData
+		{
+			std::string Title;
+			uint32_t Width, Height;
+			bool VSync;
+
+			EventCallbackFn EventCallback;
+		};
+
+		WindowData m_Data;
 	public:
 		WindowsWindow(const WindowProperties &properties);
 		virtual ~WindowsWindow();
 
 		void onUpdate() override;
 
-		unsigned int getWidth() const override { return m_Data.Width; }
-		unsigned int getHeight() const override { return m_Data.Height; }
+		uint32_t getWidth() const override { return m_Data.Width; }
+		uint32_t getHeight() const override { return m_Data.Height; }
 
 		inline void setEventCallBack(const EventCallbackFn &callback) override { m_Data.EventCallback = callback; }
 		void setVSync(bool enabled) override;
@@ -24,22 +39,5 @@ namespace Cherenkov {
 	
 		virtual void* getNativeWindow() const { return m_Window; }
 
-	private:
-		virtual void init(const WindowProperties &properties);
-		virtual void shutDown();
-		
-		GLFWwindow* m_Window;
-		Scope<RendererContext> m_Ctx;
-
-		struct WindowData
-		{
-			std::string Title;
-			unsigned int Width, Height;
-			bool VSync;
-
-			EventCallbackFn EventCallback;
-		};
-
-		WindowData m_Data;
 	};
 }

@@ -13,13 +13,13 @@ namespace Cherenkov {
 	
 	Application* Application::s_Instance = nullptr;
 	 
-	Application::Application() {
+	Application::Application(const std::string& title) {
 		CK_PROFILE_FUNCTION();
 		CK_CORE_ASSERT(!s_Instance, "Application already running!");
 		s_Instance = this;
 		{
 			CK_PROFILE_SCOPE("Window Creation");
-			m_Window = Window::Create();
+			m_Window = Window::Create(WindowProperties(title));
 			m_Window->setEventCallBack(CK_BIND_EVENT_FN(Application::onEvent));
 			m_Window->setVSync(false);
 		}
@@ -28,10 +28,9 @@ namespace Cherenkov {
 
 		m_ImGuiLayer = new ImGuiLayer();
 		pushOverlay(m_ImGuiLayer);
-
 	}
 
-	Application::~Application()	{
+	Application::~Application() {
 		CK_PROFILE_FUNCTION();
 		Renderer::shutdown();
 	}
