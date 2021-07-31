@@ -15,6 +15,8 @@ namespace Cherenkov {
 		glm::vec3							m_SqPos{ 0.0f, 0.0f, 0.0f };
 		Ref<VertexArray>					m_VertexArray;
 
+		glm::vec2							m_VpSize;
+
 		struct ProfileResult {
 			const char* Name;
 			float Time;

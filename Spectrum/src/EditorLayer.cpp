@@ -99,11 +99,18 @@ namespace Cherenkov {
 			}
 			ImGui::EndMenuBar();
 		}
-		ImGui::Begin("Renderer");
-		auto& window = Application::get().getWindow();
+		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2{ 0, 0 });
+		ImGui::Begin("Viewport");
+		ImVec2 vpSize = ImGui::GetContentRegionAvail();
+		if ((vpSize.x != m_VpSize.x) || (vpSize.y != m_VpSize.y)) { 
+			m_Framebuffer->resize((uint32_t)vpSize.x, (uint32_t)vpSize.y);
+			m_VpSize = { vpSize.x, vpSize.y };
+			m_CameraController.resize(vpSize.x, vpSize.y);
+		}
 		uint32_t tID = m_Framebuffer->getColourAttachment();
-		ImGui::Image((void*)tID, ImVec2{ (float)window.getWidth(), (float)window.getHeight() }, ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
+		ImGui::Image((void*)tID, ImVec2{ m_VpSize.x, m_VpSize.y }, ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
 		ImGui::End();
+		ImGui::PopStyleVar();
 
 		ImGui::Begin("Settings");
 		ImGui::ColorPicker4("Sq. Colour", glm::value_ptr(m_ObjColour));

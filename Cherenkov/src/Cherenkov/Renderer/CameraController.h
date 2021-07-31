@@ -24,6 +24,7 @@ namespace Cherenkov {
 		bool onWindowResize(WindowResizeEvent& e);
 	public:
 		OrthographicCameraController(float aspectRatio);
+		void resize(float width, float height);
 		void onUpdate(Timestep dt) override;
 		void onEvent(Event& ev) override;
 		inline float getZoom() { return m_Zoom; }

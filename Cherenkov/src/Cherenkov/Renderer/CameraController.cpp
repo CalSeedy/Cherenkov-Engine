@@ -17,8 +17,8 @@ namespace Cherenkov {
     }
 
     bool OrthographicCameraController::onWindowResize(WindowResizeEvent& e) {
-        m_AspectRatio = (float)e.getWidth() / (float)e.getHeight();
-        m_Camera.setProjection(-m_AspectRatio * m_Zoom, m_AspectRatio * m_Zoom, -m_Zoom, m_Zoom);
+        resize((float)e.getWidth(), (float)e.getHeight());
+        
         return false;
     }
 
@@ -26,7 +26,12 @@ namespace Cherenkov {
 
     }
 
-    void OrthographicCameraController::onUpdate(Timestep dt) {
+	void OrthographicCameraController::resize(float width, float height) {
+        if (height != 0.0f) m_AspectRatio = width / height;
+        m_Camera.setProjection(-m_AspectRatio * m_Zoom, m_AspectRatio * m_Zoom, -m_Zoom, m_Zoom);
+	}
+
+	void OrthographicCameraController::onUpdate(Timestep dt) {
         CK_PROFILE_FUNCTION();
         if (Input::isKeyPressed(CK_KEY_W)) {
             m_CameraPos.x += sin(glm::radians(m_CameraRotation)) * m_PanSpeed * dt;
