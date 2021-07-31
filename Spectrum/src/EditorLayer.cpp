@@ -5,11 +5,16 @@
 #include <stdio.h>
 
 namespace Cherenkov {
-	EditorLayer::EditorLayer() : Layer("EditorLayer"), m_CameraController{ 1920.0f / 1080.0f } {
-	}
+	EditorLayer::EditorLayer() : Layer("EditorLayer"), m_CameraController{ 1920.0f / 1080.0f } {}
 
 	void EditorLayer::onUpdate(Timestep dt) {
 		CK_PROFILE_FUNCTION();
+
+		if (Cherenkov::Specification spec = m_Framebuffer->getSpecification(); m_VpSize.x > 0.0f && m_VpSize.y > 0.0f && (spec.Width != m_VpSize.x || spec.Height != m_VpSize.y)) {
+			m_Framebuffer->resize((uint32_t)m_VpSize.x, (uint32_t)m_VpSize.y);
+			m_CameraController.resize(m_VpSize.x, m_VpSize.y);
+		}
+
 		if (m_VpFocused) m_CameraController.onUpdate(dt);
 		Renderer2D::resetStats();
 		{
@@ -99,17 +104,16 @@ namespace Cherenkov {
 			}
 			ImGui::EndMenuBar();
 		}
+
 		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2{ 0, 0 });
 		ImGui::Begin("Viewport");
+
 		m_VpFocused = ImGui::IsWindowFocused();
 		m_VpHovered = ImGui::IsWindowHovered();
 		Application::get().getImGuiLayer()->blockingEvents(!m_VpFocused || !m_VpHovered);
 		ImVec2 vpSize = ImGui::GetContentRegionAvail();
-		if ((vpSize.x != m_VpSize.x) || (vpSize.y != m_VpSize.y)) { 
-			m_Framebuffer->resize((uint32_t)vpSize.x, (uint32_t)vpSize.y);
-			m_VpSize = { vpSize.x, vpSize.y };
-			m_CameraController.resize(vpSize.x, vpSize.y);
-		}
+		m_VpSize = { vpSize.x, vpSize.y };
+
 		uint32_t tID = m_Framebuffer->getColourAttachment();
 		ImGui::Image((void*)tID, ImVec2{ m_VpSize.x, m_VpSize.y }, ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
 		ImGui::End();

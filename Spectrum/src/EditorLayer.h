@@ -17,7 +17,7 @@ namespace Cherenkov {
 
 		bool								m_VpFocused = false;
 		bool								m_VpHovered = false;
-		glm::vec2							m_VpSize;
+		glm::vec2							m_VpSize = {0, 0};
 
 		struct ProfileResult {
 			const char* Name;
