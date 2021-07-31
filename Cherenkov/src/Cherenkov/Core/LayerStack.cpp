@@ -3,25 +3,25 @@
 
 namespace Cherenkov {
 
-	LayerStack::LayerStack() {
-	}
-
 	LayerStack::~LayerStack() {
 
-		for (Layer* layer : m_Layers) {delete layer;}
+		for (Layer* layer : m_Layers) {
+			layer->onDetach();
+			delete layer;
+		}
 
 	}
 
-	void LayerStack::PushLayer(Layer* layer) {
+	void LayerStack::pushLayer(Layer* layer) {
 		m_Layers.emplace(m_Layers.begin() + m_LayerInsertIdx, layer);
 		m_LayerInsertIdx++;
 	}
 
-	void LayerStack::PopLayer(Layer* layer) {
+	void LayerStack::popLayer(Layer* layer) {
 
-		auto object = std::find(m_Layers.begin(), m_Layers.end(), layer);
+		auto object = std::find(m_Layers.begin(), m_Layers.begin() + m_LayerInsertIdx, layer);
 
-		if (object != m_Layers.end()) {
+		if (object != m_Layers.begin() + m_LayerInsertIdx) {
 		
 			layer->onDetach();
 			m_Layers.erase(object);
@@ -29,13 +29,13 @@ namespace Cherenkov {
 		}
 	}
 
-	void LayerStack::PushOverlay(Layer* overlay) {
+	void LayerStack::pushOverlay(Layer* overlay) {
 		m_Layers.emplace_back(overlay);
 	}
 
-	void LayerStack::PopOverlay(Layer* overlay) {
+	void LayerStack::popOverlay(Layer* overlay) {
 
-		auto object = std::find(m_Layers.begin(), m_Layers.end(), overlay);
+		auto object = std::find(m_Layers.begin() + m_LayerInsertIdx, m_Layers.end(), overlay);
 
 		if (object != m_Layers.end()) {
 			overlay->onDetach();

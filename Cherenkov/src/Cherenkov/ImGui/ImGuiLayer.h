@@ -9,7 +9,8 @@
 namespace Cherenkov {
 
 	class ImGuiLayer : public Layer {
-		float m_Time = 0.0f;
+		bool	m_Blocking = true;
+		float	m_Time = 0.0f;
 	public:
 		ImGuiLayer();
 		~ImGuiLayer() = default;
@@ -20,5 +21,6 @@ namespace Cherenkov {
 
 		void start();
 		void stop();
+		void blockingEvents(bool blocking) { m_Blocking = blocking; }
 	};
 }

@@ -37,13 +37,13 @@ namespace Cherenkov {
 
 	void Application::pushLayer(Layer* layer) {
 		CK_PROFILE_FUNCTION();
-		m_LayerStack.PushLayer(layer);
+		m_LayerStack.pushLayer(layer);
 		layer->onAttach();
 	}
 
 	void Application::pushOverlay(Layer* overlay) {
 		CK_PROFILE_FUNCTION();
-		m_LayerStack.PushLayer(overlay);
+		m_LayerStack.pushOverlay(overlay);
 		overlay->onAttach();
 	}
 
@@ -51,18 +51,18 @@ namespace Cherenkov {
 		m_Running = false;
 	}
 
-	void Application::onEvent(Event& event) {
+	void Application::onEvent(Event& ev) {
 		CK_PROFILE_FUNCTION();
-		EventDispatcher dispatcher(event);
+		EventDispatcher dispatcher(ev);
 		dispatcher.Dispatch<WindowCloseEvent>(CK_BIND_EVENT_FN(Application::onWindowClose));
 		dispatcher.Dispatch<WindowResizeEvent>(CK_BIND_EVENT_FN(Application::onWindowResize));
 		//CK_CORE_TRACE("{0}", event);
 
 		for (auto it = m_LayerStack.rbegin(); it != m_LayerStack.rend(); ++it) {
 		
-			if (event.m_Handled)
+			if (ev.m_Handled)
 				break;
-			(*it)->onEvent(event);
+			(*it)->onEvent(ev);
 		}
 
 	}
@@ -95,14 +95,14 @@ namespace Cherenkov {
 		}
 	}
 
-	bool Application::onWindowResize(WindowResizeEvent &ev) {
+	bool Application::onWindowResize(WindowResizeEvent& ev) {
 		if (ev.getWidth() == 0 || ev.getHeight() == 0) m_Minimized = true;
 		else m_Minimized = false;
 		Renderer::onWindowResize(ev.getWidth(), ev.getHeight());
 		return false;
 	}
 
-	bool Application::onWindowClose(WindowCloseEvent &ev) {
+	bool Application::onWindowClose(WindowCloseEvent& ev) {
 		m_Running = false;
 		return true;
 	}

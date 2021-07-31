@@ -15,6 +15,8 @@ namespace Cherenkov {
 		glm::vec3							m_SqPos{ 0.0f, 0.0f, 0.0f };
 		Ref<VertexArray>					m_VertexArray;
 
+		bool								m_VpFocused = false;
+		bool								m_VpHovered = false;
 		glm::vec2							m_VpSize;
 
 		struct ProfileResult {

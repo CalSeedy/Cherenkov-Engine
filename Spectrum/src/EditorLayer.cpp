@@ -10,7 +10,7 @@ namespace Cherenkov {
 
 	void EditorLayer::onUpdate(Timestep dt) {
 		CK_PROFILE_FUNCTION();
-		m_CameraController.onUpdate(dt);
+		if (m_VpFocused) m_CameraController.onUpdate(dt);
 		Renderer2D::resetStats();
 		{
 			CK_PROFILE_SCOPE("Render Clear");
@@ -101,6 +101,9 @@ namespace Cherenkov {
 		}
 		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2{ 0, 0 });
 		ImGui::Begin("Viewport");
+		m_VpFocused = ImGui::IsWindowFocused();
+		m_VpHovered = ImGui::IsWindowHovered();
+		Application::get().getImGuiLayer()->blockingEvents(!m_VpFocused || !m_VpHovered);
 		ImVec2 vpSize = ImGui::GetContentRegionAvail();
 		if ((vpSize.x != m_VpSize.x) || (vpSize.y != m_VpSize.y)) { 
 			m_Framebuffer->resize((uint32_t)vpSize.x, (uint32_t)vpSize.y);

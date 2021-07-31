@@ -39,6 +39,7 @@ namespace Cherenkov {
 		void pushOverlay(Layer* overlay);
 
 		static Application& get() { return *s_Instance; }
+		ImGuiLayer* getImGuiLayer() { return m_ImGuiLayer; }
 		Window& getWindow() { return *m_Window; }
 
 		void close();

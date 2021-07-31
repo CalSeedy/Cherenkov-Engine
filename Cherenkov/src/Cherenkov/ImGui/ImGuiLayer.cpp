@@ -51,9 +51,11 @@ namespace Cherenkov {
 	}
 
 	void ImGuiLayer::onEvent(Event& e)	{
-		ImGuiIO& io = ImGui::GetIO();
-		e.m_Handled |= e.inCategory(EventCategoryMouse) & io.WantCaptureMouse;
-		e.m_Handled |= e.inCategory(EventCategoryKeyBoard) & io.WantCaptureKeyboard;
+		if (m_Blocking) {
+			ImGuiIO& io = ImGui::GetIO();
+			e.m_Handled |= e.inCategory(EventCategoryMouse) & io.WantCaptureMouse;
+			e.m_Handled |= e.inCategory(EventCategoryKeyBoard) & io.WantCaptureKeyboard;
+		}
 	}
 
 	void ImGuiLayer::start() {
