@@ -7,22 +7,12 @@
 namespace Cherenkov {
 	
 	class Input {
-		static Scope<Input> s_Instance;
 	public:
-		static bool isKeyPressed(KeyCode keyCode) { return s_Instance->isKeyPressedImp(keyCode); }
-	
-		static bool isMouseButtonPressed(MouseCode button) { return s_Instance->isMouseButtonPressedImp(button); }
-		static float getMouseY() { return s_Instance->getMouseYImp(); }
-		static float getMouseX() { return s_Instance->getMouseXImp(); }
-		static std::pair<float, float> getMousePos() { return s_Instance->getMousePosImp(); }
+		static bool isKeyPressed(KeyCode keyCode);
 
-		static Scope<Input> Create();
-
-	protected:
-		virtual bool isKeyPressedImp(KeyCode keyCode) = 0;
-		virtual bool isMouseButtonPressedImp(MouseCode button) = 0;
-		virtual float getMouseYImp() = 0;
-		virtual float getMouseXImp() = 0;
-		virtual std::pair<float, float> getMousePosImp() = 0;
+		static bool isMouseButtonPressed(MouseCode button);
+		static float getMouseY();
+		static float getMouseX();
+		static std::pair<float, float> getMousePos();
 	};
 }
