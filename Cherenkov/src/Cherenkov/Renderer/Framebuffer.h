@@ -12,6 +12,7 @@ namespace Cherenkov {
 	class Framebuffer {
 	public:
 		static Ref<Framebuffer> init(const Specification spec);
+		virtual ~Framebuffer() = default;
 
 		virtual const Specification& getSpecification() const = 0;
 		virtual const uint32_t& getColourAttachment() const = 0;

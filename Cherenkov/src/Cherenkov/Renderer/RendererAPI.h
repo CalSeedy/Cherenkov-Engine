@@ -6,6 +6,7 @@
 namespace Cherenkov {
 	class RendererAPI {
 	public:
+		virtual ~RendererAPI() = default;
 		enum class API {
 			None = 0, OpenGL = 1
 		};
@@ -16,6 +17,7 @@ namespace Cherenkov {
 
 		static API getAPI() { return s_API; }
 		static Scope<RendererAPI> Create();
+
 	private:
 		static API s_API;
 	};

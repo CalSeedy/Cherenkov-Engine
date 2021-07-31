@@ -32,6 +32,7 @@ namespace Cherenkov {
 
 	class Event {
 	public:
+		virtual ~Event() = default;
 		virtual EventType getEventType() const = 0;
 		virtual const char* getEventName() const = 0;
 		virtual int getCategoryFlags() const = 0;
