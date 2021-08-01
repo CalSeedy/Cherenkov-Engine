@@ -44,12 +44,8 @@ namespace Cherenkov {
 	};
 
 	class EventDispatcher {
-
-		template<typename T>
-		using EventFn = std::function<bool(T&)>;
 		Event& m_Event;
 	public:
-
 		EventDispatcher(Event& event) : m_Event(event) {}
 
 		template<typename T, typename F>

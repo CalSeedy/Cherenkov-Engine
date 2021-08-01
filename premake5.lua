@@ -81,6 +81,7 @@ project "Cherenkov"
 
 		defines
 		{
+			"CK_PLATFORM_WINDOWS"
 		}
 
 	filter "configurations:Debug"

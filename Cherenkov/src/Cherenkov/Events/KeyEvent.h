@@ -18,7 +18,7 @@ namespace Cherenkov {
 	};
 
 	class KeyPressedEvent : public KeyEvent {
-	
+		int m_Repeats;
 	public:
 		KeyPressedEvent(KeyCode code, int repeats) 
 			: KeyEvent(code), m_Repeats(repeats) {}
@@ -32,8 +32,6 @@ namespace Cherenkov {
 		}
 
 		EVENT_CLASS_TYPE(KeyPressed)
-	private:
-		int m_Repeats;
 	};
 
 	class KeyReleasedEvent : public KeyEvent {

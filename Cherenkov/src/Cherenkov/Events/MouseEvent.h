@@ -7,7 +7,7 @@ namespace Cherenkov {
 
 	//Mouse Movement Events
 	class MouseMovedEvent : public Event {
-
+		float m_X, m_Y;
 	public:
 		MouseMovedEvent(float x, float y) : m_X(x), m_Y(y) {}
 
@@ -21,15 +21,13 @@ namespace Cherenkov {
 		}
 
 		EVENT_CLASS_CATEGORY(EventCategoryMouse | EventCategoryInput)
-		EVENT_CLASS_TYPE(MouseMoved)
-	private:
-		float m_X, m_Y;
+		EVENT_CLASS_TYPE(MouseMoved)		
 	};
 
 
 	//Mouse Scroll Events
 	class MouseScrollEvent : public Event {
-
+		float m_XOff, m_YOff;
 	public:
 		MouseScrollEvent(float xOff, float yOff) : m_XOff(xOff), m_YOff(yOff) {}
 
@@ -43,10 +41,7 @@ namespace Cherenkov {
 		}
 
 		EVENT_CLASS_CATEGORY(EventCategoryMouse | EventCategoryInput)
-		EVENT_CLASS_TYPE(MouseScrolled)
-
-	private:
-		float m_XOff, m_YOff;
+		EVENT_CLASS_TYPE(MouseScrolled)		
 	};
 
 
