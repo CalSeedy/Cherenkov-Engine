@@ -3,17 +3,23 @@
 #include "Cherenkov/Renderer/Texture.h"
 
 namespace Cherenkov {
-
 	struct QuadProperties {
-		union Pos {
-			struct {
-				float_t x, y, z;
+		struct Pos {
+			union {
+				struct {
+					float_t x, y, z;
+				};
+				glm::vec3 position;
 			};
+
 			Pos() { x = 0.0f; y = 0.0f; z = 0.0f; }
-			Pos(const glm::vec2& pos) { x = pos.x; y = pos.y; z = 0.0f; }
-			Pos(const glm::vec3& pos) { x = pos.x; y = pos.y; z = pos.z; }
+			Pos(const glm::vec2& pos) { x = pos.x; y = pos.y; z = 0.0f; position = { pos.x, pos.y, 0.0f }; }
+			Pos(const glm::vec3& pos) { x = pos.x; y = pos.y; z = pos.z; position = pos; }
 			Pos(float_t _x, float_t _y) { x = _x; y = _y; z = 0.0f; }
 			Pos(float_t _x, float_t _y, float_t _z) { x = _x; y = _y; z = _z; }
+
+			operator glm::vec3& () { return position; }
+			operator const glm::vec3& () const { return position; }
 		} Position = {};
 		glm::vec4 Colour = { 1.0f, 1.0f, 1.0f, 1.0f };
 		float_t Angle = 0.0f;
