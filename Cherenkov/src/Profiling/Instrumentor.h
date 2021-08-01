@@ -182,7 +182,9 @@ namespace Cherenkov {
 
 	#define CK_PROFILE_BEGIN(name, filepath) ::Cherenkov::Instrumentor::get().begin(name, filepath)
 	#define CK_PROFILE_END() ::Cherenkov::Instrumentor::get().end()
-	#define CK_PROFILE_SCOPE(name) constexpr auto fixedName = ::Cherenkov::InstrumentorUtils::cleanupOutput(name, "__cdecl "); ::Cherenkov::Timer timer##__LINE__(fixedName.Data)
+	#define CK_PROFILE_SCOPE_LINE2(name, line) constexpr auto fixedName##line = ::Cherenkov::InstrumentorUtils::cleanupOutput(name, "__cdecl "); ::Cherenkov::Timer timer##line(fixedName##line.Data)
+	#define CK_PROFILE_SCOPE_LINE(name, line) CK_PROFILE_SCOPE_LINE2(name, line)
+	#define CK_PROFILE_SCOPE(name) CK_PROFILE_SCOPE_LINE(name, __LINE__)
 	#define CK_PROFILE_FUNCTION() CK_PROFILE_SCOPE(CK_FUNC_SIG)
 #else
 	#define CK_PROFILE_BEGIN(name, filepath)
