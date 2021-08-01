@@ -22,6 +22,7 @@ IncludeDir["Glad"] = "Cherenkov/vendor/Glad/include"
 IncludeDir["ImGui"] = "Cherenkov/vendor/imgui"
 IncludeDir["glm"] = "Cherenkov/vendor/glm"
 IncludeDir["stb"] = "Cherenkov/vendor/stb"
+IncludeDir["EnTT"] = "Cherenkov/vendor/EnTT/single_include"
 
 group  "Dependencies"
 include "Cherenkov/vendor/GLFW"
@@ -48,7 +49,8 @@ project "Cherenkov"
 		"%{prj.name}/src/**.cpp",
 		"%{prj.name}/vendor/glm/glm/**.hpp",
 		"%{prj.name}/vendor/glm/glm/**.inl",
-		"%{prj.name}/vendor/stb/**.h"
+		"%{prj.name}/vendor/stb/**.h",
+		"%{prj.name}/vendor/EnTT/single_include/entt/entt.h"
 	}
 
 	defines
@@ -65,7 +67,8 @@ project "Cherenkov"
 		"%{IncludeDir.Glad}",
 		"%{IncludeDir.ImGui}",
 		"%{IncludeDir.glm}",
-		"%{IncludeDir.stb}"
+		"%{IncludeDir.stb}",
+		"%{IncludeDir.EnTT}"
 	}
 
 	links
@@ -161,7 +164,8 @@ project "Spectrum"
 	files
 	{
 		"%{prj.name}/src/**.h",
-		"%{prj.name}/src/**.cpp"
+		"%{prj.name}/src/**.cpp",
+		"%{prj.name}/vendor/EnTT/single_include/entt/entt.h"
 	}
 
 	includedirs
@@ -170,7 +174,8 @@ project "Spectrum"
 		"Cherenkov/src",
 		"Cherenkov/vendor",
 		"%{IncludeDir.glm}",
-		"%{IncludeDir.stb}"
+		"%{IncludeDir.stb}",
+		"%{IncludeDir.EnTT}"
 	}
 
 	links

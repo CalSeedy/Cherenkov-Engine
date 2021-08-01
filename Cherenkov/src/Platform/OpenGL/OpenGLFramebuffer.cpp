@@ -4,7 +4,7 @@
 #include <glad/glad.h>
 
 namespace Cherenkov {
-	OpenGLFramebuffer::OpenGLFramebuffer(const Specification& spec) : m_Specification{ spec } {
+	OpenGLFramebuffer::OpenGLFramebuffer(const FbSpecification& spec) : m_Specification{ spec } {
 		recreate();
 	}
 

@@ -3,7 +3,7 @@
 
 namespace Cherenkov {
 
-	struct Specification {
+	struct FbSpecification {
 		uint32_t Width, Height, Samples = 1;
 		
 		bool swapChainTarget = false;
@@ -11,10 +11,10 @@ namespace Cherenkov {
 
 	class Framebuffer {
 	public:
-		static Ref<Framebuffer> init(const Specification spec);
+		static Ref<Framebuffer> init(const FbSpecification spec);
 		virtual ~Framebuffer() = default;
 
-		virtual const Specification& getSpecification() const = 0;
+		virtual const FbSpecification& getSpecification() const = 0;
 		virtual const uint32_t& getColourAttachment() const = 0;
 
 		virtual void bind() = 0;

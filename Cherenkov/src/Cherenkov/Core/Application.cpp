@@ -8,7 +8,9 @@
 #include "Cherenkov/Core/Input.h"
 
 #include <GLFW/glfw3.h>
- 
+// testing whether EnTT was added successfully
+#include <entt/entt.hpp>
+
 namespace Cherenkov {
 	
 	Application* Application::s_Instance = nullptr;

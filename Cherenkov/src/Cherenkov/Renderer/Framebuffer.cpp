@@ -5,7 +5,7 @@
 #include "Platform/OpenGL/OpenGLFramebuffer.h"
 
 namespace Cherenkov {
-    Ref<Framebuffer> Framebuffer::init(const Specification spec) {
+    Ref<Framebuffer> Framebuffer::init(const FbSpecification spec) {
 		switch (Renderer::getAPI()){
 		case RendererAPI::API::None:	CK_CORE_ASSERT(false, "RendererAPI::None not supported!"); return nullptr;
 		case RendererAPI::API::OpenGL:	return CreateRef<OpenGLFramebuffer>(spec);

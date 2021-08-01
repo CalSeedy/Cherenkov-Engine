@@ -3,6 +3,9 @@
 
 #include "EditorLayer.h"
 
+// testing whether EnTT was added successfully
+#include <entt/entt.hpp>
+
 namespace Cherenkov {
 	class Editor : public Application {
 	public:

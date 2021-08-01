@@ -11,7 +11,7 @@ namespace Cherenkov {
 	void EditorLayer::onUpdate(Timestep dt) {
 		CK_PROFILE_FUNCTION();
 
-		if (Cherenkov::Specification spec = m_Framebuffer->getSpecification(); m_VpSize.x > 0.0f && m_VpSize.y > 0.0f && (spec.Width != m_VpSize.x || spec.Height != m_VpSize.y)) {
+		if (FbSpecification spec = m_Framebuffer->getSpecification(); m_VpSize.x > 0.0f && m_VpSize.y > 0.0f && (spec.Width != m_VpSize.x || spec.Height != m_VpSize.y)) {
 			m_Framebuffer->resize((uint32_t)m_VpSize.x, (uint32_t)m_VpSize.y);
 			m_CameraController.resize(m_VpSize.x, m_VpSize.y);
 		}
@@ -52,7 +52,7 @@ namespace Cherenkov {
 			for (float x = -5.0; x < 5.0f; x += 0.5f) {
 				for (float y = -5.0; y < 5.0f; y += 0.5f) {
 					p.Colour = { (x + 5.0f) / 5.0f, (y + 5.0f) / 5.0f, 0.4f, 1.0f };
-					p.Position = { x + 0.225f, y + 0.225f, 0.1 };
+					p.Position = { x + 0.225f, y + 0.225f, 0.1f };
 					Renderer2D::Quad({ 0.45f, 0.45f }, p);
 				}
 			}
@@ -150,7 +150,7 @@ namespace Cherenkov {
 		CK_PROFILE_FUNCTION();
 		m_Texture = Texture2D::init("assets/Textures/checkerboardSq.png");
 
-		Specification defaultSpec;
+		FbSpecification defaultSpec;
 		auto& window = Application::get().getWindow();
 		defaultSpec.Width = window.getWidth();
 		defaultSpec.Height = window.getHeight();
