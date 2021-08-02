@@ -27,6 +27,9 @@ namespace Cherenkov {
 		std::ofstream m_Output;
 		InstSession* m_Session;
 
+		Instrumentor() : m_Session{ nullptr } {}
+		~Instrumentor() { end(); }
+
 		void writeHeader() {
 			m_Output << "{\"other\":{},\"traceEvents\": [{}";
 			m_Output.flush();
@@ -47,7 +50,8 @@ namespace Cherenkov {
 		}
 
 	public:
-		Instrumentor() : m_Session{ nullptr } {}
+		Instrumentor(const Instrumentor&) = delete;
+		Instrumentor(Instrumentor&&) = delete;
 
 		void begin(const std::string& name, const std::string& filepath = "results.json") {
 

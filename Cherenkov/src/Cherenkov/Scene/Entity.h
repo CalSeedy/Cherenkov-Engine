@@ -6,7 +6,7 @@
 namespace Cherenkov { 
 
 	class Entity {
-		entt::entity m_EntityID{ 0 };
+		entt::entity m_EntityID{ entt::null };
 		Scene* m_Scene = nullptr;
 	public:
 		Entity() = default;
@@ -38,7 +38,7 @@ namespace Cherenkov {
 			return m_Scene->m_Registry.remove<T>(m_EntityID);
 		}
 
-		operator bool() const { return (uint32_t)m_EntityID != 0; }
+		operator bool() const { return m_EntityID != entt::null; }
 	};
 
 }
