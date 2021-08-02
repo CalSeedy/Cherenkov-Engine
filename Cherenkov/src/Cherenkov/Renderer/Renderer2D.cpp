@@ -149,11 +149,35 @@ namespace Cherenkov {
 		Quad(scale, s_Storage.Blank, properties);
 	}
 
-	// all other Quads call this with default values
 	void Renderer2D::Quad(const glm::vec2& scale, const Ref<Texture2D>& texture, const QuadProperties& properties) {
 		CK_PROFILE_FUNCTION();
-		constexpr glm::vec2 quadDefaultTexCoords[] = { { 0.0f, 0.0f }, { 1.0f, 0.0f }, { 1.0f, 1.0f }, { 0.0f, 1.0f }};
+		
+		glm::mat4 transform = glm::mat4(1.0f);
+		//	Translation
+		if ((properties.Position.x != 0.0f) || (properties.Position.y != 0.0f) || (properties.Position.z != 0.0f)) {
+			transform *= glm::translate(glm::mat4(1.0f), { properties.Position.x, properties.Position.y, properties.Position.z });
+		}
+		//	Rotation
+		if (properties.Angle != 0.0f) {
+			transform *= glm::rotate(glm::mat4(1.0f), properties.Angle, { 0.0f, 0.0f,1.0f });
+		}
+		//	Scale
+		if ((scale.x != 1.0f) || (scale.y != 1.0f)) {
+			transform *= glm::scale(glm::mat4(1.0f), { scale.x, scale.y, 1.0f });
+		}
+
+		Quad(transform, texture, properties.Colour, properties.TileFactor);
+	}
+
+	void Renderer2D::Quad(const glm::mat4& transform, glm::vec4 colour) {
+		Quad(transform, s_Storage.Blank, colour);
+	}
+
+	// all other Quads eventually call this
+	void Renderer2D::Quad(const glm::mat4& transform, const Ref<Texture2D>& texture, glm::vec4 colour, float_t tileFactor) {
+		CK_PROFILE_FUNCTION();
 		if (s_Storage.quadIndices >= Storage::maxIndices) flushAndReset();
+		constexpr glm::vec2 quadDefaultTexCoords[] = { { 0.0f, 0.0f }, { 1.0f, 0.0f }, { 1.0f, 1.0f }, { 0.0f, 1.0f } };
 
 		float textureIndex = 0.0f;
 		for (uint32_t i = 1; i < s_Storage.textureSlotIdx; i++) {
@@ -172,26 +196,12 @@ namespace Cherenkov {
 			s_Storage.textureSlotIdx++;
 		}
 
-		glm::mat4 transform = glm::mat4(1.0f);
-		//	Translation
-		if ((properties.Position.x != 0.0f) || (properties.Position.y != 0.0f) || (properties.Position.z != 0.0f)) {
-			transform *= glm::translate(glm::mat4(1.0f), { properties.Position.x, properties.Position.y, properties.Position.z });
-		}
-		//	Rotation
-		if (properties.Angle != 0.0f) {
-			transform *= glm::rotate(glm::mat4(1.0f), properties.Angle, { 0.0f, 0.0f,1.0f });
-		}
-		//	Scale
-		if ((scale.x != 1.0f) || (scale.y != 1.0f)) {
-			transform *= glm::scale(glm::mat4(1.0f), { scale.x, scale.y, 1.0f });
-		}
-
 		for (int i = 0; i < 4; i++) {
 			s_Storage.quadVertBufferPtr->Position = transform * s_Storage.quadVertexPositions[i];
-			s_Storage.quadVertBufferPtr->Colour = properties.Colour;
+			s_Storage.quadVertBufferPtr->Colour = colour;
 			s_Storage.quadVertBufferPtr->TextureCoord = quadDefaultTexCoords[i];
 			s_Storage.quadVertBufferPtr->TextureIdx = textureIndex;
-			s_Storage.quadVertBufferPtr->TilingFactor = properties.TileFactor;
+			s_Storage.quadVertBufferPtr->TilingFactor = tileFactor;
 			s_Storage.quadVertBufferPtr++;
 		}
 

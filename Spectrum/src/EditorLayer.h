@@ -1,10 +1,9 @@
 #pragma once
 #include <Cherenkov.h>
 
-#include "imgui/imgui.h"
-
 namespace Cherenkov {
 	class EditorLayer : public Layer {
+		Ref<Scene>							m_ActiveScene;
 		OrthographicCameraController		m_CameraController;
 
 		Ref<Framebuffer>					m_Framebuffer;
@@ -12,6 +11,7 @@ namespace Cherenkov {
 		Ref<Texture2D>						m_Texture;
 
 		glm::vec4							m_ObjColour{ 0.906f, 0.227f, 0.137f, 1.0f };
+		Entity								m_Square;
 		glm::vec3							m_SqPos{ 0.0f, 0.0f, 0.0f };
 		Ref<VertexArray>					m_VertexArray;
 

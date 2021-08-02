@@ -1,12 +1,31 @@
 #include "EditorLayer.h"
+#include <imgui/imgui.h>
+#include <imgui/imgui_internal.h>
 
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 #include <stdio.h>
-#include "imgui/imgui_internal.h"
 
 namespace Cherenkov {
 	EditorLayer::EditorLayer() : Layer("EditorLayer"), m_CameraController{ 1920.0f / 1080.0f } {}
+
+	void EditorLayer::onAttach() {
+		CK_PROFILE_FUNCTION();
+		m_Texture = Texture2D::init("assets/Textures/checkerboardSq.png");
+
+		FbSpecification defaultSpec;
+		auto& window = Application::get().getWindow();
+		defaultSpec.Width = window.getWidth();
+		defaultSpec.Height = window.getHeight();
+		m_Framebuffer = Framebuffer::init(defaultSpec);
+
+		m_ActiveScene = CreateRef<Scene>();
+		auto square = m_ActiveScene->createEntity();
+		square.add<SpriteComp>(1.0f, 1.0f, 0.0f, 1.0f);
+		m_Square = square;
+	}
+
+	void EditorLayer::onDetach() {}
 
 	void EditorLayer::onUpdate(Timestep dt) {
 		CK_PROFILE_FUNCTION();
@@ -17,46 +36,19 @@ namespace Cherenkov {
 		}
 
 		if (m_VpFocused) m_CameraController.onUpdate(dt);
+		
 		Renderer2D::resetStats();
 		{
 			CK_PROFILE_SCOPE("Render Clear");
 			m_Framebuffer->bind();
 			RenderCommand::clear({ 1.0f, 0.0f, 1.0f, 1.0f });
 		}
-		QuadProperties q1, q2, q3;
-		q1.Position = m_SqPos;
-		q1.Colour = m_ObjColour;
-		q1.Angle = 30.0f;
-
-		q2.Position = { 0.0f, 0.0f, -0.1f };
-		q2.TileFactor = 4.0f;
-
-		q3.Colour = { 1.0f, 0.2f, 0.2f, 1.0f };
-		q3.TileFactor = 5.0f;
-
+		
 		{
 			CK_PROFILE_SCOPE("Draw Scene");
 
 			Renderer2D::beginScene(m_CameraController.getCamera());
-
-			Renderer2D::Quad({ 2.0f, 2.0f }, q1);
-
-			Renderer2D::Quad({ 10.0f, 10.0f }, m_Texture, q2);
-			Renderer2D::Quad({ 6.0f, 6.0f }, m_Texture, q3);
-
-			Renderer2D::endScene();
-
-			QuadProperties p;
-			Renderer2D::beginScene(m_CameraController.getCamera());
-			float sqSize = 0.45f;
-			for (float x = -5.0; x < 5.0f; x += 0.5f) {
-				for (float y = -5.0; y < 5.0f; y += 0.5f) {
-					p.Colour = { (x + 5.0f) / 5.0f, (y + 5.0f) / 5.0f, 0.4f, 1.0f };
-					p.Position = { x + 0.225f, y + 0.225f, 0.1f };
-					Renderer2D::Quad({ 0.45f, 0.45f }, p);
-				}
-			}
-
+			m_ActiveScene->onUpdate(dt);
 			Renderer2D::endScene();
 			m_Framebuffer->unbind();
 		}
@@ -123,9 +115,14 @@ namespace Cherenkov {
 		ImGui::End();
 		ImGui::PopStyleVar();
 
-		ImGui::Begin("Settings");
-		ImGui::ColorPicker4("Sq. Colour", glm::value_ptr(m_ObjColour));
-		ImGui::DragFloat3("Sq. Position", glm::value_ptr(m_SqPos), 0.01f);
+		ImGui::Begin("Properties");
+		ImGui::Separator();
+		auto& [squareColour, squarePos, squareTag] = m_Square.get<SpriteComp, TransformComp, NameComp>();
+		glm::vec4& x = m_Square.get<SpriteComp>().Colour;
+		ImGui::Text(squareTag.Name.c_str());
+		ImGui::ColorEdit4("Sq. Colour", glm::value_ptr(squareColour.Colour));
+		ImGui::DragFloat3("Sq. Position", glm::value_ptr(squarePos.Transform[3]), 0.01f);
+		ImGui::Separator();
 		ImGui::End();
 
 
@@ -146,18 +143,4 @@ namespace Cherenkov {
 		m_CameraController.onEvent(ev);
 	}
 
-	void EditorLayer::onAttach() {
-		CK_PROFILE_FUNCTION();
-		m_Texture = Texture2D::init("assets/Textures/checkerboardSq.png");
-
-		FbSpecification defaultSpec;
-		auto& window = Application::get().getWindow();
-		defaultSpec.Width = window.getWidth();
-		defaultSpec.Height = window.getHeight();
-		m_Framebuffer = Framebuffer::init(defaultSpec);
-	}
-
-	void EditorLayer::onDetach() {
-
-	}
 }

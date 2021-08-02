@@ -38,6 +38,8 @@ namespace Cherenkov {
 
 		static void Quad(const glm::vec2& scale, const QuadProperties& properties = QuadProperties());
 		static void Quad(const glm::vec2& scale, const Ref<Texture2D>& texture, const QuadProperties& properties = QuadProperties());
+		static void Quad(const glm::mat4& transform, glm::vec4 colour);
+		static void Quad(const glm::mat4& transform, const Ref<Texture2D>& texture, glm::vec4 colour = { 1.0f, 1.0f, 1.0f, 1.0f }, float_t tileFactor = 1.0f);
 
 		struct Statistics {
 			uint32_t draws = 0;

@@ -125,7 +125,8 @@ project "Sandbox"
 		"Cherenkov/src",
 		"Cherenkov/vendor",
 		"%{IncludeDir.glm}",
-		"%{IncludeDir.stb}"
+		"%{IncludeDir.stb}",
+		"%{IncludeDir.EnTT}"
 	}
 
 	links
