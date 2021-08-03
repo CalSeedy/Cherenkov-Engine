@@ -47,4 +47,29 @@ namespace Cherenkov {
 		CameraComp(const CameraComp&) = default;
 	};
 
+
+	enum class ScriptLanguage {
+		Native,
+		Cpp,
+		Python
+	};
+
+	struct ScriptComp {
+		ScriptLanguage Language;
+		ScriptableEntity* Instance = nullptr;
+
+		ScriptableEntity*(*instantiateScript)();
+		void (*destroyScript)(ScriptComp*);
+
+		ScriptComp() = default;
+		ScriptComp(ScriptLanguage lang = ScriptLanguage::Native) : Language{ lang } {}
+
+		template<typename T>
+		void bind() {
+			instantiateScript = []() { return static_cast<ScriptableEntity*>(new T()); };
+			destroyScript = [](ScriptComp* script) { delete script->Instance; };
+		}
+	};
+
+
 }

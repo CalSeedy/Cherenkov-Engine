@@ -43,4 +43,21 @@ namespace Cherenkov {
 		bool operator==(const Entity& other) { return m_EntityID == other.m_EntityID; }
 		const bool operator==(const Entity& other) const { return m_EntityID == other.m_EntityID; }
 	};
+
+	class ScriptableEntity {
+		Entity m_Entity;
+		friend class Scene;
+	protected:
+		virtual void onCreate() {}
+		virtual void onUpdate(Timestep dt) {}
+		virtual void onDestroy() {}
+
+	public:
+		virtual ~ScriptableEntity() = default;
+
+		template<typename... Ts>
+		decltype(auto) get() {
+			return m_Entity.get<Ts ...>();
+		}
+	};
 }

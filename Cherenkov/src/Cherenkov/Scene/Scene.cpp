@@ -27,6 +27,21 @@ namespace Cherenkov {
 	}
 
 	void Scene::onUpdate(Timestep dt) {
+
+		{
+			m_Registry.view<ScriptComp>().each([=](auto entity, auto& script) {
+				if (!script.Instance) {
+					script.Instance = script.instantiateScript();
+					script.Instance->m_Entity = Entity{ entity, this };
+					script.Instance->onCreate();
+				}
+
+				script.Instance->onUpdate(dt);
+			});
+		}
+
+
+
 		Camera* primaryCam = nullptr;
 		glm::mat4* primaryTransform = nullptr;
 		auto group = m_Registry.group<CameraComp>(entt::get<TransformComp>);

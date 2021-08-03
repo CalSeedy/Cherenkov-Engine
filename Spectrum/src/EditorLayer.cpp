@@ -31,6 +31,40 @@ namespace Cherenkov {
 		auto cam2 = m_ActiveScene->createEntity("Camera 2");
 		cam2.add<CameraComp>();
 		m_CameraOther = cam2;
+
+		class Test : public ScriptableEntity {
+		public:
+			void onCreate() {
+			}
+
+			void onDestroy() {
+			
+			}
+
+			void onUpdate(Timestep dt) {
+				float speed = 5.0f;
+				auto& [transform, camera] = get<TransformComp, CameraComp>();
+
+				if (Input::isKeyPressed(KeyCode::W)) {
+					transform.Transform[3].y += speed * dt;
+				}
+				else if (Input::isKeyPressed(KeyCode::S)) {
+					transform.Transform[3].y -= speed * dt;
+				}
+				if (Input::isKeyPressed(KeyCode::A)) {
+					transform.Transform[3].x -= speed * dt;
+				}
+				else if (Input::isKeyPressed(KeyCode::D)) {
+					transform.Transform[3].x += speed * dt;
+				}
+			}
+
+		};
+
+
+		m_CameraFirst.add<ScriptComp>(ScriptLanguage::Native).bind<Test>();
+		m_CameraOther.add<ScriptComp>(ScriptLanguage::Native).bind<Test>();
+
 	}
 
 	void EditorLayer::onDetach() {}
@@ -163,7 +197,7 @@ namespace Cherenkov {
 		auto& pos = primary.get<TransformComp>().Transform[3];
 		float orthoSize = cam.getOrthographicSize();
 		ImGui::Text(tag.c_str());
-		if (ImGui::DragFloat("Orthographic Size", &orthoSize)) cam.setOrthographicSize(orthoSize);
+		if (ImGui::DragFloat("Orthographic Size", &orthoSize)) { cam.setOrthographicSize(orthoSize); }
 		ImGui::DragFloat3("Camera Position", glm::value_ptr(pos));
 		ImGui::Separator();
 

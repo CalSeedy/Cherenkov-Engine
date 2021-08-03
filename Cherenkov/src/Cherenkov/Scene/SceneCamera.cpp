@@ -29,7 +29,7 @@ namespace Cherenkov {
 	}
 
 	void SceneCamera::setViewport(uint32_t width, uint32_t height) {
-		float m_AspectRatio = (float)width / (float)height;
+		m_AspectRatio = (float)width / (float)height;
 		recalculate();
 	}
 
