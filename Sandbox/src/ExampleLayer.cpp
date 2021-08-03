@@ -51,19 +51,20 @@ void ExampleLayer::onUpdate(Cherenkov::Timestep dt) {
 
 		m_CameraController.onUpdate(dt);
 		/* --------------- Object Transform ---------------*/
-		if (Cherenkov::Input::isKeyPressed(CK_KEY_U))
+		
+		if (Cherenkov::Input::isKeyPressed(Cherenkov::Key::U))
 			m_ObjAngle += m_RotSpeed * dt;
 
-		else if (Cherenkov::Input::isKeyPressed(CK_KEY_O))
+		else if (Cherenkov::Input::isKeyPressed(Cherenkov::Key::O))
 			m_ObjAngle -= m_RotSpeed * dt;
 
 
-		if (Cherenkov::Input::isKeyPressed(CK_KEY_PAGE_UP))
+		if (Cherenkov::Input::isKeyPressed(Cherenkov::Key::Up))
 			m_ObjScale += 1.0f * dt;
 
-		else if (Cherenkov::Input::isKeyPressed(CK_KEY_PAGE_DOWN))
+		else if (Cherenkov::Input::isKeyPressed(Cherenkov::Key::Down))
 			m_ObjScale -= 1.0f * dt;
-
+		
 		Cherenkov::RenderCommand::clear({ 1.0f, 0.0f, 1.0f, 1.0f });
 
 		Cherenkov::Renderer::beginScene(m_CameraController.getCamera());
