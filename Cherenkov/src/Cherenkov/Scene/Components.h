@@ -1,6 +1,7 @@
 #pragma once
 
 #include <glm/glm.hpp>
+#include "Cherenkov/Scene/SceneCamera.h"
 
 namespace Cherenkov {
 
@@ -35,6 +36,15 @@ namespace Cherenkov {
 		NameComp(const std::string& name) : Name{ name } {}
 
 		operator const char* () { return Name.c_str(); }
+	};
+
+	struct CameraComp {
+
+		Cherenkov::SceneCamera Camera;
+		bool fixedAspectRatio = false;
+
+		CameraComp() = default;
+		CameraComp(const CameraComp&) = default;
 	};
 
 }

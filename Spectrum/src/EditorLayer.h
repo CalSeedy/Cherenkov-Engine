@@ -4,6 +4,8 @@
 namespace Cherenkov {
 	class EditorLayer : public Layer {
 		Ref<Scene>							m_ActiveScene;
+		Entity								m_CameraFirst;
+		Entity								m_CameraOther;
 		OrthographicCameraController		m_CameraController;
 
 		Ref<Framebuffer>					m_Framebuffer;

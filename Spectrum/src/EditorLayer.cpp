@@ -6,6 +6,8 @@
 #include <glm/gtc/type_ptr.hpp>
 #include <stdio.h>
 
+bool switched = false;
+
 namespace Cherenkov {
 	EditorLayer::EditorLayer() : Layer("EditorLayer"), m_CameraController{ 1920.0f / 1080.0f } {}
 
@@ -20,9 +22,15 @@ namespace Cherenkov {
 		m_Framebuffer = Framebuffer::init(defaultSpec);
 
 		m_ActiveScene = CreateRef<Scene>();
-		auto square = m_ActiveScene->createEntity();
-		square.add<SpriteComp>(1.0f, 1.0f, 0.0f, 1.0f);
+		auto square = m_ActiveScene->createEntity("Square");
+		square.add<SpriteComp>( 1.0f, 1.0f, 0.0f, 1.0f );
 		m_Square = square;
+
+		m_CameraFirst = m_ActiveScene->getPrimary();
+
+		auto cam2 = m_ActiveScene->createEntity("Camera 2");
+		cam2.add<CameraComp>();
+		m_CameraOther = cam2;
 	}
 
 	void EditorLayer::onDetach() {}
@@ -33,6 +41,7 @@ namespace Cherenkov {
 		if (FbSpecification spec = m_Framebuffer->getSpecification(); m_VpSize.x > 0.0f && m_VpSize.y > 0.0f && (spec.Width != m_VpSize.x || spec.Height != m_VpSize.y)) {
 			m_Framebuffer->resize((uint32_t)m_VpSize.x, (uint32_t)m_VpSize.y);
 			m_CameraController.resize(m_VpSize.x, m_VpSize.y);
+			m_ActiveScene->onViewportResize((uint32_t)m_VpSize.x, (uint32_t)m_VpSize.y);
 		}
 
 		if (m_VpFocused) m_CameraController.onUpdate(dt);
@@ -47,9 +56,8 @@ namespace Cherenkov {
 		{
 			CK_PROFILE_SCOPE("Draw Scene");
 
-			Renderer2D::beginScene(m_CameraController.getCamera());
 			m_ActiveScene->onUpdate(dt);
-			Renderer2D::endScene();
+
 			m_Framebuffer->unbind();
 		}
 	}
@@ -100,7 +108,7 @@ namespace Cherenkov {
 
 		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2{ 0, 0 });
 		ImGuiWindowClass window_class;
-		window_class.DockNodeFlagsOverrideSet = ImGuiDockNodeFlags_NoTabBar;
+		window_class.DockNodeFlagsOverrideSet = ImGuiDockNodeFlags_AutoHideTabBar;
 		ImGui::SetNextWindowClass(&window_class);
 		ImGui::Begin("Viewport");
 
@@ -123,6 +131,42 @@ namespace Cherenkov {
 		ImGui::ColorEdit4("Sq. Colour", glm::value_ptr(squareColour.Colour));
 		ImGui::DragFloat3("Sq. Position", glm::value_ptr(squarePos.Transform[3]), 0.01f);
 		ImGui::Separator();
+
+		static int current = 0;
+		auto& first = m_CameraFirst.get<NameComp>();
+		auto& other = m_CameraOther.get<NameComp>();
+		const char* items[] = {first.Name.c_str(), other.Name.c_str() };
+		if (ImGui::BeginCombo("##combo", items[current])) {
+			for (int i = 0; i < IM_ARRAYSIZE(items); i++) {
+				const bool is_selected = (current == i);
+				
+				if (ImGui::Selectable(items[i], is_selected, ImGuiSelectableFlags_SpanAvailWidth)) {
+					if (items[i] == first.Name.c_str()) {
+						m_ActiveScene->setPrimary(m_CameraFirst);
+					}
+					else {
+						m_ActiveScene->setPrimary(m_CameraOther);
+					}
+					if (is_selected) {
+						ImGui::SetItemDefaultFocus();
+					}
+					current = i;
+				}
+			}
+			ImGui::EndCombo();
+		}
+		ImGui::Separator();
+		ImGui::Text("Camera Controls");
+		auto& primary = m_ActiveScene->getPrimary();
+		auto& tag = primary.get<NameComp>().Name;
+		auto& cam = primary.get<CameraComp>().Camera;
+		auto& pos = primary.get<TransformComp>().Transform[3];
+		float orthoSize = cam.getOrthographicSize();
+		ImGui::Text(tag.c_str());
+		if (ImGui::DragFloat("Orthographic Size", &orthoSize)) cam.setOrthographicSize(orthoSize);
+		ImGui::DragFloat3("Camera Position", glm::value_ptr(pos));
+		ImGui::Separator();
+
 		ImGui::End();
 
 

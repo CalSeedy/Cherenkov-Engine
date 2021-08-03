@@ -1,9 +1,9 @@
 #pragma once
-#include "Cherenkov/Scene/Scene.h"
 
 #include <entt/entt.hpp>
 
-namespace Cherenkov { 
+namespace Cherenkov {
+	class Scene;
 
 	class Entity {
 		entt::entity m_EntityID{ entt::null };
@@ -14,6 +14,8 @@ namespace Cherenkov {
 		Entity(const Entity& other) = default;
 		~Entity() = default;
 
+		const entt::entity getID() const { return m_EntityID; }
+
 		template<typename... Ts>
 		bool has() {
 			return m_Scene->m_Registry.all_of<Ts ...>(m_EntityID);
@@ -22,7 +24,6 @@ namespace Cherenkov {
 		template<typename T, typename... Args>
 		T& add(Args&&... args) {
 			CK_CORE_ASSERT(!has<T>(), "Entity already has component!");
-
 			return m_Scene->m_Registry.emplace<T>(m_EntityID, std::forward<Args>(args)...);
 		}
 
@@ -39,6 +40,7 @@ namespace Cherenkov {
 		}
 
 		operator bool() const { return m_EntityID != entt::null; }
+		bool operator==(const Entity& other) { return m_EntityID == other.m_EntityID; }
+		const bool operator==(const Entity& other) const { return m_EntityID == other.m_EntityID; }
 	};
-
 }

@@ -122,6 +122,18 @@ namespace Cherenkov {
 		s_Storage.textureSlotIdx = 1;
 	}
 
+	void Renderer2D::beginScene(const Camera& camera, const glm::mat4& transform) {
+		CK_PROFILE_FUNCTION();
+		glm::mat4 viewProj = camera.getProjection() * glm::inverse(transform);
+		s_Storage.textureShader->bind();
+		s_Storage.textureShader->setMat4("viewProjection", viewProj);
+
+		s_Storage.quadIndices = 0;
+		s_Storage.quadVertBufferPtr = s_Storage.quadVertBufferBase;
+
+		s_Storage.textureSlotIdx = 1;
+	}
+
 	void Renderer2D::flush() {
 		CK_PROFILE_FUNCTION();
 		if (s_Storage.quadIndices == 0) return;

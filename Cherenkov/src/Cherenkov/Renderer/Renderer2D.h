@@ -29,9 +29,16 @@ namespace Cherenkov {
 	class Renderer2D {
 		static void flushAndReset();
 	public:
+		struct RendererCamera
+		{
+			glm::mat4 Projection;
+			glm::mat4 View;
+		};
+
 		static void init();
 		static void shutdown();
 
+		static void beginScene(const Camera& camera, const glm::mat4& transform);
 		static void beginScene(const OrthographicCamera& camera);
 		static void flush();
 		static void endScene();
