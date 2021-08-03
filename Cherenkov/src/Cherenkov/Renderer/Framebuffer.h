@@ -4,7 +4,7 @@
 namespace Cherenkov {
 
 	struct FbSpecification {
-		uint32_t Width, Height, Samples = 1;
+		uint32_t Width = 0 , Height = 0, Samples = 1;
 		
 		bool swapChainTarget = false;
 	};

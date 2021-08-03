@@ -33,28 +33,28 @@ namespace Cherenkov {
 
 	void OrthographicCameraController::onUpdate(Timestep dt) {
         CK_PROFILE_FUNCTION();
-        if (Input::isKeyPressed(CK_KEY_W)) {
+        if (Input::isKeyPressed(Key::W)) {
             m_CameraPos.x += sin(glm::radians(m_CameraRotation)) * m_PanSpeed * dt;
             m_CameraPos.y += cos(glm::radians(m_CameraRotation)) * m_PanSpeed * dt;
         }
-        else if (Input::isKeyPressed(CK_KEY_S)) {
+        else if (Input::isKeyPressed(Key::S)) {
             m_CameraPos.x -= sin(glm::radians(m_CameraRotation)) * m_PanSpeed * dt;
             m_CameraPos.y -= cos(glm::radians(m_CameraRotation)) * m_PanSpeed * dt;
         }
-        if (Input::isKeyPressed(CK_KEY_A)) {
+        if (Input::isKeyPressed(Key::A)) {
             m_CameraPos.x -= cos(glm::radians(m_CameraRotation)) * m_PanSpeed * dt;
             m_CameraPos.y -= sin(glm::radians(m_CameraRotation)) * m_PanSpeed * dt;
         }
-        else if (Input::isKeyPressed(CK_KEY_D)) {
+        else if (Input::isKeyPressed(Key::D)) {
             m_CameraPos.x += cos(glm::radians(m_CameraRotation)) * m_PanSpeed * dt;
             m_CameraPos.y += sin(glm::radians(m_CameraRotation)) * m_PanSpeed * dt;
         }
         if (m_Camera.getPosition() != m_CameraPos) m_Camera.setPosition(m_CameraPos);
 
-        if (Input::isKeyPressed(CK_KEY_Q))
+        if (Input::isKeyPressed(Key::Q))
             m_CameraRotation += m_RotSpeed * dt;
 
-        else if (Input::isKeyPressed(CK_KEY_E))
+        else if (Input::isKeyPressed(Key::E))
             m_CameraRotation -= m_RotSpeed * dt;
 
         if (m_Camera.getRotation() != m_CameraRotation) m_Camera.setRotation(m_CameraRotation);

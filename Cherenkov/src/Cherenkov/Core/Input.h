@@ -1,8 +1,9 @@
 #pragma once
 
-#include "Cherenkov/Core/Core.h"
 #include "Cherenkov/Core/KeyCodes.h"
 #include "Cherenkov/Core/MouseCodes.h"
+
+#include <glm/glm.hpp>
 
 namespace Cherenkov {
 	
@@ -13,6 +14,6 @@ namespace Cherenkov {
 		static bool isMouseButtonPressed(MouseCode button);
 		static float getMouseY();
 		static float getMouseX();
-		static std::pair<float, float> getMousePos();
+		static glm::vec2 getMousePos();
 	};
 }

@@ -193,7 +193,7 @@ namespace Cherenkov {
 
 		float textureIndex = 0.0f;
 		for (uint32_t i = 1; i < s_Storage.textureSlotIdx; i++) {
-			if (*s_Storage.boundTextures[i].get() == *texture.get()) {
+			if (*s_Storage.boundTextures[i] == *texture) {
 				textureIndex = (float)i;
 				break;
 			}

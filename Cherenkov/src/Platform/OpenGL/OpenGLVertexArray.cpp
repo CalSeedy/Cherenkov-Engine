@@ -78,7 +78,7 @@ namespace Cherenkov {
 				uint8_t count = element.count();
 				for (uint8_t i = 0; i < count; i++) {
 					glEnableVertexAttribArray(m_VBufferIdx);
-					glVertexAttribPointer(m_VBufferIdx, count, getBaseType(element.Type), element.Normalised ? GL_TRUE : GL_FALSE, layout.stride(), (const void*)(sizeof(float) * count * i));
+					glVertexAttribPointer(m_VBufferIdx, count, getBaseType(element.Type), element.Normalised ? GL_TRUE : GL_FALSE, layout.stride(), (const void*)(element.Offset + sizeof(float) * count * i));
 					glVertexAttribDivisor(m_VBufferIdx, 1);
 					m_VBufferIdx++;
 				}

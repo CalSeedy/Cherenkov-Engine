@@ -1,6 +1,7 @@
 #Dirs
 .vs/
 **/bin/
+!vendor/premake/bin/
 **/bin-int/
 Cherenkov/vendor/
 

@@ -45,16 +45,16 @@ namespace Cherenkov {
 				float speed = 5.0f;
 				auto& [transform, camera] = get<TransformComp, CameraComp>();
 
-				if (Input::isKeyPressed(KeyCode::W)) {
+				if (Input::isKeyPressed(Key::W)) {
 					transform.Transform[3].y += speed * dt;
 				}
-				else if (Input::isKeyPressed(KeyCode::S)) {
+				else if (Input::isKeyPressed(Key::S)) {
 					transform.Transform[3].y -= speed * dt;
 				}
-				if (Input::isKeyPressed(KeyCode::A)) {
+				if (Input::isKeyPressed(Key::A)) {
 					transform.Transform[3].x -= speed * dt;
 				}
-				else if (Input::isKeyPressed(KeyCode::D)) {
+				else if (Input::isKeyPressed(Key::D)) {
 					transform.Transform[3].x += speed * dt;
 				}
 			}
@@ -152,8 +152,8 @@ namespace Cherenkov {
 		ImVec2 vpSize = ImGui::GetContentRegionAvail();
 		m_VpSize = { vpSize.x, vpSize.y };
 
-		uint32_t tID = m_Framebuffer->getColourAttachment();
-		ImGui::Image((void*)tID, ImVec2{ m_VpSize.x, m_VpSize.y }, ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
+		uint64_t tID = m_Framebuffer->getColourAttachment();
+		ImGui::Image(reinterpret_cast<void*>(tID), ImVec2{ m_VpSize.x, m_VpSize.y }, ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
 		ImGui::End();
 		ImGui::PopStyleVar();
 

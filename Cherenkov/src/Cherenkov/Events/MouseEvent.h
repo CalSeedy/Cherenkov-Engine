@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Cherenkov/Events/Event.h"
-#include "Cherenkov/Core/Input.h"
+#include "Cherenkov/Core/MouseCodes.h"
 
 namespace Cherenkov {
 
@@ -9,7 +9,7 @@ namespace Cherenkov {
 	class MouseMovedEvent : public Event {
 		float m_X, m_Y;
 	public:
-		MouseMovedEvent(float x, float y) : m_X(x), m_Y(y) {}
+		MouseMovedEvent(const float x, const float y) : m_X(x), m_Y(y) {}
 
 		float getX() const { return m_X; }
 		float getY() const { return m_Y; }
@@ -29,7 +29,7 @@ namespace Cherenkov {
 	class MouseScrollEvent : public Event {
 		float m_XOff, m_YOff;
 	public:
-		MouseScrollEvent(float xOff, float yOff) : m_XOff(xOff), m_YOff(yOff) {}
+		MouseScrollEvent(const float xOff, const float yOff) : m_XOff(xOff), m_YOff(yOff) {}
 
 		float getXOffset() const { return m_XOff; }
 		float getYOffset() const { return m_YOff; }
@@ -54,7 +54,7 @@ namespace Cherenkov {
 		EVENT_CLASS_CATEGORY(EventCategoryMouseButton | EventCategoryMouse | EventCategoryInput)
 	
 	protected:
-		MouseButtonEvent(MouseCode button) : m_Button(button) {}
+		MouseButtonEvent(const MouseCode button) : m_Button(button) {}
 
 		MouseCode m_Button;
 	};
@@ -62,7 +62,7 @@ namespace Cherenkov {
 	class MouseButtonPressedEvent : public MouseButtonEvent {
 
 	public:
-		MouseButtonPressedEvent(MouseCode button) : MouseButtonEvent(button) {}
+		MouseButtonPressedEvent(const MouseCode button) : MouseButtonEvent(button) {}
 
 		std::string toStr() const override {
 			std::stringstream stream;
@@ -76,7 +76,7 @@ namespace Cherenkov {
 	class MouseButtonReleasedEvent : public MouseButtonEvent {
 
 	public:
-		MouseButtonReleasedEvent(MouseCode button) : MouseButtonEvent(button) {}
+		MouseButtonReleasedEvent(const MouseCode button) : MouseButtonEvent(button) {}
 
 		std::string toStr() const override {
 			std::stringstream stream;

@@ -1,7 +1,8 @@
 #pragma once
-#include "ckpch.h"
-
 #include "Cherenkov/Core/Core.h"
+#include "Profiling/Instrumentor.h"
+
+#include <functional>
 
 namespace Cherenkov {
 	

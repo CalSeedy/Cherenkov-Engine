@@ -1,7 +1,8 @@
 #pragma once
-#include "ckpch.h"
 #include "Cherenkov/Core/Core.h"
 #include "Cherenkov/Events/Event.h"
+
+#include <sstream>
 
 namespace Cherenkov {
 
@@ -35,7 +36,7 @@ namespace Cherenkov {
 
 		virtual void* getNativeWindow() const = 0;
 
-		static Scope<Window> Create(const WindowProperties &properties = WindowProperties());
+		static Scope<Window> Create(const WindowProperties& properties = WindowProperties());
 	}; 
 
 }

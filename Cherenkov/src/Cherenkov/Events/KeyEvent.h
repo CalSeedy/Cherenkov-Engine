@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Cherenkov/Events/Event.h"
-#include "Cherenkov/Core/Input.h"
+#include "Cherenkov/Core/KeyCodes.h"
 
 namespace Cherenkov {
 
@@ -12,18 +12,18 @@ namespace Cherenkov {
 
 		EVENT_CLASS_CATEGORY(EventCategoryKeyBoard | EventCategoryInput)
 	protected:
-		KeyEvent(KeyCode code) : m_KeyCode(code) {}
+		KeyEvent(const KeyCode code) : m_KeyCode(code) {}
 
 		KeyCode m_KeyCode;
 	};
 
 	class KeyPressedEvent : public KeyEvent {
-		int m_Repeats;
+		uint16_t m_Repeats;
 	public:
-		KeyPressedEvent(KeyCode code, int repeats) 
+		KeyPressedEvent(const KeyCode code, uint16_t repeats) 
 			: KeyEvent(code), m_Repeats(repeats) {}
 
-		int getRepeats() const { return m_Repeats; }
+		uint16_t getRepeats() const { return m_Repeats; }
 
 		std::string toStr() const override {
 			std::stringstream stream;
@@ -51,7 +51,7 @@ namespace Cherenkov {
 	class KeyTypedEvent : public KeyEvent {
 
 	public:
-		KeyTypedEvent(KeyCode code)
+		KeyTypedEvent(const KeyCode code)
 			: KeyEvent(code){}
 
 		std::string toStr() const override {

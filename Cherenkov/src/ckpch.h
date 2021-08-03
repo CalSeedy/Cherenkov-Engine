@@ -1,4 +1,11 @@
 #pragma once
+#include "Cherenkov/Core/PlatformDetector.h"
+
+#ifdef CK_PLATFORM_WINDOWS
+	#ifndef NOMINMAX
+		#define NOMINMAX
+	#endif
+#endif
 
 #include <iostream>
 #include <memory>
@@ -12,6 +19,8 @@
 #include <vector>
 #include <unordered_map>
 #include <unordered_set>
+
+#include "Cherenkov/Core/Core.h"
 
 #include "Cherenkov/Core/Log.h"
 

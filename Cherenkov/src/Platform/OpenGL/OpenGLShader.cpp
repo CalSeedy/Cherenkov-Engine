@@ -29,7 +29,6 @@ namespace Cherenkov {
 				code.resize(size);
 				file.seekg(0, std::ios::beg);
 				file.read(&code[0], size);
-				file.close();
 			} else {
 				CK_CORE_ERROR("Failed to read from '{0}'.", path);
 			}
