@@ -65,7 +65,7 @@ namespace Cherenkov {
 			case Cherenkov::ShaderDataType::Vec3i:
 			case Cherenkov::ShaderDataType::Vec4i: {
 				glEnableVertexAttribArray(m_VBufferIdx);
-				glVertexAttribPointer(m_VBufferIdx, element.count(), getBaseType(element.Type), element.Normalised ? GL_TRUE : GL_FALSE, layout.stride(), (const void*)(element.Offset));
+				glVertexAttribPointer(m_VBufferIdx, element.count(), getBaseType(element.Type), element.Normalised ? GL_TRUE : GL_FALSE, layout.stride(), (const void*)(uint64_t)(element.Offset));
 				m_VBufferIdx++;
 				break;
 			}

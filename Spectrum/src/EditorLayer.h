@@ -1,5 +1,6 @@
 #pragma once
 #include <Cherenkov.h>
+#include "Panels/SceneHierarchy.h"
 
 namespace Cherenkov {
 	class EditorLayer : public Layer {
@@ -26,6 +27,7 @@ namespace Cherenkov {
 			float Time;
 		};
 
+		SceneHierarchy						m_SceneHierarchy;
 		std::vector<ProfileResult>			m_Results;
 	public:
 		EditorLayer();

@@ -14,7 +14,6 @@ namespace Cherenkov {
 		Entity(const Entity& other) = default;
 		~Entity() = default;
 
-		const entt::entity getID() const { return m_EntityID; }
 
 		template<typename... Ts>
 		bool has() {
@@ -39,9 +38,10 @@ namespace Cherenkov {
 			return m_Scene->m_Registry.remove<T>(m_EntityID);
 		}
 
+		operator uint32_t() const { return (uint32_t)m_EntityID; }
 		operator bool() const { return m_EntityID != entt::null; }
-		bool operator==(const Entity& other) { return m_EntityID == other.m_EntityID; }
-		const bool operator==(const Entity& other) const { return m_EntityID == other.m_EntityID; }
+		bool operator==(const Entity& other) { return m_EntityID == other.m_EntityID && m_Scene == other.m_Scene; }
+		bool operator!=(const Entity& other) { return !operator==(other); }
 	};
 
 	class ScriptableEntity {

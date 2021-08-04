@@ -21,7 +21,7 @@ namespace Cherenkov {
 
 	void Scene::setPrimary(const Entity& cam) {
 		CK_CORE_ASSERT(cam.has<CameraComp>(), "Entity does not have a camera component!");
-		if (cam.getID() != m_PrimaryCamera.getID())
+		if ((uint32_t)cam != (uint32_t)m_PrimaryCamera)
 			m_PrimaryCamera = cam;
 
 	}

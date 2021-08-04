@@ -13,6 +13,7 @@ namespace Cherenkov {
 		uint32_t m_VpHeight = 0;
 
 		friend class Entity;
+		friend class SceneHierarchy;
 	public:
 		Scene();
 		~Scene();

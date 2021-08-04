@@ -65,6 +65,8 @@ namespace Cherenkov {
 		m_CameraFirst.add<ScriptComp>(ScriptLanguage::Native).bind<Test>();
 		m_CameraOther.add<ScriptComp>(ScriptLanguage::Native).bind<Test>();
 
+
+		m_SceneHierarchy.setContext(m_ActiveScene);
 	}
 
 	void EditorLayer::onDetach() {}
@@ -203,6 +205,7 @@ namespace Cherenkov {
 
 		ImGui::End();
 
+		m_SceneHierarchy.onImGuiDraw();
 
 		auto stats = Renderer2D::getStats();
 		ImGui::Begin("Stats");
