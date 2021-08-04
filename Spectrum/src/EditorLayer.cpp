@@ -188,16 +188,7 @@ namespace Cherenkov {
 		}
 		ImGui::Separator();
 		ImGui::Text("Camera Controls");
-		auto& primary = m_ActiveScene->getPrimary();
-		auto& tag = primary.get<NameComp>().Name;
-		auto& cam = primary.get<CameraComp>().Camera;
-		auto& pos = primary.get<TransformComp>().Transform[3];
-		float orthoSize = cam.getOrthographicSize();
-		ImGui::Text(tag.c_str());
-		if (ImGui::DragFloat("Orthographic Size", &orthoSize)) { cam.setOrthographicSize(orthoSize); }
-		ImGui::DragFloat3("Camera Position", glm::value_ptr(pos));
-		ImGui::Separator();
-
+		m_Properties.drawCameraControls(m_ActiveScene->getPrimary());
 		ImGui::End();
 
 		m_SceneHierarchy.onImGuiDraw();

@@ -17,5 +17,6 @@ namespace Cherenkov {
 		void onImGuiDraw();
 
 		void drawComponents(Entity entity);
+		void drawCameraControls(Entity& camera);
 	};
 }

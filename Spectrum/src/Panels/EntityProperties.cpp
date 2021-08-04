@@ -52,6 +52,70 @@ namespace Cherenkov {
 		ImGui::End();
 	}
 
+	void EntityProperties::drawCameraControls(Entity& camera) {
+		ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_DefaultOpen;
+		if (ImGui::TreeNodeEx((void*)typeid(CameraComp).hash_code(), flags, "Camera")) {
+
+			auto& primaryCam = m_Ctx->getPrimary();
+			bool primary = (camera == primaryCam);
+			if (ImGui::Checkbox("Primary Camera: ", &primary)) {
+
+				if (primary) m_Ctx->setPrimary(camera);
+
+			}
+			ImGui::SameLine();
+			auto str = primaryCam.get<NameComp>().Name.c_str();
+			ImGui::Text(str);
+
+			auto& comp = camera.get<CameraComp>();
+			bool& fixed = comp.fixedAspectRatio;
+			SceneCamera& cam = comp.Camera;
+
+			auto& type = cam.m_Type;
+			const char* buff[] = { "Orthographic", "Perspective" };
+			if (ImGui::BeginCombo("Projection", buff[(uint32_t)type])) {
+
+				for (uint32_t i = 0; i < 2; i++) {
+
+					bool selected = (i == (uint32_t)type);
+
+					if (ImGui::Selectable(buff[i], selected)) {
+						cam.setType((ProjectionType)i);
+						if (!selected) {
+							if (type == ProjectionType::Orthographic) cam.setOrthographic(cam.m_OrthographicSize, cam.m_OrthographicNear, cam.m_OrthographicFar);
+							else if (type == ProjectionType::Perspective) cam.setPerspective(cam.m_PerspectiveFOV, cam.m_PerspectiveNear, cam.m_PerspectiveFar);
+							else CK_CORE_ASSERT(false, "Unknown projection type!");
+						}
+					}
+
+					if (selected) ImGui::SetItemDefaultFocus();
+				}
+
+
+				ImGui::EndCombo();
+			}
+
+			bool changed = false;
+			if (ImGui::DragFloat("Aspect Ratio", &cam.m_AspectRatio)) changed = true;
+			if (type == ProjectionType::Orthographic) {
+				if (ImGui::DragFloat("Size", &cam.m_OrthographicSize)) changed = true;
+				if (ImGui::DragFloat("Near", &cam.m_OrthographicNear)) changed = true;
+				if (ImGui::DragFloat("Far", &cam.m_OrthographicFar)) changed = true;
+			}
+			else if (type == ProjectionType::Perspective) {
+				if (ImGui::DragFloat("FOV", &cam.m_PerspectiveFOV)) changed = true;
+				if (ImGui::DragFloat("Near", &cam.m_PerspectiveNear)) changed = true;
+				if (ImGui::DragFloat("Far", &cam.m_PerspectiveFar)) changed = true;
+			}
+
+			if (changed) cam.recalculate();
+
+			ImGui::Checkbox("Fixed Aspect Ratio", &fixed);
+
+			ImGui::TreePop();
+		}
+	}
+
 	void EntityProperties::drawComponents(Entity entity) {
 		auto& tag = entity.get<NameComp>().Name;
 		char buff[256];
@@ -61,65 +125,16 @@ namespace Cherenkov {
 			tag = std::string(buff);
 		}
 
-		ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_DefaultOpen;
+		ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_DefaultOpen | ImGuiTreeNodeFlags_OpenOnArrow;
 		if (entity.has<CameraComp>()) {
-			if (ImGui::TreeNodeEx((void*)typeid(CameraComp).hash_code(), flags, "Camera")) {
+			drawCameraControls(entity);
+		}
 
-				auto& primaryCam = m_Ctx->getPrimary();
-				bool primary = (entity == primaryCam);
-				if (ImGui::Checkbox("Primary Camera: ", &primary)) {
-					
-					if (primary) m_Ctx->setPrimary(entity);
-					
-				}
-				ImGui::SameLine();
-				auto str = primaryCam.get<NameComp>().Name.c_str();
-				ImGui::Text(str);
+		if (entity.has<SpriteComp>()) {
+			if (ImGui::TreeNodeEx((void*)typeid(TransformComp).hash_code(), flags, "Sprite")) {
+				auto& comp = entity.get<SpriteComp>();
 
-				auto& comp = entity.get<CameraComp>();
-				bool& fixed = comp.fixedAspectRatio;
-				SceneCamera& cam = comp.Camera;
-				
-				auto& type = cam.m_Type;
-				const char* buff[] = { "Orthographic", "Perspective" };
-				if (ImGui::BeginCombo("Projection", buff[(uint32_t)type])) {
-					
-					for (uint32_t i = 0; i < 2; i++) {
-
-						bool selected = (i == (uint32_t)type);
-
-						if (ImGui::Selectable(buff[i], selected)) {
-							type = (ProjectionType)i;
-							if (selected) { 
-								if (type == ProjectionType::Orthographic) cam.setOrthographic(cam.m_OrthographicSize, cam.m_OrthographicNear, cam.m_OrthographicFar);
-								else if (type == ProjectionType::Perspective) cam.setPerspective(cam.m_PerspectiveFOV, cam.m_PerspectiveNear, cam.m_PerspectiveFar);
-								else CK_CORE_ASSERT(false, "Unknown projection type!");
-							}
-						}
-
-						if (selected) ImGui::SetItemDefaultFocus();
-					}
-
-
-					ImGui::EndCombo();
-				}
-
-				bool changed = false;
-				if (ImGui::DragFloat("Aspect Ratio", &cam.m_AspectRatio)) changed = true;
-				if (type == ProjectionType::Orthographic) {
-					if (ImGui::DragFloat("Size", &cam.m_OrthographicSize)) changed = true;
-					if (ImGui::DragFloat("Near", &cam.m_OrthographicNear)) changed = true;
-					if (ImGui::DragFloat("Far", &cam.m_OrthographicFar)) changed = true;
-				}
-				else if (type == ProjectionType::Perspective) {
-					if (ImGui::DragFloat("FOV", &cam.m_PerspectiveFOV)) changed = true;
-					if (ImGui::DragFloat("Near", &cam.m_PerspectiveNear)) changed = true;
-					if (ImGui::DragFloat("Far", &cam.m_PerspectiveFar)) changed = true;
-				}
-
-				if (changed) cam.recalculate();
-
-				ImGui::Checkbox("Fixed Aspect Ratio", &fixed);
+				ImGui::ColorEdit4("Colour", glm::value_ptr(comp.Colour));
 
 				ImGui::TreePop();
 			}
@@ -146,7 +161,6 @@ namespace Cherenkov {
 				ImGui::TreePop();
 			}
 		}
-
 	}
 
 }

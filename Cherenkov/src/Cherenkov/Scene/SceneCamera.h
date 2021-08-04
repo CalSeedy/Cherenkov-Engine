@@ -32,5 +32,6 @@ namespace Cherenkov {
 
 		void setOrthographicSize(float_t size) { m_OrthographicSize = size; recalculate(); }
 		float_t getOrthographicSize() const { return m_OrthographicSize; }
+		void setType(const ProjectionType type);
 	};
 }

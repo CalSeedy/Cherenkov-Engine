@@ -50,4 +50,8 @@ namespace Cherenkov {
 		recalculate();
 	}
 
+	void SceneCamera::setType(const ProjectionType type) {
+		m_Type = type;
+	}
+
 }
