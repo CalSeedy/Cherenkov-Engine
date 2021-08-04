@@ -19,15 +19,18 @@ namespace Cherenkov {
 
 			drawEntityNode(entity);
 		});
+
+		if (ImGui::IsMouseClicked(ImGuiMouseButton_Left) && ImGui::IsWindowHovered()) m_Ctx->setSelected(Entity());
+
 		ImGui::End();
 	}
 
 	void SceneHierarchy::drawEntityNode(Entity entity) {
 		auto& tag = entity.get<NameComp>().Name;
-		ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_OpenOnArrow | (m_Selected == entity ? ImGuiTreeNodeFlags_Selected : 0);
+		ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_OpenOnArrow | (m_Ctx->getSelected() == entity ? ImGuiTreeNodeFlags_Selected : 0);
 		bool opened = ImGui::TreeNodeEx((void*)(uint64_t)(uint32_t)entity, flags, tag.c_str());
 		if (ImGui::IsItemClicked()) {
-			m_Selected = entity;
+			m_Ctx->setSelected(entity);
 		}
 
 		if (opened) ImGui::TreePop();

@@ -5,7 +5,6 @@ namespace Cherenkov {
 
 	class SceneHierarchy {
 		Ref<Scene> m_Ctx;
-		Entity m_Selected;
 	public:
 		SceneHierarchy() = default;
 		SceneHierarchy(const Ref<Scene>& context);

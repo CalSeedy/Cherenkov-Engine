@@ -1,6 +1,7 @@
 #pragma once
 #include <Cherenkov.h>
 #include "Panels/SceneHierarchy.h"
+#include "Panels/EntityProperties.h"
 
 namespace Cherenkov {
 	class EditorLayer : public Layer {
@@ -28,6 +29,7 @@ namespace Cherenkov {
 		};
 
 		SceneHierarchy						m_SceneHierarchy;
+		EntityProperties					m_Properties;
 		std::vector<ProfileResult>			m_Results;
 	public:
 		EditorLayer();

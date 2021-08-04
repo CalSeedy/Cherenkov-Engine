@@ -7,6 +7,7 @@ namespace Cherenkov {
 
 	struct TransformComp {
 		glm::mat4 Transform{ 1.0f };
+		float_t rotation = 0.0f;
 
 		TransformComp() = default;
 		TransformComp(const TransformComp&) = default;

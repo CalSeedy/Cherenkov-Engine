@@ -67,6 +67,7 @@ namespace Cherenkov {
 
 
 		m_SceneHierarchy.setContext(m_ActiveScene);
+		m_Properties.setContext(m_ActiveScene);
 	}
 
 	void EditorLayer::onDetach() {}
@@ -159,13 +160,7 @@ namespace Cherenkov {
 		ImGui::End();
 		ImGui::PopStyleVar();
 
-		ImGui::Begin("Properties");
-		ImGui::Separator();
-		auto& [squareColour, squarePos, squareTag] = m_Square.get<SpriteComp, TransformComp, NameComp>();
-		glm::vec4& x = m_Square.get<SpriteComp>().Colour;
-		ImGui::Text(squareTag.Name.c_str());
-		ImGui::ColorEdit4("Sq. Colour", glm::value_ptr(squareColour.Colour));
-		ImGui::DragFloat3("Sq. Position", glm::value_ptr(squarePos.Transform[3]), 0.01f);
+		ImGui::Begin("Camera Settings");
 		ImGui::Separator();
 
 		static int current = 0;
@@ -206,6 +201,7 @@ namespace Cherenkov {
 		ImGui::End();
 
 		m_SceneHierarchy.onImGuiDraw();
+		m_Properties.onImGuiDraw();
 
 		auto stats = Renderer2D::getStats();
 		ImGui::Begin("Stats");
@@ -215,7 +211,10 @@ namespace Cherenkov {
 		ImGui::Text("Quads: %d", stats.quads);
 		ImGui::Text("Vertices: %d", stats.getTotalVertices());
 		ImGui::Text("Indices: %d", stats.getTotalIndices());
+
 		ImGui::End();
+
+
 		ImGui::End();
 	}
 
