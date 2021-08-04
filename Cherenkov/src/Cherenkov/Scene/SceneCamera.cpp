@@ -11,19 +11,36 @@ namespace Cherenkov {
 	}
 
 	void SceneCamera::recalculate() {
-		m_Projection = glm::ortho(
-			(m_AspectRatio * m_OrthographicSize) * -0.5f,
-			(m_AspectRatio * m_OrthographicSize) * 0.5f,
-			(m_OrthographicSize) * -0.5f,
-			(m_OrthographicSize) * 0.5f,
-			m_OrthographicNear, m_OrthographicFar
-		);
+		if (m_Type == ProjectionType::Orthographic) {
+			m_Projection = glm::ortho(
+				(m_AspectRatio * m_OrthographicSize) * -0.5f,
+				(m_AspectRatio * m_OrthographicSize) * 0.5f,
+				(m_OrthographicSize) * -0.5f,
+				(m_OrthographicSize) * 0.5f,
+				m_OrthographicNear, m_OrthographicFar
+			);
+		}
+		else if (m_Type == ProjectionType::Perspective) {
+			m_Projection = glm::perspective(m_PerspectiveFOV, m_AspectRatio, m_PerspectiveNear, m_PerspectiveFar);
+		}
 	}
 	
+	void SceneCamera::setPerspective(float_t fov, float_t near, float_t far) {
+
+		m_PerspectiveFOV = glm::radians(fov);
+		m_PerspectiveNear = near;
+		m_PerspectiveFar = far;
+		m_Type = ProjectionType::Perspective;
+
+		recalculate();
+	}
+
 	void SceneCamera::setOrthographic(float_t size, float_t near, float_t far) {
 		m_OrthographicSize = size;
 		m_OrthographicNear = near;
 		m_OrthographicFar = far;
+
+		m_Type = ProjectionType::Orthographic;
 
 		recalculate();
 	}

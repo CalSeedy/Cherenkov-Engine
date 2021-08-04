@@ -171,7 +171,7 @@ namespace Cherenkov {
 			for (int i = 0; i < IM_ARRAYSIZE(items); i++) {
 				const bool is_selected = (current == i);
 				
-				if (ImGui::Selectable(items[i], is_selected, ImGuiSelectableFlags_SpanAvailWidth)) {
+				if (ImGui::Selectable(items[i], is_selected)) {
 					if (items[i] == first.Name.c_str()) {
 						m_ActiveScene->setPrimary(m_CameraFirst);
 					}
