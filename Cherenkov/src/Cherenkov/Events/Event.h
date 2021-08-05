@@ -1,6 +1,6 @@
 #pragma once
 #include "Cherenkov/Core/Core.h"
-#include "Profiling/Instrumentor.h"
+#include "Debug/Instrumentor.h"
 
 #include <functional>
 

@@ -5,25 +5,39 @@
 
 #include "Cherenkov/Renderer/Renderer2D.h"
 
+#include "Cherenkov/Scene/Entity.h"
 #include <glm/glm.hpp>
 
 namespace Cherenkov {
 
 	Scene::Scene() {
-		auto& cam = createEntity("Scene Camera");
+		Entity cam = createEntity("Scene Camera");
 		cam.add<CameraComp>();
-		m_PrimaryCamera = cam;
+		m_PrimaryCamera = (entt::entity)cam;
+		
 	}
 
 	Scene::~Scene() {
 
 	}
 
-	void Scene::setPrimary(const Entity& cam) {
-		CK_CORE_ASSERT(cam.has<CameraComp>(), "Entity does not have a camera component!");
-		if ((uint32_t)cam != (uint32_t)m_PrimaryCamera)
-			m_PrimaryCamera = cam;
 
+	Entity Scene::getPrimaryCamera() {
+		return { m_PrimaryCamera, this };
+	}
+
+
+	void Scene::setPrimaryCamera(Entity& camera) {
+		CK_CORE_ASSERT(camera.has<CameraComp>(), "Entity does not have a CameraComp!");
+		m_PrimaryCamera = camera;
+	}
+
+	Cherenkov::Entity Scene::getSelectedEntity() {
+		return { m_SelectedEntity, this };
+	}
+
+	void Scene::setSelectedEntity(Entity& entity)	{
+		m_SelectedEntity = entity;
 	}
 
 	void Scene::onUpdate(Timestep dt) {
@@ -46,7 +60,7 @@ namespace Cherenkov {
 		glm::mat4* primaryTransform = nullptr;
 		auto group = m_Registry.group<CameraComp>(entt::get<TransformComp>);
 		for (auto ent : group) {
-			auto& [camera, transform] = group.get<CameraComp, TransformComp>(ent);
+			auto [camera, transform] = group.get<CameraComp, TransformComp>(ent);
 			if (m_PrimaryCamera == Entity{ent, this}) {
 				primaryCam = &camera.Camera;
 				primaryTransform = &transform.Transform;
@@ -59,7 +73,7 @@ namespace Cherenkov {
 			Renderer2D::beginScene(*primaryCam, *primaryTransform);
 			auto group = m_Registry.group<TransformComp>(entt::get<SpriteComp>);
 			for (auto ent : group) {
-				auto& [transform, sprite] = group.get<TransformComp, SpriteComp>(ent);
+				auto [transform, sprite] = group.get<TransformComp, SpriteComp>(ent);
 				Renderer2D::Quad(transform, sprite.Colour);
 			}
 			Renderer2D::endScene();  

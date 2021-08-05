@@ -24,7 +24,9 @@
 
 #include "Cherenkov/Core/Log.h"
 
-#include "Profiling/Instrumentor.h"
+#include "Debug/Instrumentor.h"
+#include "Debug/Assert.h"
+
 #ifdef CK_PLATFORM_WINDOWS
 	#include <Windows.h>
 #endif

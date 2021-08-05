@@ -32,7 +32,7 @@ namespace Cherenkov {
 		case Cherenkov::ShaderDataType::Mat2i:		return 2 * 2 * sizeof(int);
 		case Cherenkov::ShaderDataType::Mat3i:		return 4 * 3 * sizeof(int);
 		case Cherenkov::ShaderDataType::Mat4i:		return 4 * 4 * sizeof(int);
-		default:									CK_CORE_ASSERT(false, "Unknown DataType {0}!", type); return 0;
+		default:									CK_CORE_ASSERT(false, "Unknown DataType!"); return 0;
 		}
 	}
 
@@ -66,7 +66,7 @@ namespace Cherenkov {
 			case Cherenkov::ShaderDataType::Mat2i:		return 4;
 			case Cherenkov::ShaderDataType::Mat3i:		return 3;
 			case Cherenkov::ShaderDataType::Mat4i:		return 4;
-			default:									CK_CORE_ASSERT(false, "Unknown DataType {0}!", type); return 0;
+			default:									CK_CORE_ASSERT(false, "Unknown DataType!"); return 0;
 			}
 		}
 	};
@@ -85,7 +85,7 @@ namespace Cherenkov {
 	public:
 		BufferLayout() {}
 		BufferLayout(const std::initializer_list<BufferElement>& elements) : m_Elements{ elements } { calculateOffsets(); }
-		std::vector<BufferElement>& elements() { return m_Elements; }
+		const std::vector<BufferElement>& elements() { return m_Elements; }
 		uint32_t stride() const { return m_Stride; }
 		std::vector<BufferElement>::iterator begin() { return m_Elements.begin(); }
 		std::vector<BufferElement>::iterator end() { return m_Elements.end(); }

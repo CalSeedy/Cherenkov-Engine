@@ -6,6 +6,7 @@
 #include "Cherenkov/Core/Application.h"
 #include "Cherenkov/Core/Layer.h"
 #include "Cherenkov/Core/Log.h"
+#include "Debug/Assert.h"
 
 #include "Cherenkov/Core/TimeStep.h"
 
@@ -30,3 +31,4 @@
 #include "Cherenkov/Renderer/Texture.h"
 #include "Cherenkov/Renderer/VertexArray.h"
 #include "Cherenkov/Renderer/Camera.h"
+

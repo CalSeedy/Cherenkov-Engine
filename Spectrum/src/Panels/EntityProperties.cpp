@@ -47,7 +47,7 @@ namespace Cherenkov {
 
 	void EntityProperties::onImGuiDraw() {
 		ImGui::Begin("Properties");
-		if (m_Ctx->getSelected()) drawComponents(m_Ctx->getSelected());
+		if (m_Ctx->getSelectedEntity()) drawComponents(m_Ctx->getSelectedEntity());
 		else ImGui::Text("No entity selected!");
 		ImGui::End();
 	}
@@ -56,11 +56,11 @@ namespace Cherenkov {
 		ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_DefaultOpen;
 		if (ImGui::TreeNodeEx((void*)typeid(CameraComp).hash_code(), flags, "Camera")) {
 
-			auto& primaryCam = m_Ctx->getPrimary();
+			auto& primaryCam = m_Ctx->getPrimaryCamera();
 			bool primary = (camera == primaryCam);
 			if (ImGui::Checkbox("Primary Camera: ", &primary)) {
 
-				if (primary) m_Ctx->setPrimary(camera);
+				if (primary) m_Ctx->setPrimaryCamera(camera);
 
 			}
 			ImGui::SameLine();

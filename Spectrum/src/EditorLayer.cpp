@@ -1,3 +1,4 @@
+#include <Cherenkov.h>
 #include "EditorLayer.h"
 #include <imgui/imgui.h>
 #include <imgui/imgui_internal.h>
@@ -26,7 +27,7 @@ namespace Cherenkov {
 		square.add<SpriteComp>( 1.0f, 1.0f, 0.0f, 1.0f );
 		m_Square = square;
 
-		m_CameraFirst = m_ActiveScene->getPrimary();
+		m_CameraFirst = m_ActiveScene->getPrimaryCamera();
 
 		auto cam2 = m_ActiveScene->createEntity("Camera 2");
 		cam2.add<CameraComp>();
@@ -43,7 +44,7 @@ namespace Cherenkov {
 
 			void onUpdate(Timestep dt) {
 				float speed = 5.0f;
-				auto& [transform, camera] = get<TransformComp, CameraComp>();
+				auto [transform, camera] = get<TransformComp, CameraComp>();
 
 				if (Input::isKeyPressed(Key::W)) {
 					transform.Transform[3].y += speed * dt;
@@ -173,10 +174,10 @@ namespace Cherenkov {
 				
 				if (ImGui::Selectable(items[i], is_selected)) {
 					if (items[i] == first.Name.c_str()) {
-						m_ActiveScene->setPrimary(m_CameraFirst);
+						m_ActiveScene->setPrimaryCamera(m_CameraFirst);
 					}
 					else {
-						m_ActiveScene->setPrimary(m_CameraOther);
+						m_ActiveScene->setPrimaryCamera(m_CameraOther);
 					}
 					if (is_selected) {
 						ImGui::SetItemDefaultFocus();
@@ -188,7 +189,7 @@ namespace Cherenkov {
 		}
 		ImGui::Separator();
 		ImGui::Text("Camera Controls");
-		m_Properties.drawCameraControls(m_ActiveScene->getPrimary());
+		m_Properties.drawCameraControls(m_ActiveScene->getPrimaryCamera());
 		ImGui::End();
 
 		m_SceneHierarchy.onImGuiDraw();

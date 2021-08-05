@@ -1,9 +1,9 @@
 #pragma once
 
 #include <entt/entt.hpp>
+#include "Cherenkov/Scene/Scene.h"
 
 namespace Cherenkov {
-	class Scene;
 
 	class Entity {
 		entt::entity m_EntityID{ entt::null };
@@ -40,24 +40,9 @@ namespace Cherenkov {
 
 		operator uint32_t() const { return (uint32_t)m_EntityID; }
 		operator bool() const { return m_EntityID != entt::null; }
+		operator entt::entity() const { return m_EntityID; }
 		bool operator==(const Entity& other) { return m_EntityID == other.m_EntityID && m_Scene == other.m_Scene; }
-		bool operator!=(const Entity& other) { return !operator==(other); }
+		bool operator!=(const Entity& other) { return !(*this == other); }
 	};
 
-	class ScriptableEntity {
-		Entity m_Entity;
-		friend class Scene;
-	protected:
-		virtual void onCreate() {}
-		virtual void onUpdate(Timestep dt) {}
-		virtual void onDestroy() {}
-
-	public:
-		virtual ~ScriptableEntity() = default;
-
-		template<typename... Ts>
-		decltype(auto) get() {
-			return m_Entity.get<Ts ...>();
-		}
-	};
 }

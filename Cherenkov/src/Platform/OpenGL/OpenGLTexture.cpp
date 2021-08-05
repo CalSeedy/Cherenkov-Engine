@@ -14,7 +14,9 @@ namespace Cherenkov {
 			CK_PROFILE_SCOPE("Texture2D Load");
 			data = stbi_load(path.c_str(), &width, &height, &channels, 0);
 		}
-		CK_CORE_ASSERT(data, "Failed to load Texture2D @ {0}", path.c_str());
+		char buff[256];
+		sprintf_s(buff, sizeof(buff), "Failed to load Texture2D @ '%s'", path.c_str());
+		CK_CORE_ASSERT(data, buff);
 		m_Width = width;
 		m_Height = height;
 

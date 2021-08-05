@@ -24,9 +24,7 @@ namespace Cherenkov {
 		case Cherenkov::ShaderDataType::Mat2i:			return GL_INT;
 		case Cherenkov::ShaderDataType::Mat3i:			return GL_INT;
 		case Cherenkov::ShaderDataType::Mat4i:			return GL_INT;
-		default:
-			CK_CORE_ASSERT(false, "Unknown DataType {0}!", type);
-			return 0;
+		default:										CK_CORE_ASSERT(false, "Unknown DataType!");	return 0;
 		}
 	}
 
@@ -47,8 +45,6 @@ namespace Cherenkov {
 		CK_PROFILE_FUNCTION();
 		glBindVertexArray(m_RendererID);
 		vBuffer->bind();
-
-		CK_CORE_ASSERT(vBuffer->getLayout().elements().size(), "Empty vertex buffer layout!");
 
 		const auto& layout = vBuffer->getLayout();
 		for (auto& element : layout) {

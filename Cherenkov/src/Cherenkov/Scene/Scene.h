@@ -3,26 +3,28 @@
 
 #include "Cherenkov/Core/TimeStep.h"
 
-#include "Cherenkov/Scene/Entity.h"
 
 namespace Cherenkov {
+	class Entity;
+
 	class Scene {
 		entt::registry m_Registry;
-		Entity m_PrimaryCamera;
 		uint32_t m_VpWidth = 0;
 		uint32_t m_VpHeight = 0;
-		Entity m_Selected;
+		entt::entity m_PrimaryCamera;
+		entt::entity m_SelectedEntity{ entt::null };
+
 		friend class Entity;
 		friend class SceneHierarchy;
 	public:
 		Scene();
 		~Scene();
 
-		void setPrimary(const Entity& cam);
-		Entity& getPrimary() { return m_PrimaryCamera; }
-		
-		void setSelected(const Entity& entity) { m_Selected = entity; }
-		Entity& getSelected() { return m_Selected; }
+		Entity getPrimaryCamera();
+		void setPrimaryCamera(Entity& camera);
+
+		Entity getSelectedEntity();
+		void setSelectedEntity(Entity& entity);
 
 		void onUpdate(Timestep dt);
 		Entity createEntity(const std::string& name = "");

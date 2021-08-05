@@ -21,7 +21,6 @@ namespace Cherenkov {
 
 	struct Storage {
 		static const uint32_t maxQuads = 10000;
-		CK_CORE_ASSERT(maxQuads * 6 <= UINT32_MAX, "Maximum Quads exceeds the maximum value for uint32_t!");
 		static const uint32_t maxVertices  = maxQuads * 4;
 		static const uint32_t maxIndices   = maxQuads * 6;
 		static const uint32_t maxTextures = 32;
@@ -48,6 +47,7 @@ namespace Cherenkov {
 
 	void Renderer2D::init()	{
 		CK_PROFILE_FUNCTION();
+		CK_CORE_ASSERT(s_Storage.maxQuads * 6 <= UINT32_MAX, "Maximum Quads exceeds the maximum value for uint32_t!");
 		s_Storage.quadVertexArray = VertexArray::init();
 
 		s_Storage.quadVertexBuffer = VertexBuffer::init(s_Storage.maxVertices * sizeof(QuadVertex));

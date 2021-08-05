@@ -13,18 +13,10 @@
 	#else
 		#error "Platform debugbreak is not supported!"
 	#endif
+	#define CK_ASSERTS
 #else
 	#define CK_DEBUGBREAK() 
 #endif // CK_DEBUG
-
-
-#ifdef CK_ENABLE_ASSERTS
-	#define CK_ASSERT(x, ...){if (!(x)){CK_ERROR("Assertion Failed!: (0)", __VA_ARGS__); CK_DEBUGBREAK();}}
-	#define CK_CORE_ASSERT(x, ...){if (!(x)){CK_CORE_ERROR("Assertion Failed!: (0)", __VA_ARGS__); CK_DEBUGBREAK();}}
-#else
-	#define CK_ASSERT(x, ...)
-	#define CK_CORE_ASSERT(x, ...)
-#endif
 
 #define BIT(x) (1 << x)
 #define CK_BIND_EVENT_FN(fn) [this](auto&&... args) -> decltype(auto) { return this->fn(std::forward<decltype(args)>(args)...); }
@@ -43,3 +35,6 @@ namespace Cherenkov {
 		return std::make_shared<T>(std::forward<Args>(args)...);
 	}
 }
+
+#define CK_STRINGIFY_MACRO(x) #x
+#define CK_EXPAND_MACRO(x) x

@@ -2,6 +2,7 @@
 
 #include <glm/glm.hpp>
 #include "Cherenkov/Scene/SceneCamera.h"
+#include "Cherenkov/Scene/ScriptableEntity.h"
 
 namespace Cherenkov {
 
