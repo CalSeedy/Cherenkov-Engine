@@ -1,41 +1,10 @@
 #include "EntityProperties.h"
 
-#include <imgui/imgui.h>
 #include <glm/gtc/type_ptr.hpp>
-#include "glm/gtx/matrix_decompose.hpp"
-#include "glm/gtx/compatibility.hpp"
-#include "glm/gtx/rotate_vector.hpp"
+#include <imgui/imgui.h>
+#include <imgui/imgui_internal.h>
 
 namespace Cherenkov {
-
-
-	void EntityProperties::decomposeTransform(const glm::mat4& transform, glm::vec3& position, glm::vec3& rotation, glm::vec3& scale) {
-		glm::quat orientation;
-		glm::vec3 skew;
-		glm::vec4 perspective;
-		glm::decompose(transform, scale, orientation, position, skew, perspective);
-
-		rotation = glm::degrees(glm::eulerAngles(orientation));
-
-	}
-
-
-	void EntityProperties::recalculateTransformation(glm::mat4& transform, const glm::vec3& position, glm::vec3& rotation, glm::vec3& scale) {
-		if (scale.x < 0.0f) scale.x *= -1.0f;
-		if (scale.y < 0.0f) scale.y *= -1.0f;
-		if (scale.z < 0.0f) scale.z *= -1.0f;
-		// assume angles are in degrees
-		if (rotation.x > 90.0f) rotation.x -= 180.0f;
-		if (rotation.y > 90.0f) rotation.y -= 180.0f;
-		if (rotation.z > 180.0f) rotation.z -= 360.0f;
-
-		if (rotation.x < -90.0f) rotation.x += 180.0f;
-		if (rotation.y < -90.0f) rotation.y += 180.0f;
-		if (rotation.z < -180.0f) rotation.z += 360.0f;
-
-		glm::mat4 rotMatrix{ glm::rotate(glm::mat4{1.0f}, glm::radians(rotation.z), {0,0,1}) * glm::rotate(glm::mat4{1.0f}, glm::radians(rotation.y), {0,1,0}) * glm::rotate(glm::mat4{1.0f}, glm::radians(rotation.x), {1,0,0}) };
-		transform = glm::translate(glm::mat4{ 1.0f }, position) * rotMatrix * glm::scale(glm::mat4{ 1.0f }, scale);
-	}
 
 	EntityProperties::EntityProperties(const Ref<Scene>& context) {
 		setContext(context);
@@ -116,6 +85,57 @@ namespace Cherenkov {
 		}
 	}
 
+#define HEX2FLOAT(val) 0x##val / 256.0f
+	static bool drawVec3Controls(const std::string& label, glm::vec3& vector, float_t resetValue = 0.0f, float_t colWidth = 100.0f) {
+		bool changed = false;
+		ImGui::PushID(label.c_str());
+		ImGui::Columns(2);
+
+		ImGui::SetColumnWidth(0, colWidth);
+		ImGui::Text(label.c_str());
+		
+		ImGui::NextColumn();
+		ImGui::PushMultiItemsWidths(3, ImGui::CalcItemWidth());
+		ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2{ 0.0f, 0.0f });
+
+		float_t lineHeight = GImGui->Font->FontSize + GImGui->Style.FramePadding.y * 2.0f;
+		float_t padding = 2.0f;
+		ImVec2 buttonSize = { lineHeight + padding, lineHeight };
+		ImGui::PushStyleColor(ImGuiCol_Button, ImVec4{ HEX2FLOAT(F5), HEX2FLOAT(33), HEX2FLOAT(3E), 1.0f });
+		ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4{ HEX2FLOAT(F1), HEX2FLOAT(08), HEX2FLOAT(15), 1.0f });
+		ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4{ HEX2FLOAT(C0), HEX2FLOAT(06), HEX2FLOAT(11), 1.0f });
+		if (ImGui::Button("X", buttonSize))	vector.x = resetValue; changed = true;
+		ImGui::SameLine();
+		if (ImGui::DragFloat("##X", &vector.x, 0.1f)) changed = true;
+		ImGui::PopItemWidth();
+		ImGui::SameLine(); ImGui::Dummy({ 3.0f, lineHeight }); ImGui::SameLine();
+		ImGui::PopStyleColor(3);
+
+		ImGui::PushStyleColor(ImGuiCol_Button, ImVec4{ HEX2FLOAT(18), HEX2FLOAT(A7), HEX2FLOAT(3E), 1.0f });
+		ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4{ HEX2FLOAT(1E), HEX2FLOAT(D3), HEX2FLOAT(4F), 1.0f });
+		ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4{ HEX2FLOAT(14), HEX2FLOAT(B2), HEX2FLOAT(3E), 1.0f });
+		if (ImGui::Button("Y", buttonSize))	vector.y = resetValue; changed = true;
+		ImGui::SameLine();
+		if (ImGui::DragFloat("##Y", &vector.y, 0.1f)) changed = true;
+		ImGui::PopItemWidth();
+		ImGui::SameLine(); ImGui::Dummy({ 3.0f, lineHeight }); ImGui::SameLine();
+		ImGui::PopStyleColor(3);
+
+		ImGui::PushStyleColor(ImGuiCol_Button, ImVec4{ HEX2FLOAT(20), HEX2FLOAT(4A), HEX2FLOAT(EB), 1.0f });
+		ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4{ HEX2FLOAT(18), HEX2FLOAT(67), HEX2FLOAT(E7), 1.0f });
+		ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4{ HEX2FLOAT(14), HEX2FLOAT(4B), HEX2FLOAT(EB), 1.0f });
+		if (ImGui::Button("Z", buttonSize))	vector.z = resetValue; changed = true;
+		ImGui::SameLine();
+		if(ImGui::DragFloat("##Z", &vector.z, 0.1f)) changed = true;
+		ImGui::PopItemWidth();
+		ImGui::PopStyleColor(3);
+
+		ImGui::PopStyleVar();
+		ImGui::Columns(1);
+		ImGui::PopID();
+		return changed;
+	}
+
 	void EntityProperties::drawComponents(Entity entity) {
 		auto& tag = entity.get<NameComp>().Name;
 		char buff[256];
@@ -140,23 +160,17 @@ namespace Cherenkov {
 			}
 		}
 
-		if (entity.has<TransformComp>()) {
-			
+		if (entity.has<TransformComp>()) {			
 
 			if (ImGui::TreeNodeEx((void*)typeid(TransformComp).hash_code(), flags, "Transform")) {
 
-				auto& transform = entity.get<TransformComp>().Transform;
-				glm::vec3 pos, scale, angles;
-				decomposeTransform(transform, pos, angles, scale);
-				bool changed = false;
+				auto& transformComp = entity.get<TransformComp>();
 
-				if (ImGui::DragFloat2("Scale", glm::value_ptr(scale), 0.1f)) changed = true;
+				drawVec3Controls("Scale", transformComp.Scale, 1.0f);
+				drawVec3Controls("Position", transformComp.Position);
 
-				if (ImGui::DragFloat3("Position", glm::value_ptr(pos), 0.1f)) changed = true;
-
-				if (ImGui::DragFloat3("Rotation", glm::value_ptr(angles), 0.1f)) changed = true;
-
-				if (changed) recalculateTransformation(transform, pos, angles, scale);
+				glm::vec3 rotDeg{ glm::degrees(transformComp.Rotation) };
+				if (drawVec3Controls("Rotation", rotDeg)) transformComp.Rotation = glm::radians(rotDeg);
 
 				ImGui::TreePop();
 			}

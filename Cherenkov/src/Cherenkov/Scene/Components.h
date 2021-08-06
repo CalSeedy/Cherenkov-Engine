@@ -1,21 +1,27 @@
 #pragma once
-
-#include <glm/glm.hpp>
 #include "Cherenkov/Scene/SceneCamera.h"
 #include "Cherenkov/Scene/ScriptableEntity.h"
+
+#include <glm/glm.hpp>
+#include <glm/ext/matrix_transform.hpp>
 
 namespace Cherenkov {
 
 	struct TransformComp {
-		glm::mat4 Transform{ 1.0f };
-		float_t rotation = 0.0f;
+		glm::vec3 Position{ 0.0f };
+		glm::vec3 Rotation { 0.0f };
+		glm::vec3 Scale { 1.0f };
 
 		TransformComp() = default;
 		TransformComp(const TransformComp&) = default;
-		TransformComp(const glm::mat4 transform) : Transform{ transform } {}
+		TransformComp(const glm::vec3 position) : Position{ position } {}
 
-		operator const glm::mat4& () { return Transform; }
-		operator glm::mat4() { return Transform; }
+		glm::mat4 getTransform() const { 
+			return glm::translate(glm::mat4{ 1.0f }, Position)
+				* glm::rotate(glm::mat4{ 1.0f }, Rotation.x, { 1, 0, 0 })* glm::rotate(glm::mat4{ 1.0f }, Rotation.y, { 0, 1, 0 })* glm::rotate(glm::mat4{ 1.0f }, Rotation.z, { 0, 0, 1 }) 
+				* glm::scale(glm::mat4{1.0f}, Scale);
+
+		}
 	};
 	
 	struct SpriteComp {
@@ -60,8 +66,8 @@ namespace Cherenkov {
 		ScriptLanguage Language;
 		ScriptableEntity* Instance = nullptr;
 
-		ScriptableEntity*(*instantiateScript)();
-		void (*destroyScript)(ScriptComp*);
+		ScriptableEntity*	(*instantiateScript)();
+		void				(*destroyScript)(ScriptComp*);
 
 		ScriptComp() = default;
 		ScriptComp(ScriptLanguage lang = ScriptLanguage::Native) : Language{ lang } {}

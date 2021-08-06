@@ -57,24 +57,24 @@ namespace Cherenkov {
 
 
 		Camera* primaryCam = nullptr;
-		glm::mat4* primaryTransform = nullptr;
+		glm::mat4 primaryTransform;
 		auto group = m_Registry.group<CameraComp>(entt::get<TransformComp>);
 		for (auto ent : group) {
 			auto [camera, transform] = group.get<CameraComp, TransformComp>(ent);
 			if (m_PrimaryCamera == Entity{ent, this}) {
 				primaryCam = &camera.Camera;
-				primaryTransform = &transform.Transform;
+				primaryTransform = transform.getTransform();
 				break;
 			}
 		}
 
 		if (primaryCam) {
 
-			Renderer2D::beginScene(*primaryCam, *primaryTransform);
+			Renderer2D::beginScene(*primaryCam, primaryTransform);
 			auto group = m_Registry.group<TransformComp>(entt::get<SpriteComp>);
 			for (auto ent : group) {
 				auto [transform, sprite] = group.get<TransformComp, SpriteComp>(ent);
-				Renderer2D::Quad(transform, sprite.Colour);
+				Renderer2D::Quad(transform.getTransform(), sprite.Colour);
 			}
 			Renderer2D::endScene();  
 		}

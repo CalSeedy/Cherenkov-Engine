@@ -47,16 +47,16 @@ namespace Cherenkov {
 				auto [transform, camera] = get<TransformComp, CameraComp>();
 
 				if (Input::isKeyPressed(Key::W)) {
-					transform.Transform[3].y += speed * dt;
+					transform.Position.y += speed * dt;
 				}
 				else if (Input::isKeyPressed(Key::S)) {
-					transform.Transform[3].y -= speed * dt;
+					transform.Position.y -= speed * dt;
 				}
 				if (Input::isKeyPressed(Key::A)) {
-					transform.Transform[3].x -= speed * dt;
+					transform.Position.x -= speed * dt;
 				}
 				else if (Input::isKeyPressed(Key::D)) {
-					transform.Transform[3].x += speed * dt;
+					transform.Position.x += speed * dt;
 				}
 			}
 
