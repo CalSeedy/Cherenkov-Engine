@@ -89,6 +89,10 @@ namespace Cherenkov {
 		return ent;
 	}
 
+	void Scene::destroyEntity(Entity entity) {
+		m_Registry.destroy(entity);
+	}
+
 	void Scene::onViewportResize(uint32_t width, uint32_t height) {
 		
 		m_VpWidth = width;

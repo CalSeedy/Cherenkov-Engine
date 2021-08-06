@@ -22,6 +22,13 @@ namespace Cherenkov {
 
 		if (ImGui::IsMouseClicked(ImGuiMouseButton_Left) && ImGui::IsWindowHovered()) m_Ctx->setSelectedEntity(Entity());
 
+		if (ImGui::BeginPopupContextWindow(0, ImGuiMouseButton_Right, false)) {
+			
+			if (ImGui::MenuItem("Add Entity")) m_Ctx->createEntity();
+
+			ImGui::EndPopup();
+		}
+
 		ImGui::End();
 	}
 
@@ -31,6 +38,21 @@ namespace Cherenkov {
 		bool opened = ImGui::TreeNodeEx((void*)(uint64_t)(uint32_t)entity, flags, tag.c_str());
 		if (ImGui::IsItemClicked()) {
 			m_Ctx->setSelectedEntity(entity);
+		}
+
+		bool deleted = false;
+		if (ImGui::BeginPopupContextItem()) {
+
+			char txt[256];
+			sprintf_s(txt, "Delete '%s'", tag.c_str());
+			if (ImGui::MenuItem(txt)) deleted = true;
+
+			ImGui::EndPopup();
+
+			if (deleted) {
+				if (m_Ctx->getSelectedEntity() == entity) m_Ctx->setSelectedEntity(Entity());
+				m_Ctx->destroyEntity(entity);
+			}
 		}
 
 		if (opened) ImGui::TreePop();

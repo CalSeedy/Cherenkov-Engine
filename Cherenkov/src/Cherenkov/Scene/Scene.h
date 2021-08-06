@@ -26,9 +26,10 @@ namespace Cherenkov {
 		Entity getSelectedEntity();
 		void setSelectedEntity(Entity& entity);
 
-		void onUpdate(Timestep dt);
 		Entity createEntity(const std::string& name = "");
+		void destroyEntity(Entity entity);
 
+		void onUpdate(Timestep dt);
 		void onViewportResize(uint32_t width, uint32_t height);
 	};
 }

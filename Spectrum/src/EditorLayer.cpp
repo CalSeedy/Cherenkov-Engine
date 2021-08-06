@@ -1,11 +1,13 @@
 #include <Cherenkov.h>
 #include "EditorLayer.h"
+#include "Defaults/Defaults.h"
+
+#include <stdio.h>
 #include <imgui/imgui.h>
 #include <imgui/imgui_internal.h>
 
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
-#include <stdio.h>
 
 bool switched = false;
 
@@ -33,38 +35,8 @@ namespace Cherenkov {
 		cam2.add<CameraComp>();
 		m_CameraOther = cam2;
 
-		class Test : public ScriptableEntity {
-		public:
-			void onCreate() {
-			}
-
-			void onDestroy() {
-			
-			}
-
-			void onUpdate(Timestep dt) {
-				float speed = 5.0f;
-				auto [transform, camera] = get<TransformComp, CameraComp>();
-
-				if (Input::isKeyPressed(Key::W)) {
-					transform.Position.y += speed * dt;
-				}
-				else if (Input::isKeyPressed(Key::S)) {
-					transform.Position.y -= speed * dt;
-				}
-				if (Input::isKeyPressed(Key::A)) {
-					transform.Position.x -= speed * dt;
-				}
-				else if (Input::isKeyPressed(Key::D)) {
-					transform.Position.x += speed * dt;
-				}
-			}
-
-		};
-
-
-		m_CameraFirst.add<ScriptComp>(ScriptLanguage::Native).bind<Test>();
-		m_CameraOther.add<ScriptComp>(ScriptLanguage::Native).bind<Test>();
+		m_CameraFirst.add<ScriptComp>(ScriptLanguage::Native).bind<SimpleMovement>();
+		m_CameraOther.add<ScriptComp>(ScriptLanguage::Native).bind<SimpleMovement>();
 
 
 		m_SceneHierarchy.setContext(m_ActiveScene);

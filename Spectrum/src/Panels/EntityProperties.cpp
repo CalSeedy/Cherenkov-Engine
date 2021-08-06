@@ -1,4 +1,5 @@
 #include "EntityProperties.h"
+#include "../Defaults/Defaults.h"
 
 #include <glm/gtc/type_ptr.hpp>
 #include <imgui/imgui.h>
@@ -16,73 +17,73 @@ namespace Cherenkov {
 
 	void EntityProperties::onImGuiDraw() {
 		ImGui::Begin("Properties");
-		if (m_Ctx->getSelectedEntity()) drawComponents(m_Ctx->getSelectedEntity());
+		if (m_Ctx->getSelectedEntity()) {
+			drawComponents(m_Ctx->getSelectedEntity()); 
+			drawAddComponents(m_Ctx->getSelectedEntity());
+		}
 		else ImGui::Text("No entity selected!");
 		ImGui::End();
 	}
 
 	void EntityProperties::drawCameraControls(Entity& camera) {
 		ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_DefaultOpen;
-		if (ImGui::TreeNodeEx((void*)typeid(CameraComp).hash_code(), flags, "Camera")) {
 
-			auto& primaryCam = m_Ctx->getPrimaryCamera();
-			bool primary = (camera == primaryCam);
-			if (ImGui::Checkbox("Primary Camera: ", &primary)) {
+		auto& primaryCam = m_Ctx->getPrimaryCamera();
+		bool primary = (camera == primaryCam);
+		if (ImGui::Checkbox("Primary Camera: ", &primary)) {
 
-				if (primary) m_Ctx->setPrimaryCamera(camera);
+			if (primary) m_Ctx->setPrimaryCamera(camera);
 
-			}
-			ImGui::SameLine();
-			auto str = primaryCam.get<NameComp>().Name.c_str();
-			ImGui::Text(str);
+		}
+		ImGui::SameLine();
+		auto str = primaryCam.get<NameComp>().Name.c_str();
+		ImGui::Text(str);
 
-			auto& comp = camera.get<CameraComp>();
-			bool& fixed = comp.fixedAspectRatio;
-			SceneCamera& cam = comp.Camera;
+		auto& comp = camera.get<CameraComp>();
+		bool& fixed = comp.fixedAspectRatio;
+		SceneCamera& cam = comp.Camera;
 
-			auto& type = cam.m_Type;
-			const char* buff[] = { "Orthographic", "Perspective" };
-			if (ImGui::BeginCombo("Projection", buff[(uint32_t)type])) {
+		auto& type = cam.m_Type;
+		const char* buff[] = { "Orthographic", "Perspective" };
+		if (ImGui::BeginCombo("Projection", buff[(uint32_t)type])) {
 
-				for (uint32_t i = 0; i < 2; i++) {
+			for (uint32_t i = 0; i < 2; i++) {
 
-					bool selected = (i == (uint32_t)type);
+				bool selected = (i == (uint32_t)type);
 
-					if (ImGui::Selectable(buff[i], selected)) {
-						cam.setType((ProjectionType)i);
-						if (!selected) {
-							if (type == ProjectionType::Orthographic) cam.setOrthographic(cam.m_OrthographicSize, cam.m_OrthographicNear, cam.m_OrthographicFar);
-							else if (type == ProjectionType::Perspective) cam.setPerspective(cam.m_PerspectiveFOV, cam.m_PerspectiveNear, cam.m_PerspectiveFar);
-							else CK_CORE_ASSERT(false, "Unknown projection type!");
-						}
+				if (ImGui::Selectable(buff[i], selected)) {
+					cam.setType((ProjectionType)i);
+					if (!selected) {
+						if (type == ProjectionType::Orthographic) cam.setOrthographic(cam.m_OrthographicSize, cam.m_OrthographicNear, cam.m_OrthographicFar);
+						else if (type == ProjectionType::Perspective) cam.setPerspective(cam.m_PerspectiveFOV, cam.m_PerspectiveNear, cam.m_PerspectiveFar);
+						else CK_CORE_ASSERT(false, "Unknown projection type!");
 					}
-
-					if (selected) ImGui::SetItemDefaultFocus();
 				}
 
-
-				ImGui::EndCombo();
+				if (selected) ImGui::SetItemDefaultFocus();
 			}
 
-			bool changed = false;
-			if (ImGui::DragFloat("Aspect Ratio", &cam.m_AspectRatio)) changed = true;
-			if (type == ProjectionType::Orthographic) {
-				if (ImGui::DragFloat("Size", &cam.m_OrthographicSize)) changed = true;
-				if (ImGui::DragFloat("Near", &cam.m_OrthographicNear)) changed = true;
-				if (ImGui::DragFloat("Far", &cam.m_OrthographicFar)) changed = true;
-			}
-			else if (type == ProjectionType::Perspective) {
-				if (ImGui::DragFloat("FOV", &cam.m_PerspectiveFOV)) changed = true;
-				if (ImGui::DragFloat("Near", &cam.m_PerspectiveNear)) changed = true;
-				if (ImGui::DragFloat("Far", &cam.m_PerspectiveFar)) changed = true;
-			}
 
-			if (changed) cam.recalculate();
-
-			ImGui::Checkbox("Fixed Aspect Ratio", &fixed);
-
-			ImGui::TreePop();
+			ImGui::EndCombo();
 		}
+
+		bool changed = false;
+		if (ImGui::DragFloat("Aspect Ratio", &cam.m_AspectRatio)) changed = true;
+		if (type == ProjectionType::Orthographic) {
+			if (ImGui::DragFloat("Size", &cam.m_OrthographicSize)) changed = true;
+			if (ImGui::DragFloat("Near", &cam.m_OrthographicNear)) changed = true;
+			if (ImGui::DragFloat("Far", &cam.m_OrthographicFar)) changed = true;
+		}
+		else if (type == ProjectionType::Perspective) {
+			if (ImGui::DragFloat("FOV", &cam.m_PerspectiveFOV)) changed = true;
+			if (ImGui::DragFloat("Near", &cam.m_PerspectiveNear)) changed = true;
+			if (ImGui::DragFloat("Far", &cam.m_PerspectiveFar)) changed = true;
+		}
+
+		if (changed) cam.recalculate();
+
+		ImGui::Checkbox("Fixed Aspect Ratio", &fixed);
+
 	}
 
 #define HEX2FLOAT(val) 0x##val / 256.0f
@@ -135,8 +136,9 @@ namespace Cherenkov {
 		ImGui::PopID();
 		return changed;
 	}
-
-	void EntityProperties::drawComponents(Entity entity) {
+	
+	void EntityProperties::drawComponents(Entity& entity) {
+		const float_t defaultColumnWidth = 100.0f;
 		auto& tag = entity.get<NameComp>().Name;
 		char buff[256];
 		memset(buff, 0, sizeof(buff));
@@ -145,26 +147,53 @@ namespace Cherenkov {
 			tag = std::string(buff);
 		}
 
+		bool deleted = false;
 		ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_DefaultOpen | ImGuiTreeNodeFlags_OpenOnArrow;
 		if (entity.has<CameraComp>()) {
-			drawCameraControls(entity);
-		}
+			if (ImGui::TreeNodeEx((void*)typeid(CameraComp).hash_code(), flags, "Camera")) {
+				ImGui::SameLine(); if (ImGui::Button("...")) ImGui::OpenPopup("ComponentSettings");
+				if (ImGui::BeginPopup("ComponentSettings")) {
 
+					if (ImGui::MenuItem("Remove component")) deleted = true;
+
+					ImGui::EndPopup();
+				}
+				drawCameraControls(entity);
+				ImGui::TreePop();
+				if (deleted) entity.remove<CameraComp>();
+			}
+		}
+		deleted = false;
 		if (entity.has<SpriteComp>()) {
-			if (ImGui::TreeNodeEx((void*)typeid(TransformComp).hash_code(), flags, "Sprite")) {
+			if (ImGui::TreeNodeEx((void*)typeid(SpriteComp).hash_code(), flags, "Sprite")) {
+				ImGui::SameLine(); if (ImGui::Button("...")) ImGui::OpenPopup("ComponentSettings"); 
+				if (ImGui::BeginPopup("ComponentSettings")) {
+
+					if (ImGui::MenuItem("Remove component")) deleted = true;
+
+					ImGui::EndPopup();
+				}
 				auto& comp = entity.get<SpriteComp>();
 
 				ImGui::ColorEdit4("Colour", glm::value_ptr(comp.Colour));
 
 				ImGui::TreePop();
+				if (deleted) entity.remove<SpriteComp>();
 			}
 		}
-
+		deleted = false;
 		if (entity.has<TransformComp>()) {			
 
 			if (ImGui::TreeNodeEx((void*)typeid(TransformComp).hash_code(), flags, "Transform")) {
-
 				auto& transformComp = entity.get<TransformComp>();
+				ImGui::SameLine(); if (ImGui::Button("...")) ImGui::OpenPopup("ComponentSettings");
+				if (ImGui::BeginPopup("ComponentSettings")) {
+
+					if (ImGui::MenuItem("Remove component")) deleted = true;
+					if (ImGui::MenuItem("Reset to default")) transformComp = TransformComp::getDefault();
+
+					ImGui::EndPopup();
+				}
 
 				drawVec3Controls("Scale", transformComp.Scale, 1.0f);
 				drawVec3Controls("Position", transformComp.Position);
@@ -173,8 +202,97 @@ namespace Cherenkov {
 				if (drawVec3Controls("Rotation", rotDeg)) transformComp.Rotation = glm::radians(rotDeg);
 
 				ImGui::TreePop();
+				if (deleted) entity.remove<TransformComp>();
+			}
+		}
+		deleted = false;
+		if (entity.has<ScriptComp>()) {
+			if (ImGui::TreeNodeEx((void*)typeid(ScriptComp).hash_code(), flags, "Script")) {
+				ImGui::SameLine(); if (ImGui::Button("...")) ImGui::OpenPopup("ComponentSettings");
+				if (ImGui::BeginPopup("ComponentSettings")) {
+
+					if (ImGui::MenuItem("Remove component")) deleted = true;
+
+					ImGui::EndPopup();
+				}
+				auto& scriptComp = entity.get<ScriptComp>();
+				ImGui::Columns(2);
+				ImGui::SetColumnWidth(0, defaultColumnWidth);
+				ImGui::Text("Language:");
+				ImGui::NextColumn();
+				ImGui::Text(scriptComp.getLanguage());
+				ImGui::Columns(1);
+
+				ImGui::Columns(2);
+				ImGui::SetColumnWidth(0, defaultColumnWidth);
+				ImGui::Text("Name:");
+				ImGui::NextColumn();
+				
+				char buff[256];
+				memset(buff, 0, sizeof(buff));
+				strcpy_s(buff, scriptComp.Name.c_str());
+				if (ImGui::InputText("##name", buff, sizeof(buff))) scriptComp.Name = std::string(buff);
+				ImGui::Columns(1);
+
+				ImGui::Columns(2);
+				ImGui::SetColumnWidth(0, defaultColumnWidth);
+				ImGui::Text("Path:");
+				ImGui::NextColumn();
+				ImGui::Text(((std::filesystem::path)scriptComp).string().c_str());
+				ImGui::Columns(1);
+
+				ImGui::TreePop();
+				if (deleted) entity.remove<ScriptComp>();
 			}
 		}
 	}
 
+	void loadCustomScript(Entity& entity, ScriptLanguage language) {
+		entity.add<ScriptComp>(language).bind<EmptyScript>();
+	}
+
+	void EntityProperties::drawAddComponents(Entity& entity) {
+		if (ImGui::Button("+")) ImGui::OpenPopup("AddComponent");
+
+		if (ImGui::BeginPopup("AddComponent")) {
+			bool noneLeft = true;
+			if (!(entity.has<CameraComp>())) {
+				noneLeft = false;
+				if (ImGui::Selectable("Camera Component")) entity.add<CameraComp>();
+			}
+
+			if (!(entity.has<TransformComp>())) {
+				noneLeft = false;
+				if (ImGui::Selectable("Transform Component")) entity.add<TransformComp>();
+			}
+
+			if (!(entity.has<ScriptComp>())) {
+				noneLeft = false;
+				if (ImGui::BeginMenu("Script Component")) {
+					if (ImGui::BeginMenu("Native (C++)")) {
+						if (ImGui::Selectable("Empty (default)")) entity.add<ScriptComp>(ScriptLanguage::Native).bind<EmptyScript>();
+						if (ImGui::Selectable("Simple Movement")) entity.add<ScriptComp>(ScriptLanguage::Native).bind<SimpleMovement>();
+						if (ImGui::Selectable("Custom")) loadCustomScript(entity, ScriptLanguage::Native);
+						ImGui::EndMenu();
+					}
+
+					if (ImGui::BeginMenu("Python")) {
+						if (ImGui::Selectable("Empty (default)")) entity.add<ScriptComp>(ScriptLanguage::Python).bind<EmptyScript>();
+						if (ImGui::Selectable("Custom")) loadCustomScript(entity, ScriptLanguage::Python);
+						ImGui::EndMenu();
+					}
+
+					ImGui::EndMenu();
+				}
+			}
+
+			if (!(entity.has<SpriteComp>())) {
+				noneLeft = false;
+				if (ImGui::Selectable("Sprite Component")) entity.add<SpriteComp>();
+			}
+
+			if (noneLeft) ImGui::Text("No available components.");
+			ImGui::EndPopup();
+		}
+	}
 }
