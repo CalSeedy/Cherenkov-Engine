@@ -14,6 +14,9 @@ namespace Cherenkov {
 		entt::entity m_PrimaryCamera;
 		entt::entity m_SelectedEntity{ entt::null };
 
+		template<typename T>
+		void onComponentAdded(Entity& entity, T& component);
+
 		friend class Entity;
 		friend class SceneHierarchy;
 	public:

@@ -133,37 +133,6 @@ namespace Cherenkov {
 		ImGui::End();
 		ImGui::PopStyleVar();
 
-		ImGui::Begin("Camera Settings");
-		ImGui::Separator();
-
-		static int current = 0;
-		auto& first = m_CameraFirst.get<NameComp>();
-		auto& other = m_CameraOther.get<NameComp>();
-		const char* items[] = {first.Name.c_str(), other.Name.c_str() };
-		if (ImGui::BeginCombo("##combo", items[current])) {
-			for (int i = 0; i < IM_ARRAYSIZE(items); i++) {
-				const bool is_selected = (current == i);
-				
-				if (ImGui::Selectable(items[i], is_selected)) {
-					if (items[i] == first.Name.c_str()) {
-						m_ActiveScene->setPrimaryCamera(m_CameraFirst);
-					}
-					else {
-						m_ActiveScene->setPrimaryCamera(m_CameraOther);
-					}
-					if (is_selected) {
-						ImGui::SetItemDefaultFocus();
-					}
-					current = i;
-				}
-			}
-			ImGui::EndCombo();
-		}
-		ImGui::Separator();
-		ImGui::Text("Camera Controls");
-		m_Properties.drawCameraControls(m_ActiveScene->getPrimaryCamera());
-		ImGui::End();
-
 		m_SceneHierarchy.onImGuiDraw();
 		m_Properties.onImGuiDraw();
 

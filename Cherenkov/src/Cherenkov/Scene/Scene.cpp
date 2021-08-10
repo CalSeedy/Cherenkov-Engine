@@ -54,8 +54,6 @@ namespace Cherenkov {
 			});
 		}
 
-
-
 		Camera* primaryCam = nullptr;
 		glm::mat4 primaryTransform;
 		auto group = m_Registry.group<CameraComp>(entt::get<TransformComp>);
@@ -79,13 +77,14 @@ namespace Cherenkov {
 			Renderer2D::endScene();  
 		}
 	}
-#define STR_IMPL(s)  #s
-#define NO_NAME1(s)  STR_IMPL(s)
-#define NO_NAME  NO_NAME1(__COUNTER__)
+
+	static uint32_t counter = 0;
+
 	Entity Scene::createEntity(const std::string& name) {
 		Entity ent = { m_Registry.create(), this };
-		name.empty() ? ent.add<NameComp>("Entity #" + std::string{NO_NAME}) : ent.add<NameComp>(name);
+		name.empty() ? ent.add<NameComp>("Entity #" + std::to_string(counter)) : ent.add<NameComp>(name);
 		ent.add<TransformComp>();
+		counter++;
 		return ent;
 	}
 
@@ -105,6 +104,35 @@ namespace Cherenkov {
 				comp.Camera.setViewport(width, height);
 			}
 		}
+	}
+
+
+	template<typename T>
+	void Scene::onComponentAdded(Entity& entity, T& component) { static_assert(false); }
+
+	template<>
+	void Scene::onComponentAdded<NameComp>(Entity& entity, NameComp& component) {
+
+	}
+
+	template<>
+	void Scene::onComponentAdded<CameraComp>(Entity& entity, CameraComp& component) {
+
+	}
+
+	template<>
+	void Scene::onComponentAdded<TransformComp>(Entity& entity, TransformComp& component) {
+		onViewportResize(m_VpWidth, m_VpHeight);
+	}
+
+	template<>
+	void Scene::onComponentAdded<SpriteComp>(Entity& entity, SpriteComp& component) {
+
+	}
+
+	template<>
+	void Scene::onComponentAdded<ScriptComp>(Entity& entity, ScriptComp& component) {
+
 	}
 
 }

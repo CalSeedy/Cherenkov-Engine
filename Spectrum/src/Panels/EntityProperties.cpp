@@ -146,13 +146,16 @@ namespace Cherenkov {
 		if (ImGui::InputText("Name", buff, sizeof(buff))) {
 			tag = std::string(buff);
 		}
-
+		static const float_t padding{ 1.0f };
+		static const ImVec2 buttonSize{ 20.0f, 20.0f };
 		bool deleted = false;
 		ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_DefaultOpen | ImGuiTreeNodeFlags_OpenOnArrow;
 		if (entity.has<CameraComp>()) {
 			if (ImGui::TreeNodeEx((void*)typeid(CameraComp).hash_code(), flags, "Camera")) {
-				ImGui::SameLine(); if (ImGui::Button("...")) ImGui::OpenPopup("ComponentSettings");
-				if (ImGui::BeginPopup("ComponentSettings")) {
+				ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2{ 4, 4 });
+				ImGui::SameLine(ImGui::GetColumnWidth() - padding); if (ImGui::Button("-", buttonSize)) ImGui::OpenPopup("ComponentDelete");
+				ImGui::PopStyleVar();
+				if (ImGui::BeginPopup("ComponentDelete")) {
 
 					if (ImGui::MenuItem("Remove component")) deleted = true;
 
@@ -166,8 +169,10 @@ namespace Cherenkov {
 		deleted = false;
 		if (entity.has<SpriteComp>()) {
 			if (ImGui::TreeNodeEx((void*)typeid(SpriteComp).hash_code(), flags, "Sprite")) {
-				ImGui::SameLine(); if (ImGui::Button("...")) ImGui::OpenPopup("ComponentSettings"); 
-				if (ImGui::BeginPopup("ComponentSettings")) {
+				ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2{ 4, 4 });
+				ImGui::SameLine(ImGui::GetColumnWidth() - padding); if (ImGui::Button("-", buttonSize)) ImGui::OpenPopup("ComponentDelete");
+				ImGui::PopStyleVar();
+				if (ImGui::BeginPopup("ComponentDelete")) {
 
 					if (ImGui::MenuItem("Remove component")) deleted = true;
 
@@ -186,15 +191,24 @@ namespace Cherenkov {
 
 			if (ImGui::TreeNodeEx((void*)typeid(TransformComp).hash_code(), flags, "Transform")) {
 				auto& transformComp = entity.get<TransformComp>();
-				ImGui::SameLine(); if (ImGui::Button("...")) ImGui::OpenPopup("ComponentSettings");
+				ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2{ 4, 4 });
+				ImGui::SameLine(ImGui::GetColumnWidth() - (2.0f * padding + buttonSize.x)); if (ImGui::Button("+", buttonSize)) ImGui::OpenPopup("ComponentSettings");
+				ImGui::PopStyleVar();
 				if (ImGui::BeginPopup("ComponentSettings")) {
 
-					if (ImGui::MenuItem("Remove component")) deleted = true;
 					if (ImGui::MenuItem("Reset to default")) transformComp = TransformComp::getDefault();
 
 					ImGui::EndPopup();
 				}
+				ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2{ 4, 4 });
+				ImGui::SameLine(ImGui::GetColumnWidth() - padding); if (ImGui::Button("-", buttonSize)) ImGui::OpenPopup("ComponentDelete");
+				ImGui::PopStyleVar();
+				if (ImGui::BeginPopup("ComponentDelete")) {
 
+					if (ImGui::MenuItem("Remove component")) deleted = true;
+
+					ImGui::EndPopup();
+				}
 				drawVec3Controls("Scale", transformComp.Scale, 1.0f);
 				drawVec3Controls("Position", transformComp.Position);
 
@@ -208,8 +222,10 @@ namespace Cherenkov {
 		deleted = false;
 		if (entity.has<ScriptComp>()) {
 			if (ImGui::TreeNodeEx((void*)typeid(ScriptComp).hash_code(), flags, "Script")) {
-				ImGui::SameLine(); if (ImGui::Button("...")) ImGui::OpenPopup("ComponentSettings");
-				if (ImGui::BeginPopup("ComponentSettings")) {
+				ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2{ 4, 4 });
+				ImGui::SameLine(ImGui::GetColumnWidth() - padding); if (ImGui::Button("-", buttonSize)) ImGui::OpenPopup("ComponentDelete");
+				ImGui::PopStyleVar();				
+				if (ImGui::BeginPopup("ComponentDelete")) {
 
 					if (ImGui::MenuItem("Remove component")) deleted = true;
 

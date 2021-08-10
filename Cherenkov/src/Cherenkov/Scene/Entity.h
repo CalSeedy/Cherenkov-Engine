@@ -1,7 +1,8 @@
 #pragma once
+#include "Cherenkov/Scene/Components.h"
+#include "Cherenkov/Scene/Scene.h"
 
 #include <entt/entt.hpp>
-#include "Cherenkov/Scene/Scene.h"
 
 namespace Cherenkov {
 
@@ -23,7 +24,9 @@ namespace Cherenkov {
 		template<typename T, typename... Args>
 		T& add(Args&&... args) {
 			CK_CORE_ASSERT(!has<T>(), "Entity already has component!");
-			return m_Scene->m_Registry.emplace<T>(m_EntityID, std::forward<Args>(args)...);
+			T& comp = m_Scene->m_Registry.emplace<T>(m_EntityID, std::forward<Args>(args)...);
+			m_Scene->onComponentAdded(*this, comp);
+			return comp;
 		}
 
 		template<typename... Ts>
@@ -33,7 +36,7 @@ namespace Cherenkov {
 		}
 
 		template<typename T>
-		auto remove() {
+		std::size_t remove() {
 			CK_CORE_ASSERT(has<T>(), "Entity does not have component(s)!");
 			return m_Scene->m_Registry.remove<T>(m_EntityID);
 		}
