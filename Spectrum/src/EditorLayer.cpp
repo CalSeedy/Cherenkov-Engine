@@ -9,8 +9,6 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
-bool switched = false;
-
 namespace Cherenkov {
 	EditorLayer::EditorLayer() : Layer("EditorLayer"), m_CameraController{ 1920.0f / 1080.0f } {}
 
@@ -108,12 +106,90 @@ namespace Cherenkov {
 			ImGui::DockSpace(dockID, ImVec2{ 0.0f, 0.0f }, dockingFlags);
 		}
 
+		bool openFont = false;
+
 		if (ImGui::BeginMenuBar()) {
 			if (ImGui::BeginMenu("File")) {
 				if (ImGui::MenuItem("Exit")) Application::get().close();
 				ImGui::EndMenu();
 			}
+
+			if (ImGui::BeginMenu("Settings")) {
+			
+				if (ImGui::MenuItem("Font")) openFont = true;
+												
+				ImGui::EndMenu();
+			}
+
 			ImGui::EndMenuBar();
+		}
+
+		ImVec2 center = ImGui::GetMainViewport()->GetCenter();
+		ImGui::SetNextWindowPos(center, ImGuiCond_Appearing, ImVec2(0.5f, 0.5f));
+		
+		if (openFont) ImGui::OpenPopup("Font Selection");
+
+		if (ImGui::BeginPopupModal("Font Selection", NULL, ImGuiWindowFlags_AlwaysAutoResize)) {
+			static bool changed = false;
+			const const char* fonts[] = {"Source Sans Pro (Default)", "Dear ImGui", "Open Sans"};
+			const const char* fontPaths[] = {"assets/Fonts/Source Sans Pro/SourceSansPro-", "", "assets/Fonts/Open Sans/OpenSans-"};
+
+			static uint32_t currentFont = 0;
+			static ImGuiLayer::Font tempFont = { "", 18.0f };
+
+			if (ImGui::BeginCombo("##fontstyle", fonts[currentFont])) {
+
+				for (int i = 0; i < IM_ARRAYSIZE(fonts); i++) {
+					const bool selected = (currentFont == i);
+
+					if (ImGui::Selectable(fonts[i], selected)) {
+						currentFont = i;
+						changed = true;
+					}
+
+					if (selected) ImGui::SetItemDefaultFocus();
+					tempFont.path = fontPaths[currentFont];
+				}
+
+				ImGui::EndCombo();
+			}
+
+			static bool bold = false;
+			static bool italics = false;
+
+			ImGui::Text("Bold: "); ImGui::SameLine(); if (ImGui::Checkbox("##bold", &bold)) changed = true;
+			ImGui::SameLine(); ImGui::Text("Italic: "); ImGui::SameLine(); if (ImGui::Checkbox("##italics", &italics)) changed = true;
+
+			ImGui::Text("Font size: "); ImGui::SameLine(); if (ImGui::DragFloat("##fontsize", &tempFont.size, 1.0f, 1.0f, 50.0f)) changed = true;
+
+			if (ImGui::Button("Apply")) {
+				if (changed) {
+					if (!tempFont.path.empty()) {
+						
+						if (!strcmp(strrchr(tempFont.path.c_str(), '\0') - 4, ".ttf")) {
+							size_t idx = tempFont.path.rfind("-");
+							tempFont.path = tempFont.path.substr(0, idx + 1);
+						}
+						tempFont.path.shrink_to_fit();
+						
+						if (bold) tempFont.path += "Bold";
+
+						if (italics) tempFont.path += "Italic";
+
+						if (!strcmp(strrchr(tempFont.path.c_str(), '\0') - 1, "-")) tempFont.path += "Regular";
+						tempFont.path += ".ttf";
+						tempFont.path.shrink_to_fit();
+					}
+
+					ImGuiLayer::fontChange = true;
+					ImGuiLayer::font = tempFont;
+				}
+				ImGui::CloseCurrentPopup();
+			}
+			ImGui::SameLine(); if (ImGui::Button("Close")) ImGui::CloseCurrentPopup();
+
+			//CK_CORE_TRACE("Font details:\n\tPath - '{0}'\n\tSize - {1}", tempFont.path, tempFont.size);
+			ImGui::EndPopup();
 		}
 
 		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2{ 0, 0 });
