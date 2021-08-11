@@ -17,5 +17,10 @@ namespace Cherenkov {
 		decltype(auto) get() {
 			return m_Entity.get<Ts ...>();
 		}
+
+		template<typename T>
+		bool has() {
+			return m_Entity.has<T>();
+		}
 	};
 }

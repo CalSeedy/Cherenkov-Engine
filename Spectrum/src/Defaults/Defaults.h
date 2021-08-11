@@ -17,19 +17,22 @@ namespace Cherenkov {
 
 		void onUpdate(Timestep dt) {
 			float speed = 5.0f;
-			auto [transform, camera] = get<TransformComp, CameraComp>();
+			bool hasTransform = has<TransformComp>();
+			if (hasTransform) {
+				auto& transform = get<TransformComp>();
 
-			if (Input::isKeyPressed(Key::W)) {
-				transform.Position.y += speed * dt;
-			}
-			else if (Input::isKeyPressed(Key::S)) {
-				transform.Position.y -= speed * dt;
-			}
-			if (Input::isKeyPressed(Key::A)) {
-				transform.Position.x -= speed * dt;
-			}
-			else if (Input::isKeyPressed(Key::D)) {
-				transform.Position.x += speed * dt;
+				if (Input::isKeyPressed(Key::W)) {
+					transform.Position.y += speed * dt;
+				}
+				else if (Input::isKeyPressed(Key::S)) {
+					transform.Position.y -= speed * dt;
+				}
+				if (Input::isKeyPressed(Key::A)) {
+					transform.Position.x -= speed * dt;
+				}
+				else if (Input::isKeyPressed(Key::D)) {
+					transform.Position.x += speed * dt;
+				}
 			}
 		}
 
