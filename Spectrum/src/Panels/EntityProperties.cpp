@@ -6,6 +6,8 @@
 #include <imgui/imgui_internal.h>
 
 namespace Cherenkov {
+#define BOLD 1
+#define ITALIC 2
 
 	EntityProperties::EntityProperties(const Ref<Scene>& context) {
 		setContext(context);
@@ -36,8 +38,14 @@ namespace Cherenkov {
 
 		}
 		ImGui::SameLine();
-		auto str = primaryCam.get<NameComp>().Name.c_str();
-		ImGui::Text(str);
+		if ((entt::entity)primaryCam != entt::null) {
+			auto str = primaryCam.get<NameComp>().Name.c_str();
+			ImGui::Text(str);
+		}
+		else {
+
+			ImGui::Text("No camera entities in scene!");
+		}
 
 		auto& comp = camera.get<CameraComp>();
 		bool& fixed = comp.fixedAspectRatio;
@@ -88,6 +96,8 @@ namespace Cherenkov {
 
 #define HEX2FLOAT(val) 0x##val / 256.0f
 	static bool drawVec3Controls(const std::string& label, glm::vec3& vector, float_t resetValue = 0.0f, float_t colWidth = 100.0f) {
+		ImGuiIO& io = ImGui::GetIO();
+		bool notDefault = std::strcmp(ImGuiLayer::font.path.c_str(), "") && !ImGuiLayer::fontChange;
 		bool changed = false;
 		ImGui::PushID(label.c_str());
 		ImGui::Columns(2);
@@ -105,7 +115,9 @@ namespace Cherenkov {
 		ImGui::PushStyleColor(ImGuiCol_Button, ImVec4{ HEX2FLOAT(F5), HEX2FLOAT(33), HEX2FLOAT(3E), 1.0f });
 		ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4{ HEX2FLOAT(F1), HEX2FLOAT(08), HEX2FLOAT(15), 1.0f });
 		ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4{ HEX2FLOAT(C0), HEX2FLOAT(06), HEX2FLOAT(11), 1.0f });
+		if (notDefault) ImGui::PushFont(io.Fonts->Fonts[BOLD]);
 		if (ImGui::Button("X", buttonSize))	vector.x = resetValue; changed = true;
+		if (notDefault) ImGui::PopFont();
 		ImGui::SameLine();
 		if (ImGui::DragFloat("##X", &vector.x, 0.1f)) changed = true;
 		ImGui::PopItemWidth();
@@ -115,7 +127,9 @@ namespace Cherenkov {
 		ImGui::PushStyleColor(ImGuiCol_Button, ImVec4{ HEX2FLOAT(18), HEX2FLOAT(A7), HEX2FLOAT(3E), 1.0f });
 		ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4{ HEX2FLOAT(1E), HEX2FLOAT(D3), HEX2FLOAT(4F), 1.0f });
 		ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4{ HEX2FLOAT(14), HEX2FLOAT(B2), HEX2FLOAT(3E), 1.0f });
+		if (notDefault) ImGui::PushFont(io.Fonts->Fonts[BOLD]);
 		if (ImGui::Button("Y", buttonSize))	vector.y = resetValue; changed = true;
+		if (notDefault) ImGui::PopFont();
 		ImGui::SameLine();
 		if (ImGui::DragFloat("##Y", &vector.y, 0.1f)) changed = true;
 		ImGui::PopItemWidth();
@@ -125,7 +139,9 @@ namespace Cherenkov {
 		ImGui::PushStyleColor(ImGuiCol_Button, ImVec4{ HEX2FLOAT(20), HEX2FLOAT(4A), HEX2FLOAT(EB), 1.0f });
 		ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4{ HEX2FLOAT(18), HEX2FLOAT(67), HEX2FLOAT(E7), 1.0f });
 		ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4{ HEX2FLOAT(14), HEX2FLOAT(4B), HEX2FLOAT(EB), 1.0f });
+		if (notDefault) ImGui::PushFont(io.Fonts->Fonts[BOLD]);
 		if (ImGui::Button("Z", buttonSize))	vector.z = resetValue; changed = true;
+		if (notDefault) ImGui::PopFont();
 		ImGui::SameLine();
 		if(ImGui::DragFloat("##Z", &vector.z, 0.1f)) changed = true;
 		ImGui::PopItemWidth();
@@ -137,7 +153,39 @@ namespace Cherenkov {
 		return changed;
 	}
 	
+	template<typename T, typename Func>
+	static void drawComponent(const std::string& title, Entity& entity, Func function) {
+		if (entity.has<T>()) {
+			const float_t padding{ 1.0f };
+			const ImVec2 buttonSize{ 20.0f, 20.0f };
+			ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_DefaultOpen | ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_SpanAvailWidth;
+
+			bool deleted = false;
+			auto& comp = entity.get<T>();
+			bool open = ImGui::TreeNodeEx((void*)typeid(T).hash_code(), flags, title.c_str());
+			ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2{ 4, 4 });
+			ImGui::SameLine(ImGui::GetColumnWidth() - padding); if (ImGui::Button("-", buttonSize)) ImGui::OpenPopup("ComponentDelete");
+			ImGui::PopStyleVar();
+			if (ImGui::BeginPopup("ComponentDelete")) {
+
+				if (ImGui::MenuItem("Remove component")) deleted = true;
+
+				ImGui::EndPopup();
+			}
+
+			if (open) {
+				function(entity);
+				ImGui::TreePop();
+			}
+			if (deleted) entity.remove<T>();
+			
+		}
+	}
+
+
 	void EntityProperties::drawComponents(Entity& entity) {
+		const float_t padding{ 1.0f };
+		const ImVec2 buttonSize{ 20.0f, 20.0f };
 		const float_t defaultColumnWidth = 100.0f;
 		auto& tag = entity.get<NameComp>().Name;
 		char buff[256];
@@ -146,121 +194,62 @@ namespace Cherenkov {
 		if (ImGui::InputText("Name", buff, sizeof(buff))) {
 			tag = std::string(buff);
 		}
-		static const float_t padding{ 1.0f };
-		static const ImVec2 buttonSize{ 20.0f, 20.0f };
-		bool deleted = false;
-		ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_DefaultOpen | ImGuiTreeNodeFlags_OpenOnArrow;
-		if (entity.has<CameraComp>()) {
-			if (ImGui::TreeNodeEx((void*)typeid(CameraComp).hash_code(), flags, "Camera")) {
-				ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2{ 4, 4 });
-				ImGui::SameLine(ImGui::GetColumnWidth() - padding); if (ImGui::Button("-", buttonSize)) ImGui::OpenPopup("ComponentDelete");
-				ImGui::PopStyleVar();
-				if (ImGui::BeginPopup("ComponentDelete")) {
+			
+		drawComponent<CameraComp>("Camera", entity, [&](Entity& ent) {
+			drawCameraControls(ent);
+		});
 
-					if (ImGui::MenuItem("Remove component")) deleted = true;
+		drawComponent<SpriteComp>("Sprite/Texture", entity, [](Entity& ent) {
+			auto& component = ent.get<SpriteComp>();
+			ImGui::ColorEdit4("Colour", glm::value_ptr(component.Colour));
+		});
+		
+		drawComponent<TransformComp>("Transform", entity, [&](Entity& ent) {
+			auto& component = ent.get<TransformComp>();
+			ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2{ 4, 4 });
+			ImGui::SameLine(ImGui::GetColumnWidth() - (2.0f * padding + buttonSize.x)); if (ImGui::Button("+", buttonSize)) ImGui::OpenPopup("ComponentSettings");
+			ImGui::PopStyleVar();
+			if (ImGui::BeginPopup("ComponentSettings")) {
 
-					ImGui::EndPopup();
-				}
-				drawCameraControls(entity);
-				ImGui::TreePop();
-				if (deleted) entity.remove<CameraComp>();
+				if (ImGui::MenuItem("Reset to default")) component = TransformComp::getDefault();
+
+				ImGui::EndPopup();
 			}
-		}
-		deleted = false;
-		if (entity.has<SpriteComp>()) {
-			if (ImGui::TreeNodeEx((void*)typeid(SpriteComp).hash_code(), flags, "Sprite")) {
-				ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2{ 4, 4 });
-				ImGui::SameLine(ImGui::GetColumnWidth() - padding); if (ImGui::Button("-", buttonSize)) ImGui::OpenPopup("ComponentDelete");
-				ImGui::PopStyleVar();
-				if (ImGui::BeginPopup("ComponentDelete")) {
+			drawVec3Controls("Scale", component.Scale, 1.0f);
+			drawVec3Controls("Position", component.Position);
 
-					if (ImGui::MenuItem("Remove component")) deleted = true;
+			glm::vec3 rotDeg{ glm::degrees(component.Rotation) };
+			if (drawVec3Controls("Rotation", rotDeg)) component.Rotation = glm::radians(rotDeg);
+		});
 
-					ImGui::EndPopup();
-				}
-				auto& comp = entity.get<SpriteComp>();
+		drawComponent<ScriptComp>("Script", entity, [&](Entity& ent) {
+			auto& component = ent.get<ScriptComp>();
+			ImGui::Columns(2);
+			ImGui::SetColumnWidth(0, defaultColumnWidth);
+			ImGui::Text("Language:");
+			ImGui::NextColumn();
+			ImGui::Text(component.getLanguage());
+			ImGui::Columns(1);
 
-				ImGui::ColorEdit4("Colour", glm::value_ptr(comp.Colour));
+			ImGui::Columns(2);
+			ImGui::SetColumnWidth(0, defaultColumnWidth);
+			ImGui::Text("Name:");
+			ImGui::NextColumn();
 
-				ImGui::TreePop();
-				if (deleted) entity.remove<SpriteComp>();
-			}
-		}
-		deleted = false;
-		if (entity.has<TransformComp>()) {			
+			char buff[256];
+			memset(buff, 0, sizeof(buff));
+			strcpy_s(buff, component.Name.c_str());
+			if (ImGui::InputText("##name", buff, sizeof(buff))) component.Name = std::string(buff);
+			ImGui::Columns(1);
 
-			if (ImGui::TreeNodeEx((void*)typeid(TransformComp).hash_code(), flags, "Transform")) {
-				auto& transformComp = entity.get<TransformComp>();
-				ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2{ 4, 4 });
-				ImGui::SameLine(ImGui::GetColumnWidth() - (2.0f * padding + buttonSize.x)); if (ImGui::Button("+", buttonSize)) ImGui::OpenPopup("ComponentSettings");
-				ImGui::PopStyleVar();
-				if (ImGui::BeginPopup("ComponentSettings")) {
+			ImGui::Columns(2);
+			ImGui::SetColumnWidth(0, defaultColumnWidth);
+			ImGui::Text("Path:");
+			ImGui::NextColumn();
+			ImGui::Text(((std::filesystem::path)component).string().c_str());
+			ImGui::Columns(1);
+		});
 
-					if (ImGui::MenuItem("Reset to default")) transformComp = TransformComp::getDefault();
-
-					ImGui::EndPopup();
-				}
-				ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2{ 4, 4 });
-				ImGui::SameLine(ImGui::GetColumnWidth() - padding); if (ImGui::Button("-", buttonSize)) ImGui::OpenPopup("ComponentDelete");
-				ImGui::PopStyleVar();
-				if (ImGui::BeginPopup("ComponentDelete")) {
-
-					if (ImGui::MenuItem("Remove component")) deleted = true;
-
-					ImGui::EndPopup();
-				}
-				drawVec3Controls("Scale", transformComp.Scale, 1.0f);
-				drawVec3Controls("Position", transformComp.Position);
-
-				glm::vec3 rotDeg{ glm::degrees(transformComp.Rotation) };
-				if (drawVec3Controls("Rotation", rotDeg)) transformComp.Rotation = glm::radians(rotDeg);
-
-				ImGui::TreePop();
-				if (deleted) entity.remove<TransformComp>();
-			}
-		}
-		deleted = false;
-		if (entity.has<ScriptComp>()) {
-			if (ImGui::TreeNodeEx((void*)typeid(ScriptComp).hash_code(), flags, "Script")) {
-				ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2{ 4, 4 });
-				ImGui::SameLine(ImGui::GetColumnWidth() - padding); if (ImGui::Button("-", buttonSize)) ImGui::OpenPopup("ComponentDelete");
-				ImGui::PopStyleVar();				
-				if (ImGui::BeginPopup("ComponentDelete")) {
-
-					if (ImGui::MenuItem("Remove component")) deleted = true;
-
-					ImGui::EndPopup();
-				}
-				auto& scriptComp = entity.get<ScriptComp>();
-				ImGui::Columns(2);
-				ImGui::SetColumnWidth(0, defaultColumnWidth);
-				ImGui::Text("Language:");
-				ImGui::NextColumn();
-				ImGui::Text(scriptComp.getLanguage());
-				ImGui::Columns(1);
-
-				ImGui::Columns(2);
-				ImGui::SetColumnWidth(0, defaultColumnWidth);
-				ImGui::Text("Name:");
-				ImGui::NextColumn();
-				
-				char buff[256];
-				memset(buff, 0, sizeof(buff));
-				strcpy_s(buff, scriptComp.Name.c_str());
-				if (ImGui::InputText("##name", buff, sizeof(buff))) scriptComp.Name = std::string(buff);
-				ImGui::Columns(1);
-
-				ImGui::Columns(2);
-				ImGui::SetColumnWidth(0, defaultColumnWidth);
-				ImGui::Text("Path:");
-				ImGui::NextColumn();
-				ImGui::Text(((std::filesystem::path)scriptComp).string().c_str());
-				ImGui::Columns(1);
-
-				ImGui::TreePop();
-				if (deleted) entity.remove<ScriptComp>();
-			}
-		}
 	}
 
 	void loadCustomScript(Entity& entity, ScriptLanguage language) {

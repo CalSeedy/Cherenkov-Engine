@@ -13,14 +13,19 @@
 
 namespace Cherenkov {
 	
-	ImGuiLayer::Font ImGuiLayer::font = { "assets/Fonts/Source Sans Pro/SourceSansPro-Regular.ttf", 18.0f };
+	ImGuiLayer::Font ImGuiLayer::font = { "assets/Fonts/Source Sans Pro/SourceSansPro-", 18.0f };
 	bool ImGuiLayer::fontChange = false;
 
 	void ImGuiLayer::changeFonts() {
 		ImGuiIO& io = ImGui::GetIO(); (void)io;
 		io.Fonts->Clear();
-		if (std::strcmp(ImGuiLayer::font.path.c_str(), "") != 0)	io.FontDefault = io.Fonts->AddFontFromFileTTF(ImGuiLayer::font.path.c_str(), ImGuiLayer::font.size);
-		else io.FontDefault = io.Fonts->AddFontDefault();
+		if (std::strcmp(ImGuiLayer::font.path.c_str(), "") != 0) {
+			io.FontDefault = io.Fonts->AddFontFromFileTTF((ImGuiLayer::font.path + std::string("Regular.ttf")).c_str(), ImGuiLayer::font.size);
+			io.Fonts->AddFontFromFileTTF((ImGuiLayer::font.path + std::string("Bold.ttf")).c_str(), ImGuiLayer::font.size);
+			io.Fonts->AddFontFromFileTTF((ImGuiLayer::font.path + std::string("Italic.ttf")).c_str(), ImGuiLayer::font.size);
+			io.Fonts->AddFontFromFileTTF((ImGuiLayer::font.path + std::string("BoldItalic.ttf")).c_str(), ImGuiLayer::font.size);
+		} else
+			io.FontDefault = io.Fonts->AddFontDefault();
 		io.Fonts->Build();
 		ImGui_ImplOpenGL3_CreateFontsTexture();
 	}
@@ -40,7 +45,10 @@ namespace Cherenkov {
 		//io.ConfigFlags |= ImGuiConfigFlags_ViewportsNoTaskBarIcons;
 		//io.ConfigFlags |= ImGuiConfigFlags_ViewportsNoMerge;
 
-		io.FontDefault = io.Fonts->AddFontFromFileTTF(this->font.path.c_str(), this->font.size);
+		io.FontDefault = io.Fonts->AddFontFromFileTTF((ImGuiLayer::font.path + std::string("Regular.ttf")).c_str(), ImGuiLayer::font.size);
+		io.Fonts->AddFontFromFileTTF((ImGuiLayer::font.path + std::string("Bold.ttf")).c_str(), ImGuiLayer::font.size);
+		io.Fonts->AddFontFromFileTTF((ImGuiLayer::font.path + std::string("Italic.ttf")).c_str(), ImGuiLayer::font.size);
+		io.Fonts->AddFontFromFileTTF((ImGuiLayer::font.path + std::string("BoldItalic.ttf")).c_str(), ImGuiLayer::font.size);
 		ImGui::StyleColorsDark();
 
 		ImGuiStyle& style = ImGui::GetStyle();

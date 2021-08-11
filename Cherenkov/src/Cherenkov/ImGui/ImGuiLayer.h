@@ -14,8 +14,8 @@ namespace Cherenkov {
 
 	public:
 		struct Font {
-			std::string path;
-			float_t size;
+			std::string path = "";
+			float_t size = 18.0f;
 		};
 
 		ImGuiLayer();

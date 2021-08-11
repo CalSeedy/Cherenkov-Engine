@@ -1,8 +1,8 @@
 #pragma once
-#include <entt/entt.hpp>
 
 #include "Cherenkov/Core/TimeStep.h"
 
+#include <entt/entt.hpp>
 
 namespace Cherenkov {
 	class Entity;
@@ -11,17 +11,22 @@ namespace Cherenkov {
 		entt::registry m_Registry;
 		uint32_t m_VpWidth = 0;
 		uint32_t m_VpHeight = 0;
-		entt::entity m_PrimaryCamera;
+		entt::entity m_PrimaryCamera{ entt::null };
 		entt::entity m_SelectedEntity{ entt::null };
 
 		template<typename T>
 		void onComponentAdded(Entity& entity, T& component);
+
+		template<typename T>
+		void onComponentRemoved(Entity& entity);
 
 		friend class Entity;
 		friend class SceneHierarchy;
 	public:
 		Scene();
 		~Scene();
+
+		size_t cameraCount();
 
 		Entity getPrimaryCamera();
 		void setPrimaryCamera(Entity& camera);

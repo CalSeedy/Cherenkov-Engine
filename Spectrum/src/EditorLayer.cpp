@@ -131,8 +131,8 @@ namespace Cherenkov {
 
 		if (ImGui::BeginPopupModal("Font Selection", NULL, ImGuiWindowFlags_AlwaysAutoResize)) {
 			static bool changed = false;
-			const const char* fonts[] = {"Source Sans Pro (Default)", "Dear ImGui", "Open Sans"};
-			const const char* fontPaths[] = {"assets/Fonts/Source Sans Pro/SourceSansPro-", "", "assets/Fonts/Open Sans/OpenSans-"};
+			const char* fonts[] = {"Source Sans Pro (Default)", "Dear ImGui", "Open Sans"};
+			const char* fontPaths[] = {"assets/Fonts/Source Sans Pro/SourceSansPro-", "", "assets/Fonts/Open Sans/OpenSans-"};
 
 			static uint32_t currentFont = 0;
 			static ImGuiLayer::Font tempFont = { "", 18.0f };
@@ -154,12 +154,6 @@ namespace Cherenkov {
 				ImGui::EndCombo();
 			}
 
-			static bool bold = false;
-			static bool italics = false;
-
-			ImGui::Text("Bold: "); ImGui::SameLine(); if (ImGui::Checkbox("##bold", &bold)) changed = true;
-			ImGui::SameLine(); ImGui::Text("Italic: "); ImGui::SameLine(); if (ImGui::Checkbox("##italics", &italics)) changed = true;
-
 			ImGui::Text("Font size: "); ImGui::SameLine(); if (ImGui::DragFloat("##fontsize", &tempFont.size, 1.0f, 1.0f, 50.0f)) changed = true;
 
 			if (ImGui::Button("Apply")) {
@@ -171,14 +165,6 @@ namespace Cherenkov {
 							tempFont.path = tempFont.path.substr(0, idx + 1);
 						}
 						tempFont.path.shrink_to_fit();
-						
-						if (bold) tempFont.path += "Bold";
-
-						if (italics) tempFont.path += "Italic";
-
-						if (!strcmp(strrchr(tempFont.path.c_str(), '\0') - 1, "-")) tempFont.path += "Regular";
-						tempFont.path += ".ttf";
-						tempFont.path.shrink_to_fit();
 					}
 
 					ImGuiLayer::fontChange = true;
@@ -188,7 +174,6 @@ namespace Cherenkov {
 			}
 			ImGui::SameLine(); if (ImGui::Button("Close")) ImGui::CloseCurrentPopup();
 
-			//CK_CORE_TRACE("Font details:\n\tPath - '{0}'\n\tSize - {1}", tempFont.path, tempFont.size);
 			ImGui::EndPopup();
 		}
 

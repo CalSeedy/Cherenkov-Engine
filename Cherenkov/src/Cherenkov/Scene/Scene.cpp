@@ -21,6 +21,10 @@ namespace Cherenkov {
 
 	}
 
+	size_t Scene::cameraCount() {
+		auto view = m_Registry.view<CameraComp>();
+		return view.size();
+	}
 
 	Entity Scene::getPrimaryCamera() {
 		return { m_PrimaryCamera, this };
@@ -117,7 +121,7 @@ namespace Cherenkov {
 
 	template<>
 	void Scene::onComponentAdded<CameraComp>(Entity& entity, CameraComp& component) {
-
+		if (cameraCount() == 1) m_PrimaryCamera = entity;
 	}
 
 	template<>
@@ -132,6 +136,34 @@ namespace Cherenkov {
 
 	template<>
 	void Scene::onComponentAdded<ScriptComp>(Entity& entity, ScriptComp& component) {
+
+	}
+
+	template<typename T>
+	void Scene::onComponentRemoved(Entity& entity) { static_assert(false); }
+
+	template<>
+	void Scene::onComponentRemoved<NameComp>(Entity& entity) {
+
+	}
+
+	template<>
+	void Scene::onComponentRemoved<CameraComp>(Entity& entity) {
+		if (cameraCount() == 0) m_PrimaryCamera = entt::null;
+	}
+
+	template<>
+	void Scene::onComponentRemoved<TransformComp>(Entity& entity) {
+
+	}
+
+	template<>
+	void Scene::onComponentRemoved<SpriteComp>(Entity& entity) {
+
+	}
+
+	template<>
+	void Scene::onComponentRemoved<ScriptComp>(Entity& entity) {
 
 	}
 
