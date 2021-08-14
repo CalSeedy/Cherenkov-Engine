@@ -35,7 +35,8 @@ project "Cherenkov"
 		"%{IncludeDir.ImGui}",
 		"%{IncludeDir.glm}",
 		"%{IncludeDir.stb}",
-		"%{IncludeDir.EnTT}"
+		"%{IncludeDir.EnTT}",
+		"%{IncludeDir.yaml}"
 	}
 
 	links
@@ -43,6 +44,7 @@ project "Cherenkov"
 		"GLFW",
 		"Glad",
 		"ImGui",
+		"yaml",
 		"opengl32.lib"
 	}
 

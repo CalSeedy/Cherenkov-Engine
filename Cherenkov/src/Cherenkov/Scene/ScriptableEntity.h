@@ -13,6 +13,8 @@ namespace Cherenkov {
 	public:
 		virtual ~ScriptableEntity() = default;
 
+		operator uint32_t() { return (uint32_t)m_Entity; }
+
 		template<typename... Ts>
 		decltype(auto) get() {
 			return m_Entity.get<Ts ...>();

@@ -83,6 +83,8 @@ namespace Cherenkov {
 		void bind() {
 			instantiateScript = []() { return static_cast<ScriptableEntity*>(new T()); };
 			destroyScript = [](ScriptComp* script) { delete script->Instance; };
+			if (std::is_same_v<T, SimpleMovement>) Path = "Default_SimpleMovement";
+			else if (std::is_same_v<T, EmptyScript>) Path = "Default_Empty";
 		}
 
 		const char* getLanguage() {

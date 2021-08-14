@@ -20,6 +20,7 @@
 #include "Cherenkov/Scene/Scene.h"
 #include "Cherenkov/Scene/Components.h"
 #include "Cherenkov/Scene/Entity.h"
+#include "Cherenkov/Scene/Serializer.h"
 
 #include "Cherenkov/Renderer/Renderer.h"
 #include "Cherenkov/Renderer/Renderer2D.h"

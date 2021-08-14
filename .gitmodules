@@ -21,3 +21,6 @@
 [submodule "Cherenkov/vendor/EnTT"]
 	path = Cherenkov/vendor/EnTT
 	url = https://github.com/skypjack/entt.git
+[submodule "Cherenkov/vendor/yaml"]
+	path = Cherenkov/vendor/yaml
+	url = https://github.com/jbeder/yaml-cpp.git

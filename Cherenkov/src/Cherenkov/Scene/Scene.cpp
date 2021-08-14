@@ -11,9 +11,9 @@
 namespace Cherenkov {
 
 	Scene::Scene() {
-		Entity cam = createEntity("Scene Camera");
-		cam.add<CameraComp>();
-		m_PrimaryCamera = (entt::entity)cam;
+		//Entity cam = createEntity("Scene Camera");
+		//cam.add<CameraComp>();
+		//m_PrimaryCamera = (entt::entity)cam;
 		
 	}
 

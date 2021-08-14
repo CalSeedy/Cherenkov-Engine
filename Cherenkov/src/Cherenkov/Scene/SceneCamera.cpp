@@ -25,6 +25,19 @@ namespace Cherenkov {
 		}
 	}
 	
+	void SceneCamera::setProperties(float_t aspect, float_t orthoSize, float_t orthoNear, float_t orthoFar, float_t perspFOV, float_t perspNear, float_t perspFar) {
+		m_AspectRatio = aspect;
+
+		m_OrthographicSize = orthoSize;
+		m_OrthographicNear = orthoNear;
+		m_OrthographicFar = orthoFar;
+
+		m_PerspectiveFOV = perspFOV;
+		m_PerspectiveNear = perspNear;
+		m_PerspectiveFar = perspFar;
+		recalculate();
+	}
+
 	void SceneCamera::setPerspective(float_t fov, float_t near, float_t far) {
 
 		m_PerspectiveFOV = glm::radians(fov);

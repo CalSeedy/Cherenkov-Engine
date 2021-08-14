@@ -22,6 +22,7 @@ namespace Cherenkov {
 
 		friend class Entity;
 		friend class SceneHierarchy;
+		friend class Serializer;
 	public:
 		Scene();
 		~Scene();

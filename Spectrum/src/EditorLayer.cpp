@@ -23,6 +23,7 @@ namespace Cherenkov {
 		m_Framebuffer = Framebuffer::init(defaultSpec);
 
 		m_ActiveScene = CreateRef<Scene>();
+#if 0
 		auto square = m_ActiveScene->createEntity("Square");
 		square.add<SpriteComp>( 1.0f, 1.0f, 0.0f, 1.0f );
 		m_Square = square;
@@ -35,13 +36,16 @@ namespace Cherenkov {
 
 		m_CameraFirst.add<ScriptComp>(ScriptLanguage::Native).bind<SimpleMovement>();
 		m_CameraOther.add<ScriptComp>(ScriptLanguage::Native).bind<SimpleMovement>();
-
+#endif
 
 		m_SceneHierarchy.setContext(m_ActiveScene);
 		m_Properties.setContext(m_ActiveScene);
+
 	}
 
-	void EditorLayer::onDetach() {}
+	void EditorLayer::onDetach() {
+		
+	}
 
 	void EditorLayer::onUpdate(Timestep dt) {
 		CK_PROFILE_FUNCTION();
@@ -112,6 +116,10 @@ namespace Cherenkov {
 
 		if (ImGui::BeginMenuBar()) {
 			if (ImGui::BeginMenu("File")) {
+				
+				if (ImGui::MenuItem("Serialize")) { Serializer serializer(m_ActiveScene); serializer.serialize("assets/Scenes/test.cherenkov"); }
+				if (ImGui::MenuItem("Deserialize")) { Serializer serializer(m_ActiveScene); serializer.deserialize("assets/Scenes/test.cherenkov"); }
+
 				if (ImGui::MenuItem("Exit")) Application::get().close();
 				ImGui::EndMenu();
 			}

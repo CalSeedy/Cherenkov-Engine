@@ -1,0 +1,67 @@
+Scene: Scene Title
+Primary: Camera 2
+Entities:
+  - Entity ID: 864872648263
+    NameComp:
+      Name: This is a thing
+    TransformComp:
+      Position: [2.70000005, 0, 0]
+      Rotation: [0, 0, 0]
+      Scale: [3.29999995, 12.3000002, 1]
+    SpriteComp:
+      Colour: [1, 0, 0, 0.666666687]
+  - Entity ID: 864872648263
+    NameComp:
+      Name: Scene Camera
+    CameraComp:
+      Camera:
+        Type: 1
+        Aspect Ratio: 0.798850596
+        Orthographic Size: 10
+        Orthographic Near: -1
+        Orthographic Far: 1
+        Perspective FOV: 0.785398185
+        Perspective Near: 0.00999999978
+        Perspective Far: 1000
+      Fixed: false
+    TransformComp:
+      Position: [-0.321502686, -0.642910004, 18.3999996]
+      Rotation: [0, 0, 0]
+      Scale: [1, 1, 1]
+    ScriptComp:
+      Name: Empty
+      Path: Default_SimpleMovement
+      Language: 0
+      Instance: 86529365364595692
+  - Entity ID: 864872648263
+    NameComp:
+      Name: Square
+    TransformComp:
+      Position: [0, 0, 0]
+      Rotation: [0, 0, 0]
+      Scale: [1, 1, 1]
+    SpriteComp:
+      Colour: [1, 1, 0, 1]
+  - Entity ID: 864872648263
+    NameComp:
+      Name: Camera 2
+    CameraComp:
+      Camera:
+        Type: 0
+        Aspect Ratio: 0.798850596
+        Orthographic Size: 10
+        Orthographic Near: -1
+        Orthographic Far: 1
+        Perspective FOV: 45
+        Perspective Near: 0.00999999978
+        Perspective Far: 1000
+      Fixed: false
+    TransformComp:
+      Position: [-0.321502686, -0.642910004, 0]
+      Rotation: [0, 0, 0]
+      Scale: [1, 1, 1]
+    ScriptComp:
+      Name: Empty
+      Path: Default_SimpleMovement
+      Language: 0
+      Instance: 86529365364595692
