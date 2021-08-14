@@ -100,12 +100,14 @@ namespace Cherenkov {
 		if (fullscreen)	ImGui::PopStyleVar(2);
 
 		ImGuiIO& io = ImGui::GetIO();
-
+		ImGuiStyle& style = ImGui::GetStyle();
+		float currMinWinX = style.WindowMinSize.x;
+		style.WindowMinSize.x = 360.0f;
 		if (io.ConfigFlags & ImGuiConfigFlags_DockingEnable) {
 			ImGuiID dockID = ImGui::GetID("MyDockSpace");
 			ImGui::DockSpace(dockID, ImVec2{ 0.0f, 0.0f }, dockingFlags);
 		}
-
+		style.WindowMinSize.x = currMinWinX;
 		bool openFont = false;
 
 		if (ImGui::BeginMenuBar()) {
@@ -117,7 +119,13 @@ namespace Cherenkov {
 			if (ImGui::BeginMenu("Settings")) {
 			
 				if (ImGui::MenuItem("Font")) openFont = true;
-												
+				
+				if (ImGui::BeginMenu("Theme")) {
+					if (ImGui::MenuItem("Dear ImGui")) ImGuiLayer::setTheme(ImGuiLayer::ColourStyle::Default);
+					if (ImGui::MenuItem("Light Mode")) ImGuiLayer::setTheme(ImGuiLayer::ColourStyle::LightMode);
+					if (ImGui::MenuItem("Dark Mode")) ImGuiLayer::setTheme(ImGuiLayer::ColourStyle::DarkMode);
+					ImGui::EndMenu();
+				}
 				ImGui::EndMenu();
 			}
 

@@ -21,7 +21,6 @@ namespace Cherenkov {
 		ImGui::Begin("Properties");
 		if (m_Ctx->getSelectedEntity()) {
 			drawComponents(m_Ctx->getSelectedEntity()); 
-			drawAddComponents(m_Ctx->getSelectedEntity());
 		}
 		else ImGui::Text("No entity selected!");
 		ImGui::End();
@@ -157,15 +156,18 @@ namespace Cherenkov {
 	static void drawComponent(const std::string& title, Entity& entity, Func function) {
 		if (entity.has<T>()) {
 			const float_t padding{ 1.0f };
-			const ImVec2 buttonSize{ 20.0f, 20.0f };
-			ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_DefaultOpen | ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_SpanAvailWidth;
-
+			ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_DefaultOpen | ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_SpanAvailWidth | ImGuiTreeNodeFlags_Framed | ImGuiTreeNodeFlags_AllowItemOverlap | ImGuiTreeNodeFlags_FramePadding;
+			const float availWidth = ImGui::GetContentRegionAvailWidth();
 			bool deleted = false;
 			auto& comp = entity.get<T>();
-			bool open = ImGui::TreeNodeEx((void*)typeid(T).hash_code(), flags, title.c_str());
 			ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2{ 4, 4 });
-			ImGui::SameLine(ImGui::GetColumnWidth() - padding); if (ImGui::Button("-", buttonSize)) ImGui::OpenPopup("ComponentDelete");
+			ImGui::Separator();
+			bool open = ImGui::TreeNodeEx((void*)typeid(T).hash_code(), flags, title.c_str());
+			float lineHeight = GImGui->Font->FontSize + GImGui->Style.FramePadding.y * 2.0f;
 			ImGui::PopStyleVar();
+
+			const ImVec2 buttonSize{ lineHeight , lineHeight };
+			ImGui::SameLine(availWidth - lineHeight * 0.5f); if (ImGui::Button("-", buttonSize)) ImGui::OpenPopup("ComponentDelete");
 			if (ImGui::BeginPopup("ComponentDelete")) {
 
 				if (ImGui::MenuItem("Remove component")) deleted = true;
@@ -185,16 +187,17 @@ namespace Cherenkov {
 
 	void EntityProperties::drawComponents(Entity& entity) {
 		const float_t padding{ 1.0f };
-		const ImVec2 buttonSize{ 20.0f, 20.0f };
 		const float_t defaultColumnWidth = 100.0f;
 		auto& tag = entity.get<NameComp>().Name;
 		char buff[256];
 		memset(buff, 0, sizeof(buff));
 		strcpy_s(buff, tag.c_str());
-		if (ImGui::InputText("Name", buff, sizeof(buff))) {
+		if (ImGui::InputText("##Name", buff, sizeof(buff))) {
 			tag = std::string(buff);
 		}
-			
+		
+		drawAddComponents(entity);
+
 		drawComponent<CameraComp>("Camera", entity, [&](Entity& ent) {
 			drawCameraControls(ent);
 		});
@@ -203,11 +206,12 @@ namespace Cherenkov {
 			auto& component = ent.get<SpriteComp>();
 			ImGui::ColorEdit4("Colour", glm::value_ptr(component.Colour));
 		});
-		
+		const float availWidth = ImGui::GetContentRegionAvailWidth();
 		drawComponent<TransformComp>("Transform", entity, [&](Entity& ent) {
 			auto& component = ent.get<TransformComp>();
 			ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2{ 4, 4 });
-			ImGui::SameLine(ImGui::GetColumnWidth() - (2.0f * padding + buttonSize.x)); if (ImGui::Button("+", buttonSize)) ImGui::OpenPopup("ComponentSettings");
+			float lineHeight = GImGui->Font->FontSize + GImGui->Style.FramePadding.y * 2.0f;
+			ImGui::SameLine(availWidth - lineHeight * 1.5f); if (ImGui::Button("+", ImVec2{ lineHeight, lineHeight})) ImGui::OpenPopup("ComponentSettings");
 			ImGui::PopStyleVar();
 			if (ImGui::BeginPopup("ComponentSettings")) {
 
@@ -257,6 +261,7 @@ namespace Cherenkov {
 	}
 
 	void EntityProperties::drawAddComponents(Entity& entity) {
+		ImGui::SameLine(); ImGui::PushItemWidth(-1);
 		if (ImGui::Button("+")) ImGui::OpenPopup("AddComponent");
 
 		if (ImGui::BeginPopup("AddComponent")) {
@@ -299,5 +304,6 @@ namespace Cherenkov {
 			if (noneLeft) ImGui::Text("No available components.");
 			ImGui::EndPopup();
 		}
+		ImGui::PopItemWidth();
 	}
 }
