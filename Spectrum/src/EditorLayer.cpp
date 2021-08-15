@@ -251,7 +251,7 @@ namespace Cherenkov {
 
 		m_VpFocused = ImGui::IsWindowFocused();
 		m_VpHovered = ImGui::IsWindowHovered();
-		Application::get().getImGuiLayer()->blockingEvents(!m_VpFocused || !m_VpHovered);
+		Application::get().getImGuiLayer()->blockingEvents(!m_VpFocused && !m_VpHovered);
 		ImVec2 vpSize = ImGui::GetContentRegionAvail();
 		m_VpSize = { vpSize.x, vpSize.y };
 
@@ -259,9 +259,41 @@ namespace Cherenkov {
 		ImGui::Image(reinterpret_cast<void*>(tID), ImVec2{ m_VpSize.x, m_VpSize.y }, ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
 
 		Entity currentSelection = m_ActiveScene->getSelectedEntity();
-		if (currentSelection) {
+		if (currentSelection && m_GuizmoOp != -1) {
 			ImGuizmo::SetOrthographic(false);
+			ImGuizmo::SetDrawlist();
 
+			float windowWidth = (float)ImGui::GetWindowWidth(), windowHeight = (float)ImGui::GetWindowHeight();
+			ImGuizmo::SetRect(ImGui::GetWindowPos().x, ImGui::GetWindowPos().y, windowWidth, windowHeight);
+
+			auto& cameraEnt = m_ActiveScene->getPrimaryCamera();
+			const auto& camera = cameraEnt.get<CameraComp>().Camera;
+			const auto& projection = camera.getProjection();
+			glm::mat4 viewMat = glm::inverse(cameraEnt.get<TransformComp>().getTransform());
+
+			auto& selectedTC = currentSelection.get<TransformComp>();
+			glm::mat4 selectedTransform = selectedTC.getTransform();
+
+			bool snap = Input::isKeyPressed(Key::Left_Control);
+			float snapValue;
+			switch (m_GuizmoOp) {
+			case ImGuizmo::OPERATION::ROTATE: {snapValue = 15.0f; break; }
+			case ImGuizmo::OPERATION::TRANSLATE: {snapValue = 0.5f; break; }
+			case ImGuizmo::OPERATION::SCALE: { snapValue = 0.1f; break; }
+			default: CK_CORE_ASSERT(false, "Unknown ImGuizmo operation."); break;
+			}
+			float snapVals[3] = { snapValue, snapValue, snapValue };
+			ImGuizmo::Manipulate(glm::value_ptr(viewMat), glm::value_ptr(projection), (ImGuizmo::OPERATION)m_GuizmoOp, ImGuizmo::LOCAL, glm::value_ptr(selectedTransform), nullptr, snap ? snapVals : nullptr);
+
+			if (ImGuizmo::IsUsing()) {
+				glm::vec3 newPos, newRot, newScale;
+				Maths::decomposeMat4(selectedTransform, newPos, newRot, newScale);
+				glm::vec3 deltaRot = newRot - selectedTC.Rotation;
+
+				selectedTC.Position = newPos;
+				selectedTC.Rotation += deltaRot;
+				selectedTC.Scale = newScale;
+			}
 		}
 
 		ImGui::End();
@@ -316,6 +348,24 @@ namespace Cherenkov {
 			else if (ctrl) saveScene();
 			break;
 		}
+
+		case Key::Q: {
+			m_GuizmoOp = -1;
+			break;
+		}
+		case Key::W: {
+			m_GuizmoOp = ImGuizmo::OPERATION::TRANSLATE;
+			break;
+		}
+		case Key::E: {
+			m_GuizmoOp = ImGuizmo::OPERATION::ROTATE;
+			break;
+		}
+		case Key::R: {
+			m_GuizmoOp = ImGuizmo::OPERATION::SCALE;
+			break;
+		}
+
 		default: 	break;
 		}
 	}

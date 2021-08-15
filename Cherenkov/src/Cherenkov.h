@@ -34,3 +34,4 @@
 #include "Cherenkov/Renderer/Camera.h"
 
 #include "Cherenkov/Utils/PlatformUtils.h"
+#include "Cherenkov/Maths/Maths.h"

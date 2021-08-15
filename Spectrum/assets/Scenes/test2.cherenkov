@@ -1,22 +1,31 @@
 Scene: Scene Title
-Primary: Camera 2
+Primary: Scene Camera
 Entities:
   - Entity ID: 864872648263
     NameComp:
-      Name: kjugsdfugskudfg
+      Name: Right
     TransformComp:
-      Position: [2.70000005, 0, 0]
-      Rotation: [0, 0, 0]
-      Scale: [3.29999995, 12.3000002, 1]
+      Position: [2.07630992, 0, -0.0763117]
+      Rotation: [0, 0.785398245, 0]
+      Scale: [5, 5, 1]
     SpriteComp:
-      Colour: [0, 0, 0, 1]
+      Colour: [1, 0, 0, 1]
+  - Entity ID: 864872648263
+    NameComp:
+      Name: Top
+    TransformComp:
+      Position: [-7.34076548, 2.52673912, 9.47907829]
+      Rotation: [1.49576926, 0.594609559, 3.0372417]
+      Scale: [9.99410057, 9.99995232, 0.999992013]
+    SpriteComp:
+      Colour: [0, 0.270294666, 1, 1]
   - Entity ID: 864872648263
     NameComp:
       Name: Scene Camera
     CameraComp:
       Camera:
         Type: 1
-        Aspect Ratio: 1.02316213
+        Aspect Ratio: 1.20443106
         Orthographic Size: 10
         Orthographic Near: -1
         Orthographic Far: 1
@@ -25,43 +34,15 @@ Entities:
         Perspective Far: 1000
       Fixed: false
     TransformComp:
-      Position: [0.751972198, -4.00504112, 18.3999996]
+      Position: [0, 0, 44.7000008]
       Rotation: [0, 0, 0]
       Scale: [1, 1, 1]
-    ScriptComp:
-      Name: Empty
-      Path: Default_SimpleMovement
-      Language: 0
-      Instance: 86529365364595692
   - Entity ID: 864872648263
     NameComp:
-      Name: Square
+      Name: Left
     TransformComp:
-      Position: [0, 0, -0.400000006]
-      Rotation: [0, 0, 0]
-      Scale: [1, 1, 1]
+      Position: [-1.46271133, 0.0372910202, 0]
+      Rotation: [0, -0.785398245, 0]
+      Scale: [5, 5, 1]
     SpriteComp:
-      Colour: [0.0386100374, 0.0636544302, 0.270270288, 1]
-  - Entity ID: 864872648263
-    NameComp:
-      Name: Camera 2
-    CameraComp:
-      Camera:
-        Type: 0
-        Aspect Ratio: 1.02316213
-        Orthographic Size: 10
-        Orthographic Near: -1
-        Orthographic Far: 1
-        Perspective FOV: 45
-        Perspective Near: 0.00999999978
-        Perspective Far: 1000
-      Fixed: false
-    TransformComp:
-      Position: [0.751972198, -4.00504112, 0]
-      Rotation: [0, 0, 0]
-      Scale: [1, 1, 1]
-    ScriptComp:
-      Name: Empty
-      Path: Default_SimpleMovement
-      Language: 0
-      Instance: 86529365364595692
+      Colour: [1, 1, 1, 1]

@@ -11,6 +11,7 @@ namespace Cherenkov {
 		OrthographicCameraController		m_CameraController;
 
 		Ref<Framebuffer>					m_Framebuffer;
+		int									m_GuizmoOp = -1;
 		Ref<Shader>							m_Shader;
 		Ref<Texture2D>						m_Texture;
 
