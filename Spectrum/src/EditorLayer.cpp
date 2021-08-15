@@ -12,6 +12,45 @@
 namespace Cherenkov {
 	EditorLayer::EditorLayer() : Layer("EditorLayer"), m_CameraController{ 1920.0f / 1080.0f } {}
 
+	void EditorLayer::newScene() {
+		m_ActiveScene = CreateRef<Scene>();
+		m_ActiveScene->onViewportResize((uint32_t)m_VpSize.x, (uint32_t)m_VpSize.y);
+		m_SceneHierarchy.setContext(m_ActiveScene);
+		m_Properties.setContext(m_ActiveScene);
+		m_SavePath = {};
+	}
+
+	void EditorLayer::saveScene() {
+		if (!m_SavePath.empty()) {
+			Serializer serializer(m_ActiveScene);
+			serializer.serialize(m_SavePath);
+		}
+		else {
+			saveAs();
+		}
+	}
+
+	void EditorLayer::openScene() {
+		std::string path = FileDialogue::open("Cherenkov Scene File (*.cherenkov)\0*.cherenkov\0");
+
+		if (!path.empty()) {
+			newScene();
+
+			Serializer serializer(m_ActiveScene);
+			serializer.deserialize(path);
+		}
+
+		m_SavePath = path;
+	}
+
+	void EditorLayer::saveAs() {
+		m_SavePath = FileDialogue::save("Cherenkov Scene File (*.cherenkov)\0*.cherenkov\0");
+		if (!m_SavePath.empty()) {
+			Serializer serializer(m_ActiveScene);
+			serializer.serialize(m_SavePath);
+		}
+	}
+
 	void EditorLayer::onAttach() {
 		CK_PROFILE_FUNCTION();
 		m_Texture = Texture2D::init("assets/Textures/checkerboardSq.png");
@@ -117,9 +156,18 @@ namespace Cherenkov {
 		if (ImGui::BeginMenuBar()) {
 			if (ImGui::BeginMenu("File")) {
 				
+				if (ImGui::MenuItem("New", "Ctrl + N")) newScene();
+
+				if (ImGui::MenuItem("Open...", "Ctrl + O")) openScene();
+
+				if (ImGui::MenuItem("Save", "Ctrl + S")) saveScene();
+
+				if (ImGui::MenuItem("Save As...", "Ctrl + Shift + S")) saveAs();
+
+				ImGui::Separator();
 				if (ImGui::MenuItem("Serialize")) { Serializer serializer(m_ActiveScene); serializer.serialize("assets/Scenes/test.cherenkov"); }
 				if (ImGui::MenuItem("Deserialize")) { Serializer serializer(m_ActiveScene); serializer.deserialize("assets/Scenes/test.cherenkov"); }
-
+				ImGui::Separator();
 				if (ImGui::MenuItem("Exit")) Application::get().close();
 				ImGui::EndMenu();
 			}
@@ -230,7 +278,36 @@ namespace Cherenkov {
 
 	void EditorLayer::onEvent(Event& ev) {
 		CK_PROFILE_FUNCTION();
-		m_CameraController.onEvent(ev);
+		//m_CameraController.onEvent(ev);
+
+		EventDispatcher dp(ev);
+		dp.Dispatch<KeyPressedEvent>(CK_BIND_EVENT_FN(EditorLayer::onKeyPressed));
 	}
 
+	bool EditorLayer::onKeyPressed(KeyPressedEvent& ev) {
+		
+
+		// Shortcuts
+		if (ev.getRepeats() > 0) return false;
+		bool ctrl = Input::isKeyPressed(Key::Left_Control) || Input::isKeyPressed(Key::Right_Control);
+		bool shift = Input::isKeyPressed(Key::Left_Shift) || Input::isKeyPressed(Key::Right_Shift);
+
+		switch (ev.getKeyCode()) {
+
+		case Key::O: {
+			if (ctrl) openScene();
+			break;
+		}
+		case Key::N: {
+			if (ctrl) newScene();
+			break;
+		}
+		case Key::S: {
+			if (ctrl && shift) saveAs();
+			else if (ctrl) saveScene();
+			break;
+		}
+		default: 	break;
+		}
+	}
 }

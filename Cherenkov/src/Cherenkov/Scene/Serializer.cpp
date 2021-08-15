@@ -20,6 +20,7 @@ namespace YAML {
 			node.push_back(vec.x);
 			node.push_back(vec.y);
 			node.push_back(vec.z);
+			node.SetStyle(EmitterStyle::Flow);
 			return node;
 		}
 
@@ -42,6 +43,7 @@ namespace YAML {
 			node.push_back(vec.y);
 			node.push_back(vec.z);
 			node.push_back(vec.w);
+			node.SetStyle(EmitterStyle::Flow);
 			return node;
 		}
 
@@ -138,7 +140,8 @@ namespace Cherenkov {
 		YAML::Emitter out;
 		out << YAML::BeginMap;
 		out << YAML::Key << "Scene" << YAML::Value << "Scene Title";
-		out << YAML::Key << "Primary" << YAML::Value << m_Scene->getPrimaryCamera().get<NameComp>().Name;
+		std::string primary = (m_Scene->cameraCount() > 0) ? m_Scene->getPrimaryCamera().get<NameComp>().Name : "";
+		out << YAML::Key << "Primary" << YAML::Value << primary;
 		out << YAML::Key << "Entities" << YAML::Value << YAML::BeginSeq;
 		m_Scene->m_Registry.each([&](auto entID) {
 			Entity ent = { entID, m_Scene.get() };
@@ -156,11 +159,7 @@ namespace Cherenkov {
 
 	bool Serializer::deserialize(const std::filesystem::path& path) {
 
-		std::ifstream inFile(path);
-		std::stringstream stream;
-		stream << inFile.rdbuf();
-
-		YAML::Node data = YAML::Load(stream.str());
+		YAML::Node data = YAML::LoadFile(path.string());
 		if (!data["Scene"])	return false;
 		std::string sceneName = data["Scene"].as<std::string>();
 		CK_CORE_INFO("Deserializing scene '{0}'", sceneName);
@@ -205,7 +204,7 @@ namespace Cherenkov {
 					comp.Camera.setProperties(aspect, orthoS, orthoN, orthoF, perspFOV, perspN, perspF);
 					comp.fixedAspectRatio = cameraComp["Fixed"].as<bool>();
 					
-					if (!hasSetPrimaryCam) {
+					if (!hasSetPrimaryCam && !std::strcmp(primaryCam.c_str(), "")) {
 						if (!std::strcmp(primaryCam.c_str(), name.c_str())) {
 							m_Scene->setPrimaryCamera(newEntity);
 							hasSetPrimaryCam = true;

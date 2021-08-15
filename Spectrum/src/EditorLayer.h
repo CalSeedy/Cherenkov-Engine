@@ -27,10 +27,16 @@ namespace Cherenkov {
 			const char* Name;
 			float Time;
 		};
-
+		std::string							m_SavePath{};
 		SceneHierarchy						m_SceneHierarchy;
 		EntityProperties					m_Properties;
 		std::vector<ProfileResult>			m_Results;
+
+		bool onKeyPressed(KeyPressedEvent& ev);
+		void openScene();
+		void saveScene();
+		void saveAs();
+		void newScene();
 	public:
 		EditorLayer();
 

@@ -33,3 +33,4 @@
 #include "Cherenkov/Renderer/VertexArray.h"
 #include "Cherenkov/Renderer/Camera.h"
 
+#include "Cherenkov/Utils/PlatformUtils.h"

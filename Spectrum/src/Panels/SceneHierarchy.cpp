@@ -10,6 +10,7 @@ namespace Cherenkov {
 
 	void SceneHierarchy::setContext(const Ref<Scene>& context) {
 		m_Ctx = context;
+		m_Ctx->m_SelectedEntity = entt::null;
 	}
 
 	void SceneHierarchy::onImGuiDraw() {

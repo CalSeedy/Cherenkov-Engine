@@ -191,7 +191,7 @@ namespace Cherenkov {
 		auto& tag = entity.get<NameComp>().Name;
 		char buff[256];
 		memset(buff, 0, sizeof(buff));
-		strcpy_s(buff, tag.c_str());
+		std::strncpy(buff, tag.c_str(), sizeof(buff));
 		if (ImGui::InputText("##Name", buff, sizeof(buff))) {
 			tag = std::string(buff);
 		}
@@ -242,7 +242,7 @@ namespace Cherenkov {
 
 			char buff[256];
 			memset(buff, 0, sizeof(buff));
-			strcpy_s(buff, component.Name.c_str());
+			std::strncpy(buff, tag.c_str(), sizeof(buff));
 			if (ImGui::InputText("##name", buff, sizeof(buff))) component.Name = std::string(buff);
 			ImGui::Columns(1);
 
