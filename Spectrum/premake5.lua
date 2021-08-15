@@ -20,7 +20,8 @@ project "Spectrum"
 		"%{wks.location}/Cherenkov/vendor",
 		"%{IncludeDir.glm}",
 		"%{IncludeDir.stb}",
-		"%{IncludeDir.EnTT}"
+		"%{IncludeDir.EnTT}",
+		"%{IncludeDir.imguizmo}"
 	}
 
 	links

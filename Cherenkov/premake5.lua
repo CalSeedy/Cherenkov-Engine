@@ -17,7 +17,9 @@ project "Cherenkov"
 		"vendor/glm/glm/**.hpp",
 		"vendor/glm/glm/**.inl",
 		"vendor/stb/**.h",
-		"vendor/EnTT/single_include/entt/entt.h"
+		"vendor/EnTT/single_include/entt/entt.h",
+		"vendor/ImGuizmo/ImGuizmo.h",
+		"vendor/ImGuizmo/ImGuizmo.cpp"
 	}
 
 	defines
@@ -36,7 +38,8 @@ project "Cherenkov"
 		"%{IncludeDir.glm}",
 		"%{IncludeDir.stb}",
 		"%{IncludeDir.EnTT}",
-		"%{IncludeDir.yaml}"
+		"%{IncludeDir.yaml}",
+		"%{IncludeDir.imguizmo}"
 	}
 
 	links
@@ -47,6 +50,9 @@ project "Cherenkov"
 		"yaml",
 		"opengl32.lib"
 	}
+
+	filter "files:vendor/ImGuizmo/**.cpp"
+		flags {"NoPCH"}
 
 	filter "system:windows"
 		systemversion "latest"

@@ -10,6 +10,7 @@
 #include <GLFW/glfw3.h>
 #include <glad/glad.h>
 
+#include <imguizmo.h>
 
 namespace Cherenkov {
 	
@@ -438,6 +439,7 @@ namespace Cherenkov {
 		ImGui_ImplGlfw_NewFrame();
 		ImGui_ImplOpenGL3_NewFrame();
 		ImGui::NewFrame();
+		ImGuizmo::BeginFrame();
 	}
 
 	void ImGuiLayer::stop()	{

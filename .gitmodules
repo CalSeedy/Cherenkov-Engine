@@ -24,3 +24,6 @@
 [submodule "Cherenkov/vendor/yaml"]
 	path = Cherenkov/vendor/yaml
 	url = https://github.com/jbeder/yaml-cpp.git
+[submodule "Cherenkov/vendor/ImGuizmo"]
+	path = Cherenkov/vendor/ImGuizmo
+	url = https://github.com/CedricGuillemet/ImGuizmo.git

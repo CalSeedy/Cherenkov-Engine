@@ -9,6 +9,8 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
+#include <imguizmo.h>
+
 namespace Cherenkov {
 	EditorLayer::EditorLayer() : Layer("EditorLayer"), m_CameraController{ 1920.0f / 1080.0f } {}
 
@@ -255,6 +257,13 @@ namespace Cherenkov {
 
 		uint64_t tID = m_Framebuffer->getColourAttachment();
 		ImGui::Image(reinterpret_cast<void*>(tID), ImVec2{ m_VpSize.x, m_VpSize.y }, ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
+
+		Entity currentSelection = m_ActiveScene->getSelectedEntity();
+		if (currentSelection) {
+			ImGuizmo::SetOrthographic(false);
+
+		}
+
 		ImGui::End();
 		ImGui::PopStyleVar();
 
