@@ -14,11 +14,14 @@ namespace Cherenkov {
 	std::string FileDialogue::open(const char* filter){
 		OPENFILENAMEA openfilename;
 		CHAR szFile[260] = { 0 };
+		CHAR dirName[260] = { 0 };
 		ZeroMemory(&openfilename, sizeof(OPENFILENAME));
 		openfilename.lStructSize = sizeof(OPENFILENAME);
 		openfilename.hwndOwner = glfwGetWin32Window((GLFWwindow*)Application::get().getWindow().getNativeWindow());
 		openfilename.lpstrFile = szFile;
 		openfilename.nMaxFile = sizeof(szFile);
+		if (GetCurrentDirectoryA(256, dirName))
+			openfilename.lpstrInitialDir = dirName;
 		openfilename.lpstrFilter = filter;
 		openfilename.nFilterIndex = 1;
 		openfilename.Flags = OFN_PATHMUSTEXIST | OFN_FILEMUSTEXIST | OFN_NOCHANGEDIR;
@@ -30,15 +33,18 @@ namespace Cherenkov {
 	std::string FileDialogue::save(const char* filter){
 		OPENFILENAMEA openfilename;
 		CHAR szFile[260] = { 0 };
+		CHAR dirName[260] = { 0 };
 		ZeroMemory(&openfilename, sizeof(OPENFILENAME));
 		openfilename.lStructSize = sizeof(OPENFILENAME);
 		openfilename.hwndOwner = glfwGetWin32Window((GLFWwindow*)Application::get().getWindow().getNativeWindow());
 		openfilename.lpstrFile = szFile;
 		openfilename.nMaxFile = sizeof(szFile);
+		if (GetCurrentDirectoryA(256, dirName))
+			openfilename.lpstrInitialDir = dirName;
 		openfilename.lpstrFilter = filter;
 		openfilename.nFilterIndex = 1;
 		openfilename.lpstrDefExt = std::strchr(filter, '\0') + 1;
-		openfilename.Flags = OFN_PATHMUSTEXIST | OFN_FILEMUSTEXIST | OFN_NOCHANGEDIR;
+		openfilename.Flags = OFN_PATHMUSTEXIST | OFN_OVERWRITEPROMPT | OFN_NOCHANGEDIR;
 		if (GetSaveFileNameA(&openfilename) == TRUE) return openfilename.lpstrFile;
 
 		return std::string();
