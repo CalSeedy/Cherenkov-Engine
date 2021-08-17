@@ -12,7 +12,7 @@
 #include <imguizmo.h>
 
 namespace Cherenkov {
-	EditorLayer::EditorLayer() : Layer("EditorLayer"), m_CameraController{ 1920.0f / 1080.0f } {}
+	EditorLayer::EditorLayer() : Layer("EditorLayer") {}
 
 	void EditorLayer::newScene() {
 		m_ActiveScene = CreateRef<Scene>();
@@ -64,6 +64,7 @@ namespace Cherenkov {
 		m_Framebuffer = Framebuffer::init(defaultSpec);
 
 		m_ActiveScene = CreateRef<Scene>();
+		m_EditorCamera = EditorCamera(30.0f, 1.778f, 0.1f, 1000.0f);
 #if 0
 		auto square = m_ActiveScene->createEntity("Square");
 		square.add<SpriteComp>( 1.0f, 1.0f, 0.0f, 1.0f );
@@ -93,11 +94,11 @@ namespace Cherenkov {
 
 		if (FbSpecification spec = m_Framebuffer->getSpecification(); m_VpSize.x > 0.0f && m_VpSize.y > 0.0f && (spec.Width != m_VpSize.x || spec.Height != m_VpSize.y)) {
 			m_Framebuffer->resize((uint32_t)m_VpSize.x, (uint32_t)m_VpSize.y);
-			m_CameraController.resize(m_VpSize.x, m_VpSize.y);
+			m_EditorCamera.setViewport(m_VpSize.x, m_VpSize.y);
 			m_ActiveScene->onViewportResize((uint32_t)m_VpSize.x, (uint32_t)m_VpSize.y);
 		}
 
-		if (m_VpFocused) m_CameraController.onUpdate(dt);
+		m_EditorCamera.onUpdate(dt);
 		
 		Renderer2D::resetStats();
 		{
@@ -109,7 +110,7 @@ namespace Cherenkov {
 		{
 			CK_PROFILE_SCOPE("Draw Scene");
 
-			m_ActiveScene->onUpdate(dt);
+			m_ActiveScene->onUpdateEditor(m_EditorCamera, dt);
 
 			m_Framebuffer->unbind();
 		}
@@ -266,10 +267,13 @@ namespace Cherenkov {
 			float windowWidth = (float)ImGui::GetWindowWidth(), windowHeight = (float)ImGui::GetWindowHeight();
 			ImGuizmo::SetRect(ImGui::GetWindowPos().x, ImGui::GetWindowPos().y, windowWidth, windowHeight);
 
-			auto& cameraEnt = m_ActiveScene->getPrimaryCamera();
+			/*auto& cameraEnt = m_ActiveScene->getPrimaryCamera();
 			const auto& camera = cameraEnt.get<CameraComp>().Camera;
 			const auto& projection = camera.getProjection();
-			glm::mat4 viewMat = glm::inverse(cameraEnt.get<TransformComp>().getTransform());
+			glm::mat4 viewMat = glm::inverse(cameraEnt.get<TransformComp>().getTransform());*/
+
+			const glm::mat4& camProjection = m_EditorCamera.getProjection();
+			glm::mat4 camView = m_EditorCamera.getView();
 
 			auto& selectedTC = currentSelection.get<TransformComp>();
 			glm::mat4 selectedTransform = selectedTC.getTransform();
@@ -283,7 +287,7 @@ namespace Cherenkov {
 			default: CK_CORE_ASSERT(false, "Unknown ImGuizmo operation."); break;
 			}
 			float snapVals[3] = { snapValue, snapValue, snapValue };
-			ImGuizmo::Manipulate(glm::value_ptr(viewMat), glm::value_ptr(projection), (ImGuizmo::OPERATION)m_GuizmoOp, ImGuizmo::LOCAL, glm::value_ptr(selectedTransform), nullptr, snap ? snapVals : nullptr);
+			ImGuizmo::Manipulate(glm::value_ptr(camView), glm::value_ptr(camProjection), (ImGuizmo::OPERATION)m_GuizmoOp, ImGuizmo::LOCAL, glm::value_ptr(selectedTransform), nullptr, snap ? snapVals : nullptr);
 
 			if (ImGuizmo::IsUsing()) {
 				glm::vec3 newPos, newRot, newScale;
@@ -320,6 +324,8 @@ namespace Cherenkov {
 	void EditorLayer::onEvent(Event& ev) {
 		CK_PROFILE_FUNCTION();
 		//m_CameraController.onEvent(ev);
+		m_EditorCamera.onEvent(ev);
+
 
 		EventDispatcher dp(ev);
 		dp.Dispatch<KeyPressedEvent>(CK_BIND_EVENT_FN(EditorLayer::onKeyPressed));

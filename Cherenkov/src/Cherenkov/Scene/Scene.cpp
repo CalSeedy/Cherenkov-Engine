@@ -10,16 +10,9 @@
 
 namespace Cherenkov {
 
-	Scene::Scene() {
-		//Entity cam = createEntity("Scene Camera");
-		//cam.add<CameraComp>();
-		//m_PrimaryCamera = (entt::entity)cam;
-		
-	}
+	Scene::Scene() {}
 
-	Scene::~Scene() {
-
-	}
+	Scene::~Scene() {}
 
 	size_t Scene::cameraCount() {
 		auto view = m_Registry.view<CameraComp>();
@@ -44,7 +37,7 @@ namespace Cherenkov {
 		m_SelectedEntity = entity;
 	}
 
-	void Scene::onUpdate(Timestep dt) {
+	void Scene::onUpdateRuntime(Timestep dt) {
 
 		{
 			m_Registry.view<ScriptComp>().each([=](auto entity, auto& script) {
@@ -94,6 +87,16 @@ namespace Cherenkov {
 
 	void Scene::destroyEntity(Entity entity) {
 		m_Registry.destroy(entity);
+	}
+
+	void Scene::onUpdateEditor(EditorCamera& camera, Timestep dt) {
+		Renderer2D::beginScene(camera);
+			auto group = m_Registry.group<TransformComp>(entt::get<SpriteComp>);
+			for (auto ent : group) {
+				auto [transform, sprite] = group.get<TransformComp, SpriteComp>(ent);
+				Renderer2D::Quad(transform.getTransform(), sprite.Colour);
+			}
+			Renderer2D::endScene();  
 	}
 
 	void Scene::onViewportResize(uint32_t width, uint32_t height) {

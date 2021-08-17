@@ -13,7 +13,7 @@
 #include "Cherenkov/Core/Input.h"
 #include "Cherenkov/Core/KeyCodes.h"
 #include "Cherenkov/Core/MouseCodes.h"
-#include "Cherenkov/Renderer/CameraController.h"
+#include "Cherenkov/Renderer/EditorCamera.h"
 
 #include "Cherenkov/ImGui/ImGuiLayer.h"
 

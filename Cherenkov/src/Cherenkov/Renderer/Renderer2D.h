@@ -1,5 +1,5 @@
 #pragma once
-#include "Cherenkov/Renderer/Camera.h"
+#include "Cherenkov/Renderer/EditorCamera.h"
 #include "Cherenkov/Renderer/Texture.h"
 
 namespace Cherenkov {
@@ -27,7 +27,8 @@ namespace Cherenkov {
 	};
 
 	class Renderer2D {
-		static void flushAndReset();
+		static void nextBatch();
+		static void startBatch();
 	public:
 		struct RendererCamera
 		{
@@ -39,6 +40,7 @@ namespace Cherenkov {
 		static void shutdown();
 
 		static void beginScene(const Camera& camera, const glm::mat4& transform);
+		static void beginScene(const EditorCamera& camera);
 		static void beginScene(const OrthographicCamera& camera);
 		static void flush();
 		static void endScene();

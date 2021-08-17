@@ -116,10 +116,7 @@ namespace Cherenkov {
 		s_Storage.textureShader->bind();
 		s_Storage.textureShader->setMat4("viewProjection", camera.getViewProjection());
 
-		s_Storage.quadIndices = 0;
-		s_Storage.quadVertBufferPtr = s_Storage.quadVertBufferBase;
-
-		s_Storage.textureSlotIdx = 1;
+		startBatch();
 	}
 
 	void Renderer2D::beginScene(const Camera& camera, const glm::mat4& transform) {
@@ -128,33 +125,46 @@ namespace Cherenkov {
 		s_Storage.textureShader->bind();
 		s_Storage.textureShader->setMat4("viewProjection", viewProj);
 
-		s_Storage.quadIndices = 0;
-		s_Storage.quadVertBufferPtr = s_Storage.quadVertBufferBase;
+		startBatch();
+	}
 
-		s_Storage.textureSlotIdx = 1;
+	void Renderer2D::beginScene(const EditorCamera& camera)	{
+		CK_PROFILE_FUNCTION();
+		glm::mat4 viewProj = camera.getViewProjection();
+
+		s_Storage.textureShader->bind();
+		s_Storage.textureShader->setMat4("viewProjection", viewProj);
+
+		startBatch();
 	}
 
 	void Renderer2D::flush() {
 		CK_PROFILE_FUNCTION();
 		if (s_Storage.quadIndices == 0) return;
+
+		uint32_t size = (uint32_t)((uint8_t*)s_Storage.quadVertBufferPtr - (uint8_t*)s_Storage.quadVertBufferBase);
+		s_Storage.quadVertexBuffer->loadData(s_Storage.quadVertBufferBase, size);
+
 		for (uint32_t i = 0; i < s_Storage.textureSlotIdx; i++) s_Storage.boundTextures[i]->bind(i);
 		RenderCommand::drawIndexed(s_Storage.quadVertexArray, s_Storage.quadIndices);
 		s_Storage.stats.draws++;
 	}
 
-	void Renderer2D::flushAndReset() {
-		endScene();
+	void Renderer2D::endScene() {
+		CK_PROFILE_FUNCTION();
+		
+		flush();
+	}
+
+	void Renderer2D::nextBatch() {
+		flush();
+		startBatch();
+	}
+
+	void Renderer2D::startBatch() {
 		s_Storage.quadIndices = 0;
 		s_Storage.quadVertBufferPtr = s_Storage.quadVertBufferBase;
 		s_Storage.textureSlotIdx = 1;
-	}
-
-	void Renderer2D::endScene() {
-		CK_PROFILE_FUNCTION();
-		uint32_t size = (uint32_t)((uint8_t*)s_Storage.quadVertBufferPtr - (uint8_t*)s_Storage.quadVertBufferBase);
-		s_Storage.quadVertexBuffer->loadData(s_Storage.quadVertBufferBase, size);
-
-		flush();
 	}
 
 	void Renderer2D::Quad(const glm::vec2& scale, const QuadProperties& properties) {
@@ -188,7 +198,7 @@ namespace Cherenkov {
 	// all other Quads eventually call this
 	void Renderer2D::Quad(const glm::mat4& transform, const Ref<Texture2D>& texture, glm::vec4 colour, float_t tileFactor) {
 		CK_PROFILE_FUNCTION();
-		if (s_Storage.quadIndices >= Storage::maxIndices) flushAndReset();
+		if (s_Storage.quadIndices >= Storage::maxIndices) nextBatch();
 		constexpr glm::vec2 quadDefaultTexCoords[] = { { 0.0f, 0.0f }, { 1.0f, 0.0f }, { 1.0f, 1.0f }, { 0.0f, 1.0f } };
 
 		float textureIndex = 0.0f;
@@ -201,7 +211,7 @@ namespace Cherenkov {
 
 		if (textureIndex == 0.0f) {
 
-			if (s_Storage.textureSlotIdx >= Storage::maxTextures) flushAndReset();
+			if (s_Storage.textureSlotIdx >= Storage::maxTextures) nextBatch();
 
 			textureIndex = (float)s_Storage.textureSlotIdx;
 			s_Storage.boundTextures[s_Storage.textureSlotIdx] = texture;

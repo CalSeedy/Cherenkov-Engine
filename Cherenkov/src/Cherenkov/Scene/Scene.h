@@ -2,6 +2,8 @@
 
 #include "Cherenkov/Core/TimeStep.h"
 
+#include "Cherenkov/Renderer/EditorCamera.h"
+
 #include <entt/entt.hpp>
 
 namespace Cherenkov {
@@ -38,7 +40,8 @@ namespace Cherenkov {
 		Entity createEntity(const std::string& name = "");
 		void destroyEntity(Entity entity);
 
-		void onUpdate(Timestep dt);
+		void onUpdateEditor(EditorCamera& camera, Timestep dt);
+		void onUpdateRuntime(Timestep dt);
 		void onViewportResize(uint32_t width, uint32_t height);
 	};
 }
