@@ -3,9 +3,38 @@
 
 namespace Cherenkov {
 
+	enum class FbTextureFormat {
+		None = 0,
+
+		RGBA8,
+
+		DEPTH24STENCIL8,
+
+		Depth = DEPTH24STENCIL8
+	};
+
+	struct FbTextureSpecification {
+
+		FbTextureFormat TextureFormat = FbTextureFormat::None;
+
+		FbTextureSpecification() = default;
+		FbTextureSpecification(FbTextureFormat format) : TextureFormat{ format } {}
+
+	};
+
+	struct FbAttachmentSpecification {
+
+		std::vector<FbTextureSpecification> Attachments;
+
+		FbAttachmentSpecification() = default;
+		FbAttachmentSpecification(std::initializer_list<FbTextureSpecification> attachments) : Attachments{ attachments } {}
+
+	};
+
+
 	struct FbSpecification {
 		uint32_t Width = 0 , Height = 0, Samples = 1;
-		
+		FbAttachmentSpecification Attachments;
 		bool swapChainTarget = false;
 	};
 
@@ -15,7 +44,7 @@ namespace Cherenkov {
 		virtual ~Framebuffer() = default;
 
 		virtual const FbSpecification& getSpecification() const = 0;
-		virtual const uint32_t& getColourAttachment() const = 0;
+		virtual uint32_t getColourAttachment(uint32_t ind = 0) const = 0;
 
 		virtual void bind() = 0;
 		virtual void unbind() = 0;

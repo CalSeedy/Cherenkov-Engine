@@ -7,8 +7,12 @@ namespace Cherenkov {
 	class OpenGLFramebuffer : public Framebuffer {
 		FbSpecification m_Specification;
 		uint32_t m_RendererID = 0;
-		uint32_t m_ColourAttachment = 0;
+		
+		std::vector<uint32_t> m_ColourAttachments;
 		uint32_t m_DepthAttachment = 0;
+
+		std::vector<FbTextureSpecification> m_ColourAttachmentSpecifications;
+		FbTextureSpecification m_DepthAttachmentSpecification = FbTextureFormat::None;
 	public:
 		OpenGLFramebuffer(const FbSpecification& spec);
 		virtual ~OpenGLFramebuffer();
@@ -18,6 +22,6 @@ namespace Cherenkov {
 		void bind() override;
 		void unbind() override;
 		const FbSpecification& getSpecification() const { return m_Specification; }
-		const uint32_t& getColourAttachment() const { return m_ColourAttachment; }
+		uint32_t getColourAttachment(uint32_t ind = 0) const override { CK_CORE_ASSERT(ind < m_ColourAttachments.size()); return m_ColourAttachments[ind]; }
 	};
 }

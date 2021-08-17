@@ -58,9 +58,10 @@ namespace Cherenkov {
 		m_Texture = Texture2D::init("assets/Textures/checkerboardSq.png");
 
 		FbSpecification defaultSpec;
+		defaultSpec.Attachments = { FbTextureFormat::RGBA8, FbTextureFormat::Depth, FbTextureFormat::RGBA8 };
 		auto& window = Application::get().getWindow();
-		defaultSpec.Width = window.getWidth();
-		defaultSpec.Height = window.getHeight();
+		defaultSpec.Width = 1280;
+		defaultSpec.Height = 720;
 		m_Framebuffer = Framebuffer::init(defaultSpec);
 
 		m_ActiveScene = CreateRef<Scene>();

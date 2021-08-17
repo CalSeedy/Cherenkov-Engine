@@ -26,6 +26,7 @@ void main(){
 #version 450
 
 layout(location = 0) out vec4 final_Colour;
+layout(location = 1) out vec4 final_Colour2;
 
 in vec4 out_Colour;
 in vec2 out_TextureCoord;
@@ -72,4 +73,5 @@ void main(){
 	}
 
 	final_Colour = texColour;
+	final_Colour2 = vec4(0.9, 0.2, 0.3, 1.0);
 }

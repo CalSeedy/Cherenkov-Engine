@@ -4,14 +4,80 @@
 #include <glad/glad.h>
 
 namespace Cherenkov {
+
+	static const uint32_t s_MaxFramebufferSize = 8192;
+
+	namespace Utils {
+		static bool isDepthFormat(FbTextureFormat format) {
+			switch (format) {
+			case Cherenkov::FbTextureFormat::DEPTH24STENCIL8:	return true;
+			default:											return false;
+			}
+		}
+
+		static GLenum textureTarget(bool multi) {
+			return multi ? GL_TEXTURE_2D_MULTISAMPLE : GL_TEXTURE_2D;
+		}
+
+		static void createTextures(bool multi, uint32_t* ID, uint32_t count) {
+			glCreateTextures(textureTarget(multi), count, ID);
+		}
+
+		static void bindTexture(bool multi, uint32_t ID) {
+			glBindTexture(textureTarget(multi), ID);
+		}
+
+		static void attachColourTexture(uint32_t ID, int samples, GLenum format, uint32_t width, uint32_t height, int index) {
+			bool multi = samples > 1;
+
+			if (multi) glTexImage2DMultisample(GL_TEXTURE_2D_MULTISAMPLE, samples, format, width, height, GL_FALSE);
+			else { 
+				glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr); 
+				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
+				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+			}
+			glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + index, textureTarget(multi), ID, 0);
+		}
+
+		static void attachDepthTexture(uint32_t ID, int samples, GLenum format, GLenum attachmentType, uint32_t width, uint32_t height) {
+			bool multi = samples > 1;
+
+			if (multi) glTexImage2DMultisample(GL_TEXTURE_2D_MULTISAMPLE, samples, format, width, height, GL_FALSE);
+			else {
+				glTexStorage2D(GL_TEXTURE_2D, 1, format, width, height);
+				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
+				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+			}
+			glFramebufferTexture2D(GL_FRAMEBUFFER, attachmentType, textureTarget(multi), ID, 0);
+		}
+	}
+
 	OpenGLFramebuffer::OpenGLFramebuffer(const FbSpecification& spec) : m_Specification{ spec } {
+		bool hasDepth = false;
+		for (auto format : m_Specification.Attachments.Attachments) {
+			if (!Utils::isDepthFormat(format.TextureFormat)) m_ColourAttachmentSpecifications.emplace_back(format);
+			else {
+				if (!hasDepth)
+					m_DepthAttachmentSpecification = format;
+				else
+					CK_CORE_ASSERT(false, "Depth buffer already set!");
+			}
+
+		}
+		 
 		recreate();
 	}
 
 
 	OpenGLFramebuffer::~OpenGLFramebuffer()	{
 		glDeleteFramebuffers(1, &m_RendererID);
-		glDeleteTextures(1, &m_ColourAttachment);
+		glDeleteTextures(m_ColourAttachments.size(), m_ColourAttachments.data());
 		glDeleteTextures(1, &m_DepthAttachment);
 	}
 
@@ -19,37 +85,63 @@ namespace Cherenkov {
 
 		if (m_RendererID) {
 			glDeleteFramebuffers(1, &m_RendererID);
-			glDeleteTextures(1, &m_ColourAttachment);
+			glDeleteTextures(m_ColourAttachments.size(), m_ColourAttachments.data());
 			glDeleteTextures(1, &m_DepthAttachment);
+
+			m_ColourAttachments.clear();
+			m_DepthAttachment = 0;
 		}
 
 		glCreateFramebuffers(1, &m_RendererID);
 		glBindFramebuffer(GL_FRAMEBUFFER, m_RendererID);
 		
-		// Colour
-		glCreateTextures(GL_TEXTURE_2D, 1, &m_ColourAttachment);
-		glBindTexture(GL_TEXTURE_2D, m_ColourAttachment);
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, m_Specification.Width, m_Specification.Height, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
+		bool multi = m_Specification.Samples > 1;
 
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+		if (m_ColourAttachmentSpecifications.size()) {
+			m_ColourAttachments.resize(m_ColourAttachmentSpecifications.size());
+			Utils::createTextures(multi, m_ColourAttachments.data(), m_ColourAttachments.size());
+			for (size_t i = 0; i < m_ColourAttachments.size(); i++) {
+				Utils::bindTexture(multi, m_ColourAttachments[i]);
+				switch (m_ColourAttachmentSpecifications[i].TextureFormat) {
+				case FbTextureFormat::RGBA8:
+					Utils::attachColourTexture(m_ColourAttachments[i], m_Specification.Samples, GL_RGBA8, m_Specification.Width, m_Specification.Height, i);
+					break;
+				}
+			}
+		}
 
-		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, m_ColourAttachment, 0);
-		///////////////////
+		if (m_DepthAttachmentSpecification.TextureFormat != FbTextureFormat::None) {
+			Utils::createTextures(multi, &m_DepthAttachment, 1);
+			Utils::bindTexture(multi, m_DepthAttachment);
+			switch (m_DepthAttachmentSpecification.TextureFormat) {
+			case FbTextureFormat::DEPTH24STENCIL8:
+				Utils::attachDepthTexture(m_DepthAttachment, m_Specification.Samples, GL_DEPTH24_STENCIL8, GL_DEPTH_STENCIL_ATTACHMENT, m_Specification.Width, m_Specification.Height);
+				break;
+			}
+		}
 
-		// Depth
-		glCreateTextures(GL_TEXTURE_2D, 1, &m_DepthAttachment);
-		glBindTexture(GL_TEXTURE_2D, m_DepthAttachment);
-		glTexStorage2D(GL_TEXTURE_2D, 1, GL_DEPTH24_STENCIL8, m_Specification.Width, m_Specification.Height);
+		size_t numOfColourAttachments = m_ColourAttachments.size();
+		if ( numOfColourAttachments > 1) {
+			
+			CK_CORE_ASSERT(numOfColourAttachments <= 4);
+			GLenum buffers[4] = { GL_COLOR_ATTACHMENT0, GL_COLOR_ATTACHMENT1, GL_COLOR_ATTACHMENT2, GL_COLOR_ATTACHMENT3 };
+			glDrawBuffers(numOfColourAttachments, buffers);
+		}
+		else if (m_ColourAttachments.empty()){
+			glDrawBuffer(GL_NONE);
+		}
 
-		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_TEXTURE_2D, m_DepthAttachment, 0);
-		///////////////////
 		CK_CORE_ASSERT(glCheckFramebufferStatus(GL_FRAMEBUFFER) == GL_FRAMEBUFFER_COMPLETE, "Framebuffer incomplete!");
 
 		glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	}
 
 	void OpenGLFramebuffer::resize(uint32_t width, uint32_t height) {
+		if (width == 0 || height == 0 || width > s_MaxFramebufferSize || height > s_MaxFramebufferSize)
+		{
+			CK_CORE_WARN("Attempted to rezize framebuffer to {0}, {1}", width, height);
+			return;
+		}
 		m_Specification.Width = width;
 		m_Specification.Height = height;
 		recreate();

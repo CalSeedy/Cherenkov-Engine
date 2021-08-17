@@ -5,44 +5,26 @@ Entities:
     NameComp:
       Name: Right
     TransformComp:
-      Position: [2.07630992, 0, -0.0763117]
-      Rotation: [0, 0.785398245, 0]
-      Scale: [5, 5, 1]
+      Position: [0.351999998, 0, 0.349999994]
+      Rotation: [0, 0.785398185, 0]
+      Scale: [1, 1, 1]
     SpriteComp:
       Colour: [1, 0, 0, 1]
   - Entity ID: 864872648263
     NameComp:
       Name: Top
     TransformComp:
-      Position: [-7.34076548, 2.52673912, 9.47907829]
-      Rotation: [1.49576926, 0.594609559, 3.0372417]
-      Scale: [9.99410057, 9.99995232, 0.999992013]
+      Position: [0, 0.5, 0]
+      Rotation: [1.57079637, 0.785398185, 0]
+      Scale: [1, 1, 1]
     SpriteComp:
       Colour: [0, 0.270294666, 1, 1]
   - Entity ID: 864872648263
     NameComp:
-      Name: Scene Camera
-    CameraComp:
-      Camera:
-        Type: 1
-        Aspect Ratio: 1.20443106
-        Orthographic Size: 10
-        Orthographic Near: -1
-        Orthographic Far: 1
-        Perspective FOV: 0.785398185
-        Perspective Near: 0.00999999978
-        Perspective Far: 1000
-      Fixed: false
-    TransformComp:
-      Position: [0, 0, 44.7000008]
-      Rotation: [0, 0, 0]
-      Scale: [1, 1, 1]
-  - Entity ID: 864872648263
-    NameComp:
       Name: Left
     TransformComp:
-      Position: [-1.46271133, 0.0372910202, 0]
+      Position: [-0.354999989, 0, 0.349999994]
       Rotation: [0, -0.785398245, 0]
-      Scale: [5, 5, 1]
+      Scale: [1, 1, 1]
     SpriteComp:
       Colour: [1, 1, 1, 1]
