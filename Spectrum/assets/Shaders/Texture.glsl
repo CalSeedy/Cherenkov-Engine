@@ -1,5 +1,5 @@
 #type vertex
-#version 330 core
+#version 450
 
 layout(location = 0) in vec3 in_Position;
 layout(location = 1) in vec4 in_Colour;
@@ -11,7 +11,7 @@ uniform mat4 viewProjection;
 
 out vec4 out_Colour;
 out vec2 out_TextureCoord;
-out float out_TextureIdx;
+out flat float out_TextureIdx;
 out float out_TilingFactor;
 
 void main(){
@@ -23,13 +23,13 @@ void main(){
 }
 
 #type fragment
-#version 330 core
+#version 450
 
 layout(location = 0) out vec4 final_Colour;
 
 in vec4 out_Colour;
 in vec2 out_TextureCoord;
-in float out_TextureIdx;
+in flat float out_TextureIdx;
 in float out_TilingFactor;
 
 uniform sampler2D textures[32];
