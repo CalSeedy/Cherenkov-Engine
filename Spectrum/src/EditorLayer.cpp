@@ -236,32 +236,28 @@ namespace Cherenkov {
 		window_class.DockNodeFlagsOverrideSet = ImGuiDockNodeFlags_AutoHideTabBar;
 		ImGui::SetNextWindowClass(&window_class);
 		ImGui::Begin("Viewport");
-		ImVec2 vpOffset = ImGui::GetCursorPos();
+		ImVec2 vpMinRegion = ImGui::GetWindowContentRegionMin();
+		ImVec2 vpMaxRegion = ImGui::GetWindowContentRegionMax();
+		ImVec2 vpOffset = ImGui::GetWindowPos();
+		m_VpBounds[0] = { vpMinRegion.x + vpOffset.x, vpMinRegion.y + vpOffset.y };
+		m_VpBounds[1] = { vpMaxRegion.x + vpOffset.x, vpMaxRegion.y + vpOffset.y };
+
 		m_VpFocused = ImGui::IsWindowFocused();
 		m_VpHovered = ImGui::IsWindowHovered();
 		Application::get().getImGuiLayer()->blockingEvents(!m_VpFocused && !m_VpHovered);
+		
 		ImVec2 vpSize = ImGui::GetContentRegionAvail();
 		m_VpSize = { vpSize.x, vpSize.y };
 
 		uint64_t tID = m_Framebuffer->getColourAttachment();
 		ImGui::Image(reinterpret_cast<void*>(tID), ImVec2{ m_VpSize.x, m_VpSize.y }, ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
 
-		ImVec2 windowSize = ImGui::GetWindowSize();
-		ImVec2 minBound = ImGui::GetWindowPos();
-		minBound.x += vpOffset.x;	minBound.y += vpOffset.y;
-		ImVec2 maxBound = minBound;
-		maxBound.x += windowSize.x;	maxBound.y += windowSize.y;
-
-		m_VpBounds[0] = { minBound.x, minBound.y };
-		m_VpBounds[1] = { maxBound.x, maxBound.y };
-
 		Entity currentSelection = m_ActiveScene->getSelectedEntity();
 		if (currentSelection && m_GuizmoOp != -1) {
 			ImGuizmo::SetOrthographic(false);
 			ImGuizmo::SetDrawlist();
+			ImGuizmo::SetRect(m_VpBounds[0].x, m_VpBounds[0].y, m_VpBounds[1].x - m_VpBounds[0].x, m_VpBounds[1].y - m_VpBounds[0].y);
 
-			float windowWidth = (float)ImGui::GetWindowWidth(), windowHeight = (float)ImGui::GetWindowHeight();
-			ImGuizmo::SetRect(ImGui::GetWindowPos().x, ImGui::GetWindowPos().y, windowWidth, windowHeight);
 
 			/*auto& cameraEnt = m_ActiveScene->getPrimaryCamera();
 			const auto& camera = cameraEnt.get<CameraComp>().Camera;
@@ -378,31 +374,24 @@ namespace Cherenkov {
 		
 		switch (ev.getMouseButton()) {
 		case Mouse::Button_Left:
-			if (m_VpHovered) {
-				if (!Input::isKeyPressed(Key::Left_Alt)) {
-					auto [mx, my] = ImGui::GetMousePos();
-					mx -= m_VpBounds[0].x;
-					my -= m_VpBounds[0].y;
-					glm::vec2 vpSize = m_VpBounds[1] - m_VpBounds[0];
-					my = vpSize.y - my;
-					int mouseX = (int)mx;
-					int mouseY = (int)my;
+			if (m_VpHovered && !Input::isKeyPressed(Key::Left_Alt) && !ImGuizmo::IsOver()) {
+				auto [mx, my] = ImGui::GetMousePos();
+				mx -= m_VpBounds[0].x;
+				my -= m_VpBounds[0].y;
+				glm::vec2 vpSize = m_VpBounds[1] - m_VpBounds[0];
+				my = vpSize.y - my;
+				int mouseX = (int)mx;
+				int mouseY = (int)my;
 
-					if (mouseX >= 0 && mouseX < (int)vpSize.x && mouseY >= 0 && mouseY < (int)vpSize.y) {
-						m_Framebuffer->bind();
-						int val = m_Framebuffer->readPixel(1, mouseX, mouseY);
-						m_Framebuffer->unbind();
-						if (val > -1) {
-							Entity ent{ (entt::entity)val, m_ActiveScene.get() };
-							m_ActiveScene->setSelectedEntity(ent);
-						}
-						else if (val == -1) {
-							Entity ent{ (entt::entity)val, m_ActiveScene.get() };
-							m_ActiveScene->setSelectedEntity(ent);
-						}
-					}
+				if (mouseX >= 0 && mouseX < (int)vpSize.x && mouseY >= 0 && mouseY < (int)vpSize.y) {
+					m_Framebuffer->bind();
+					int val = m_Framebuffer->readPixel(1, mouseX, mouseY);
+					m_Framebuffer->unbind();
+					Entity ent = val != -1 ? Entity((entt::entity)val, m_ActiveScene.get()) : Entity();
+					m_ActiveScene->setSelectedEntity(ent);
 				}
 			}
+			
 			break;
 		default :			break;
 		}
