@@ -47,34 +47,46 @@ namespace Cherenkov {
 		vBuffer->bind();
 
 		const auto& layout = vBuffer->getLayout();
+		uint8_t count;
 		for (auto& element : layout) {
 			switch (element.Type) {
 			case Cherenkov::ShaderDataType::None:	
-			case Cherenkov::ShaderDataType::Bool:	
 			//case Cherenkov::ShaderDataType::Struct
 			case Cherenkov::ShaderDataType::Float:	
 			case Cherenkov::ShaderDataType::Vec2f:	
 			case Cherenkov::ShaderDataType::Vec3f:	
-			case Cherenkov::ShaderDataType::Vec4f:	
-			case Cherenkov::ShaderDataType::Int:	
-			case Cherenkov::ShaderDataType::Vec2i:	
-			case Cherenkov::ShaderDataType::Vec3i:
-			case Cherenkov::ShaderDataType::Vec4i: {
+			case Cherenkov::ShaderDataType::Vec4f:
 				glEnableVertexAttribArray(m_VBufferIdx);
 				glVertexAttribPointer(m_VBufferIdx, element.count(), getBaseType(element.Type), element.Normalised ? GL_TRUE : GL_FALSE, layout.stride(), (const void*)(uint64_t)(element.Offset));
 				m_VBufferIdx++;
 				break;
-			}
+			case Cherenkov::ShaderDataType::Bool:
+			case Cherenkov::ShaderDataType::Int:
+			case Cherenkov::ShaderDataType::Vec2i:
+			case Cherenkov::ShaderDataType::Vec3i:
+			case Cherenkov::ShaderDataType::Vec4i:
+				glEnableVertexAttribArray(m_VBufferIdx);
+				glVertexAttribIPointer(m_VBufferIdx, element.count(), getBaseType(element.Type), layout.stride(), (const void*)(uint64_t)(element.Offset));
+				m_VBufferIdx++;
+				break;
 			case Cherenkov::ShaderDataType::Mat2f:
 			case Cherenkov::ShaderDataType::Mat3f:
 			case Cherenkov::ShaderDataType::Mat4f:
-			case Cherenkov::ShaderDataType::Mat2i:
-			case Cherenkov::ShaderDataType::Mat3i:
-			case Cherenkov::ShaderDataType::Mat4i: {
-				uint8_t count = element.count();
+				count = element.count();
 				for (uint8_t i = 0; i < count; i++) {
 					glEnableVertexAttribArray(m_VBufferIdx);
 					glVertexAttribPointer(m_VBufferIdx, count, getBaseType(element.Type), element.Normalised ? GL_TRUE : GL_FALSE, layout.stride(), (const void*)(element.Offset + sizeof(float) * count * i));
+					glVertexAttribDivisor(m_VBufferIdx, 1);
+					m_VBufferIdx++;
+				}
+				break;
+			case Cherenkov::ShaderDataType::Mat2i:
+			case Cherenkov::ShaderDataType::Mat3i:
+			case Cherenkov::ShaderDataType::Mat4i: {
+				count = element.count();
+				for (uint8_t i = 0; i < count; i++) {
+					glEnableVertexAttribArray(m_VBufferIdx);
+					glVertexAttribIPointer(m_VBufferIdx, count, getBaseType(element.Type), layout.stride(), (const void*)(element.Offset + sizeof(float) * count * i));
 					glVertexAttribDivisor(m_VBufferIdx, 1);
 					m_VBufferIdx++;
 				}

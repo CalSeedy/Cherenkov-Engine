@@ -56,6 +56,14 @@ namespace Cherenkov {
 			}
 			glFramebufferTexture2D(GL_FRAMEBUFFER, attachmentType, textureTarget(multi), ID, 0);
 		}
+
+		static GLenum CKtoGLFormatConversion(FbTextureFormat& format) {
+			switch (format)	{
+			case FbTextureFormat::RED_INT:	return GL_RED_INTEGER;
+			case FbTextureFormat::RGBA8:	return GL_RGBA8;
+			default:						CK_CORE_ASSERT(false, "Unknown colour format for conversion!"); return GL_NONE;
+			}
+		}
 	}
 
 	OpenGLFramebuffer::OpenGLFramebuffer(const FbSpecification& spec) : m_Specification{ spec } {
@@ -157,6 +165,10 @@ namespace Cherenkov {
 
 	void OpenGLFramebuffer::unbind() {
 		glBindFramebuffer(GL_FRAMEBUFFER, 0);
+	}
+
+	void OpenGLFramebuffer::clearColourAttachment(uint32_t idx, int data) {
+		glClearTexImage(m_ColourAttachments[idx], 0, Utils::CKtoGLFormatConversion(m_ColourAttachmentSpecifications[idx].TextureFormat), GL_INT, &data);
 	}
 
 	int OpenGLFramebuffer::readPixel(uint32_t attachmentID, int x, int y) {

@@ -17,6 +17,8 @@ namespace Cherenkov {
 		glm::vec2 TextureCoord;
 		float TextureIdx;
 		float TilingFactor;
+
+		int EntityID;
 	};
 
 	struct Storage {
@@ -57,7 +59,8 @@ namespace Cherenkov {
 			{ShaderDataType::Vec4f, "in_Colour"},
 			{ShaderDataType::Vec2f, "in_TextureCoord"},
 			{ShaderDataType::Float, "in_TextureIdx"},
-			{ShaderDataType::Float, "in_TilingFactor"}
+			{ShaderDataType::Float, "in_TilingFactor"},
+			{ShaderDataType::Int, "in_EntityID"}
 			});
 		s_Storage.quadVertexArray->addVertexBuffer(s_Storage.quadVertexBuffer);
 
@@ -188,15 +191,15 @@ namespace Cherenkov {
 			transform *= glm::scale(glm::mat4(1.0f), { scale.x, scale.y, 1.0f });
 		}
 
-		Quad(transform, texture, properties.Colour, properties.TileFactor);
+		Quad(transform, texture, properties.Colour, properties.TileFactor, properties.EntiyID);
 	}
 
-	void Renderer2D::Quad(const glm::mat4& transform, glm::vec4 colour) {
-		Quad(transform, s_Storage.Blank, colour);
+	void Renderer2D::Quad(const glm::mat4& transform, glm::vec4 colour, int entityID) {
+		Quad(transform, s_Storage.Blank, colour, 1.0f, entityID);
 	}
 
 	// all other Quads eventually call this
-	void Renderer2D::Quad(const glm::mat4& transform, const Ref<Texture2D>& texture, glm::vec4 colour, float_t tileFactor) {
+	void Renderer2D::Quad(const glm::mat4& transform, const Ref<Texture2D>& texture, glm::vec4 colour, float_t tileFactor, int entityID) {
 		CK_PROFILE_FUNCTION();
 		if (s_Storage.quadIndices >= Storage::maxIndices) nextBatch();
 		constexpr glm::vec2 quadDefaultTexCoords[] = { { 0.0f, 0.0f }, { 1.0f, 0.0f }, { 1.0f, 1.0f }, { 0.0f, 1.0f } };
@@ -224,11 +227,17 @@ namespace Cherenkov {
 			s_Storage.quadVertBufferPtr->TextureCoord = quadDefaultTexCoords[i];
 			s_Storage.quadVertBufferPtr->TextureIdx = textureIndex;
 			s_Storage.quadVertBufferPtr->TilingFactor = tileFactor;
+			s_Storage.quadVertBufferPtr->EntityID = entityID;
 			s_Storage.quadVertBufferPtr++;
 		}
 
 		s_Storage.quadIndices += 6;
 		s_Storage.stats.quads++;
+	}
+
+	void Renderer2D::Sprite(const glm::mat4& transform, SpriteComp& comp, int entityID)	{
+		CK_PROFILE_FUNCTION();
+		Quad(transform, comp.Colour, entityID);
 	}
 
 	void Renderer2D::resetStats() {

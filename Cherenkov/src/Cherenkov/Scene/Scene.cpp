@@ -69,7 +69,8 @@ namespace Cherenkov {
 			auto group = m_Registry.group<TransformComp>(entt::get<SpriteComp>);
 			for (auto ent : group) {
 				auto [transform, sprite] = group.get<TransformComp, SpriteComp>(ent);
-				Renderer2D::Quad(transform.getTransform(), sprite.Colour);
+				//Renderer2D::Quad(transform.getTransform(), sprite.Colour);
+				Renderer2D::Sprite(transform.getTransform(), sprite, (int)ent);
 			}
 			Renderer2D::endScene();  
 		}
@@ -94,7 +95,8 @@ namespace Cherenkov {
 			auto group = m_Registry.group<TransformComp>(entt::get<SpriteComp>);
 			for (auto ent : group) {
 				auto [transform, sprite] = group.get<TransformComp, SpriteComp>(ent);
-				Renderer2D::Quad(transform.getTransform(), sprite.Colour);
+				//Renderer2D::Quad(transform.getTransform(), sprite.Colour);
+				Renderer2D::Sprite(transform.getTransform(), sprite, (int)ent);
 			}
 			Renderer2D::endScene();  
 	}

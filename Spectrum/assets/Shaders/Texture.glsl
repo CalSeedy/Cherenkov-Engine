@@ -6,6 +6,7 @@ layout(location = 1) in vec4 in_Colour;
 layout(location = 2) in vec2 in_TextureCoord;
 layout(location = 3) in float in_TextureIdx;
 layout(location = 4) in float in_TilingFactor;
+layout(location = 5) in int in_EntityID;
 
 uniform mat4 viewProjection;
 
@@ -13,12 +14,14 @@ out vec4 out_Colour;
 out vec2 out_TextureCoord;
 out flat float out_TextureIdx;
 out float out_TilingFactor;
+out flat int out_EntityID;
 
 void main(){
 	out_Colour = in_Colour;
 	out_TextureCoord = in_TextureCoord;
 	out_TextureIdx = in_TextureIdx;
 	out_TilingFactor = in_TilingFactor;
+	out_EntityID = in_EntityID;
 	gl_Position = viewProjection * vec4(in_Position, 1.0);
 }
 
@@ -32,6 +35,7 @@ in vec4 out_Colour;
 in vec2 out_TextureCoord;
 in flat float out_TextureIdx;
 in float out_TilingFactor;
+in flat int out_EntityID;
 
 uniform sampler2D textures[32];
 
@@ -73,5 +77,5 @@ void main(){
 	}
 
 	final_Colour = texColour;
-	final_Colour2 = 50;
+	final_Colour2 = out_EntityID;
 }

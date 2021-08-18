@@ -34,6 +34,7 @@ namespace Cherenkov {
 		EntityProperties					m_Properties;
 
 		bool onKeyPressed(KeyPressedEvent& ev);
+		bool onMouseButtonPressed(MouseButtonPressedEvent& ev);
 		void openScene();
 		void saveScene();
 		void saveAs();

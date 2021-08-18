@@ -48,6 +48,8 @@ namespace Cherenkov {
 		virtual uint32_t getColourAttachment(uint32_t ind = 0) const = 0;
 		virtual int readPixel(uint32_t attachmentID, int x, int y) = 0;
 
+		virtual void clearColourAttachment(uint32_t idx, int data) = 0;
+
 		virtual void bind() = 0;
 		virtual void unbind() = 0;
 

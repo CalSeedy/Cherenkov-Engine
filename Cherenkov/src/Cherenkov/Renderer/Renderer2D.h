@@ -1,6 +1,7 @@
 #pragma once
 #include "Cherenkov/Renderer/EditorCamera.h"
 #include "Cherenkov/Renderer/Texture.h"
+#include "Cherenkov/Scene/Components.h"
 
 namespace Cherenkov {
 	struct QuadProperties {
@@ -24,6 +25,7 @@ namespace Cherenkov {
 		glm::vec4 Colour = { 1.0f, 1.0f, 1.0f, 1.0f };
 		float_t Angle = 0.0f;
 		float_t TileFactor = 1.0f;
+		int EntiyID = -1;
 	};
 
 	class Renderer2D {
@@ -47,8 +49,10 @@ namespace Cherenkov {
 
 		static void Quad(const glm::vec2& scale, const QuadProperties& properties = QuadProperties());
 		static void Quad(const glm::vec2& scale, const Ref<Texture2D>& texture, const QuadProperties& properties = QuadProperties());
-		static void Quad(const glm::mat4& transform, glm::vec4 colour);
-		static void Quad(const glm::mat4& transform, const Ref<Texture2D>& texture, glm::vec4 colour = { 1.0f, 1.0f, 1.0f, 1.0f }, float_t tileFactor = 1.0f);
+		static void Quad(const glm::mat4& transform, glm::vec4 colour, int entityID = -1);
+		static void Quad(const glm::mat4& transform, const Ref<Texture2D>& texture, glm::vec4 colour = { 1.0f, 1.0f, 1.0f, 1.0f }, float_t tileFactor = 1.0f, int entityID = -1);
+
+		static void Sprite(const glm::mat4& transform, SpriteComp& comp, int entityID);
 
 		struct Statistics {
 			uint32_t draws = 0;

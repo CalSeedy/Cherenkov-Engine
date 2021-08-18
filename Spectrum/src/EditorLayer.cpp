@@ -91,25 +91,13 @@ namespace Cherenkov {
 			CK_PROFILE_SCOPE("Render Clear");
 			m_Framebuffer->bind();
 			RenderCommand::clear({ 1.0f, 0.0f, 1.0f, 1.0f });
+			m_Framebuffer->clearColourAttachment(1, -1);
 		}
 		
 		{
 			CK_PROFILE_SCOPE("Draw Scene");
 
 			m_ActiveScene->onUpdateEditor(m_EditorCamera, dt);
-
-			auto [mx, my] = ImGui::GetMousePos();
-			mx -= m_VpBounds[0].x;
-			my -= m_VpBounds[0].y;
-			glm::vec2 vpSize = m_VpBounds[1] - m_VpBounds[0];
-			my = vpSize.y - my;
-			int mouseX = (int)mx;
-			int mouseY = (int)my;
-
-			if (mouseX >= 0 && mouseX < (int)vpSize.x && mouseY >= 0 && mouseY < (int)vpSize.y) {
-				int val = m_Framebuffer->readPixel(1, mouseX, mouseY);
-				CK_CORE_WARN("X: {0}, Y: {1} --> {2}", mouseX, mouseY, val);
-			}
 
 			m_Framebuffer->unbind();
 		}
@@ -337,6 +325,7 @@ namespace Cherenkov {
 
 		EventDispatcher dp(ev);
 		dp.Dispatch<KeyPressedEvent>(CK_BIND_EVENT_FN(EditorLayer::onKeyPressed));
+		dp.Dispatch<MouseButtonPressedEvent>(CK_BIND_EVENT_FN(EditorLayer::onMouseButtonPressed));
 	}
 
 	bool EditorLayer::onKeyPressed(KeyPressedEvent& ev) {
@@ -382,5 +371,35 @@ namespace Cherenkov {
 
 		default: 	break;
 		}
+		return false;
+	}
+
+	bool EditorLayer::onMouseButtonPressed(MouseButtonPressedEvent& ev) {
+		
+		switch (ev.getMouseButton()) {
+		case Mouse::Button_Left:
+			if (m_VpHovered) {
+				auto [mx, my] = ImGui::GetMousePos();
+				mx -= m_VpBounds[0].x;
+				my -= m_VpBounds[0].y;
+				glm::vec2 vpSize = m_VpBounds[1] - m_VpBounds[0];
+				my = vpSize.y - my;
+				int mouseX = (int)mx;
+				int mouseY = (int)my;
+
+				if (mouseX >= 0 && mouseX < (int)vpSize.x && mouseY >= 0 && mouseY < (int)vpSize.y) {
+					m_Framebuffer->bind();
+					int val = m_Framebuffer->readPixel(1, mouseX, mouseY);
+					m_Framebuffer->unbind();
+					if (val > -1) {
+						Entity ent((entt::entity)val, m_ActiveScene.get());
+						m_ActiveScene->setSelectedEntity(ent);
+					}
+				}
+			}
+			break;
+		default :			break;
+		}
+		return false;
 	}
 }
