@@ -379,21 +379,27 @@ namespace Cherenkov {
 		switch (ev.getMouseButton()) {
 		case Mouse::Button_Left:
 			if (m_VpHovered) {
-				auto [mx, my] = ImGui::GetMousePos();
-				mx -= m_VpBounds[0].x;
-				my -= m_VpBounds[0].y;
-				glm::vec2 vpSize = m_VpBounds[1] - m_VpBounds[0];
-				my = vpSize.y - my;
-				int mouseX = (int)mx;
-				int mouseY = (int)my;
+				if (!Input::isKeyPressed(Key::Left_Alt)) {
+					auto [mx, my] = ImGui::GetMousePos();
+					mx -= m_VpBounds[0].x;
+					my -= m_VpBounds[0].y;
+					glm::vec2 vpSize = m_VpBounds[1] - m_VpBounds[0];
+					my = vpSize.y - my;
+					int mouseX = (int)mx;
+					int mouseY = (int)my;
 
-				if (mouseX >= 0 && mouseX < (int)vpSize.x && mouseY >= 0 && mouseY < (int)vpSize.y) {
-					m_Framebuffer->bind();
-					int val = m_Framebuffer->readPixel(1, mouseX, mouseY);
-					m_Framebuffer->unbind();
-					if (val > -1) {
-						Entity ent((entt::entity)val, m_ActiveScene.get());
-						m_ActiveScene->setSelectedEntity(ent);
+					if (mouseX >= 0 && mouseX < (int)vpSize.x && mouseY >= 0 && mouseY < (int)vpSize.y) {
+						m_Framebuffer->bind();
+						int val = m_Framebuffer->readPixel(1, mouseX, mouseY);
+						m_Framebuffer->unbind();
+						if (val > -1) {
+							Entity ent{ (entt::entity)val, m_ActiveScene.get() };
+							m_ActiveScene->setSelectedEntity(ent);
+						}
+						else if (val == -1) {
+							Entity ent{ (entt::entity)val, m_ActiveScene.get() };
+							m_ActiveScene->setSelectedEntity(ent);
+						}
 					}
 				}
 			}
