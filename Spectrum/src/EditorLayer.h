@@ -15,6 +15,7 @@ namespace Cherenkov {
 		// Framebuffer/viewport
 		EditorCamera						m_EditorCamera;
 		Ref<Framebuffer>					m_Framebuffer;
+		glm::vec2							m_VpBounds[2];
 		bool								m_VpFocused = false;
 		bool								m_VpHovered = false;
 		glm::vec2							m_VpSize = {0, 0};

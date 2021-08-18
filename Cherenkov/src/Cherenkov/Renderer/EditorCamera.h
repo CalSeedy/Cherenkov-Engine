@@ -38,11 +38,11 @@ namespace Cherenkov {
 		float_t zoomSpeed() const;
 	public:
 		EditorCamera() = default;
-		EditorCamera(float_t fov, float_t aspect, float_t near, float_t far);
+		EditorCamera(float_t fov, float_t aspect, float_t near_, float_t far_);
 
 		void onEvent(Event& ev);
 		void onUpdate(Timestep dt);
-		void setViewport(float_t width, float_t height) { m_VpWidth = width; m_VpHeight = height; }
+		void setViewport(float_t width, float_t height) { m_VpWidth = width; m_VpHeight = height; updateProjection(); }
 
 
 		void getDistance(float_t distance) { m_Distance = distance; }

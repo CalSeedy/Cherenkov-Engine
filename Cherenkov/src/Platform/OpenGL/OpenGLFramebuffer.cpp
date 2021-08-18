@@ -27,12 +27,12 @@ namespace Cherenkov {
 			glBindTexture(textureTarget(multi), ID);
 		}
 
-		static void attachColourTexture(uint32_t ID, int samples, GLenum format, uint32_t width, uint32_t height, int index) {
+		static void attachColourTexture(uint32_t ID, int samples, GLenum internalFormat, GLenum accessFormat, uint32_t width, uint32_t height, int index) {
 			bool multi = samples > 1;
 
-			if (multi) glTexImage2DMultisample(GL_TEXTURE_2D_MULTISAMPLE, samples, format, width, height, GL_FALSE);
+			if (multi) glTexImage2DMultisample(GL_TEXTURE_2D_MULTISAMPLE, samples, internalFormat, width, height, GL_FALSE);
 			else { 
-				glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr); 
+				glTexImage2D(GL_TEXTURE_2D, 0, internalFormat, width, height, 0, accessFormat, GL_UNSIGNED_BYTE, nullptr);
 				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
@@ -77,7 +77,7 @@ namespace Cherenkov {
 
 	OpenGLFramebuffer::~OpenGLFramebuffer()	{
 		glDeleteFramebuffers(1, &m_RendererID);
-		glDeleteTextures(m_ColourAttachments.size(), m_ColourAttachments.data());
+		glDeleteTextures((GLsizei)m_ColourAttachments.size(), m_ColourAttachments.data());
 		glDeleteTextures(1, &m_DepthAttachment);
 	}
 
@@ -85,7 +85,7 @@ namespace Cherenkov {
 
 		if (m_RendererID) {
 			glDeleteFramebuffers(1, &m_RendererID);
-			glDeleteTextures(m_ColourAttachments.size(), m_ColourAttachments.data());
+			glDeleteTextures((GLsizei)m_ColourAttachments.size(), m_ColourAttachments.data());
 			glDeleteTextures(1, &m_DepthAttachment);
 
 			m_ColourAttachments.clear();
@@ -99,12 +99,15 @@ namespace Cherenkov {
 
 		if (m_ColourAttachmentSpecifications.size()) {
 			m_ColourAttachments.resize(m_ColourAttachmentSpecifications.size());
-			Utils::createTextures(multi, m_ColourAttachments.data(), m_ColourAttachments.size());
+			Utils::createTextures(multi, m_ColourAttachments.data(), (GLsizei)m_ColourAttachments.size());
 			for (size_t i = 0; i < m_ColourAttachments.size(); i++) {
 				Utils::bindTexture(multi, m_ColourAttachments[i]);
 				switch (m_ColourAttachmentSpecifications[i].TextureFormat) {
 				case FbTextureFormat::RGBA8:
-					Utils::attachColourTexture(m_ColourAttachments[i], m_Specification.Samples, GL_RGBA8, m_Specification.Width, m_Specification.Height, i);
+					Utils::attachColourTexture(m_ColourAttachments[i], m_Specification.Samples, GL_RGBA8, GL_RGBA, m_Specification.Width, m_Specification.Height, (int)i);
+					break;
+				case FbTextureFormat::RED_INT:
+					Utils::attachColourTexture(m_ColourAttachments[i], m_Specification.Samples, GL_R32I, GL_RED_INTEGER, m_Specification.Width, m_Specification.Height, (int)i);
 					break;
 				}
 			}
@@ -125,7 +128,7 @@ namespace Cherenkov {
 			
 			CK_CORE_ASSERT(numOfColourAttachments <= 4);
 			GLenum buffers[4] = { GL_COLOR_ATTACHMENT0, GL_COLOR_ATTACHMENT1, GL_COLOR_ATTACHMENT2, GL_COLOR_ATTACHMENT3 };
-			glDrawBuffers(numOfColourAttachments, buffers);
+			glDrawBuffers((GLsizei)numOfColourAttachments, buffers);
 		}
 		else if (m_ColourAttachments.empty()){
 			glDrawBuffer(GL_NONE);
@@ -154,6 +157,14 @@ namespace Cherenkov {
 
 	void OpenGLFramebuffer::unbind() {
 		glBindFramebuffer(GL_FRAMEBUFFER, 0);
+	}
+
+	int OpenGLFramebuffer::readPixel(uint32_t attachmentID, int x, int y) {
+		glReadBuffer(GL_COLOR_ATTACHMENT0 + attachmentID);
+		int value;
+		glReadPixels(x, y, 1, 1, GL_RED_INTEGER, GL_INT, &value);
+
+		return value;
 	}
 
 }

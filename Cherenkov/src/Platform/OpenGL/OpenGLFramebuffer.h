@@ -23,5 +23,6 @@ namespace Cherenkov {
 		void unbind() override;
 		const FbSpecification& getSpecification() const { return m_Specification; }
 		uint32_t getColourAttachment(uint32_t ind = 0) const override { CK_CORE_ASSERT(ind < m_ColourAttachments.size()); return m_ColourAttachments[ind]; }
+		int readPixel(uint32_t attachmentID, int x, int y) override;
 	};
 }

@@ -7,6 +7,7 @@ namespace Cherenkov {
 		None = 0,
 
 		RGBA8,
+		RED_INT,
 
 		DEPTH24STENCIL8,
 
@@ -45,6 +46,7 @@ namespace Cherenkov {
 
 		virtual const FbSpecification& getSpecification() const = 0;
 		virtual uint32_t getColourAttachment(uint32_t ind = 0) const = 0;
+		virtual int readPixel(uint32_t attachmentID, int x, int y) = 0;
 
 		virtual void bind() = 0;
 		virtual void unbind() = 0;

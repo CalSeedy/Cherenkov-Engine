@@ -58,28 +58,13 @@ namespace Cherenkov {
 		m_Texture = Texture2D::init("assets/Textures/checkerboardSq.png");
 
 		FbSpecification defaultSpec;
-		defaultSpec.Attachments = { FbTextureFormat::RGBA8, FbTextureFormat::Depth, FbTextureFormat::RGBA8 };
-		auto& window = Application::get().getWindow();
+		defaultSpec.Attachments = { FbTextureFormat::RGBA8, FbTextureFormat::Depth, FbTextureFormat::RED_INT };
 		defaultSpec.Width = 1280;
 		defaultSpec.Height = 720;
 		m_Framebuffer = Framebuffer::init(defaultSpec);
 
 		m_ActiveScene = CreateRef<Scene>();
 		m_EditorCamera = EditorCamera(30.0f, 1.778f, 0.1f, 1000.0f);
-#if 0
-		auto square = m_ActiveScene->createEntity("Square");
-		square.add<SpriteComp>( 1.0f, 1.0f, 0.0f, 1.0f );
-		m_Square = square;
-
-		m_CameraFirst = m_ActiveScene->getPrimaryCamera();
-
-		auto cam2 = m_ActiveScene->createEntity("Camera 2");
-		cam2.add<CameraComp>();
-		m_CameraOther = cam2;
-
-		m_CameraFirst.add<ScriptComp>(ScriptLanguage::Native).bind<SimpleMovement>();
-		m_CameraOther.add<ScriptComp>(ScriptLanguage::Native).bind<SimpleMovement>();
-#endif
 
 		m_SceneHierarchy.setContext(m_ActiveScene);
 		m_Properties.setContext(m_ActiveScene);
@@ -92,8 +77,8 @@ namespace Cherenkov {
 
 	void EditorLayer::onUpdate(Timestep dt) {
 		CK_PROFILE_FUNCTION();
-
-		if (FbSpecification spec = m_Framebuffer->getSpecification(); m_VpSize.x > 0.0f && m_VpSize.y > 0.0f && (spec.Width != m_VpSize.x || spec.Height != m_VpSize.y)) {
+		FbSpecification spec = m_Framebuffer->getSpecification();
+		if (m_VpSize.x > 0.0f && m_VpSize.y > 0.0f && (spec.Width != m_VpSize.x || spec.Height != m_VpSize.y)) {
 			m_Framebuffer->resize((uint32_t)m_VpSize.x, (uint32_t)m_VpSize.y);
 			m_EditorCamera.setViewport(m_VpSize.x, m_VpSize.y);
 			m_ActiveScene->onViewportResize((uint32_t)m_VpSize.x, (uint32_t)m_VpSize.y);
@@ -112,6 +97,19 @@ namespace Cherenkov {
 			CK_PROFILE_SCOPE("Draw Scene");
 
 			m_ActiveScene->onUpdateEditor(m_EditorCamera, dt);
+
+			auto [mx, my] = ImGui::GetMousePos();
+			mx -= m_VpBounds[0].x;
+			my -= m_VpBounds[0].y;
+			glm::vec2 vpSize = m_VpBounds[1] - m_VpBounds[0];
+			my = vpSize.y - my;
+			int mouseX = (int)mx;
+			int mouseY = (int)my;
+
+			if (mouseX >= 0 && mouseX < (int)vpSize.x && mouseY >= 0 && mouseY < (int)vpSize.y) {
+				int val = m_Framebuffer->readPixel(1, mouseX, mouseY);
+				CK_CORE_WARN("X: {0}, Y: {1} --> {2}", mouseX, mouseY, val);
+			}
 
 			m_Framebuffer->unbind();
 		}
@@ -250,7 +248,7 @@ namespace Cherenkov {
 		window_class.DockNodeFlagsOverrideSet = ImGuiDockNodeFlags_AutoHideTabBar;
 		ImGui::SetNextWindowClass(&window_class);
 		ImGui::Begin("Viewport");
-
+		ImVec2 vpOffset = ImGui::GetCursorPos();
 		m_VpFocused = ImGui::IsWindowFocused();
 		m_VpHovered = ImGui::IsWindowHovered();
 		Application::get().getImGuiLayer()->blockingEvents(!m_VpFocused && !m_VpHovered);
@@ -259,6 +257,15 @@ namespace Cherenkov {
 
 		uint64_t tID = m_Framebuffer->getColourAttachment();
 		ImGui::Image(reinterpret_cast<void*>(tID), ImVec2{ m_VpSize.x, m_VpSize.y }, ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
+
+		ImVec2 windowSize = ImGui::GetWindowSize();
+		ImVec2 minBound = ImGui::GetWindowPos();
+		minBound.x += vpOffset.x;	minBound.y += vpOffset.y;
+		ImVec2 maxBound = minBound;
+		maxBound.x += windowSize.x;	maxBound.y += windowSize.y;
+
+		m_VpBounds[0] = { minBound.x, minBound.y };
+		m_VpBounds[1] = { maxBound.x, maxBound.y };
 
 		Entity currentSelection = m_ActiveScene->getSelectedEntity();
 		if (currentSelection && m_GuizmoOp != -1) {
