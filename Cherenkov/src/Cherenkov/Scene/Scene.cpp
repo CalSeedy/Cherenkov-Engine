@@ -127,6 +127,8 @@ namespace Cherenkov {
 	template<>
 	void Scene::onComponentAdded<CameraComp>(Entity& entity, CameraComp& component) {
 		if (cameraCount() == 1) m_PrimaryCamera = entity;
+		if (m_VpWidth > 0 && m_VpHeight > 0)
+			component.Camera.setViewport(m_VpWidth, m_VpHeight);
 	}
 
 	template<>

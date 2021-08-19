@@ -3,21 +3,18 @@
 
 #include "EditorLayer.h"
 
-// testing whether EnTT was added successfully
-#include <entt/entt.hpp>
-
 namespace Cherenkov {
-	class Editor : public Application {
+	class Spectrum : public Application {
 	public:
-		Editor() : Application("Spectrum") {
+		Spectrum(AppCommandlineArgs args) : Application("Spectrum", args) {
 			//PushLayer(new ExampleLayer());
 			pushLayer(new EditorLayer());
 		}
 
-		~Editor() {}
+		~Spectrum() {}
 	};
 
-	Application* createApplication() {
-		return new Editor();
+	Application* createApplication(AppCommandlineArgs args) {
+		return new Spectrum(args);
 	}
 }

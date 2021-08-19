@@ -1,13 +1,13 @@
 Scene: Scene Title
-Primary: Scene Camera
+Primary: ""
 Entities:
   - Entity ID: 864872648263
     NameComp:
       Name: Right
     TransformComp:
-      Position: [0.351999998, 0, 0.349999994]
-      Rotation: [0, 0.785398185, 0]
-      Scale: [1, 1, 1]
+      Position: [0.356455863, 0.00489004981, 0.357777506]
+      Rotation: [2.36325431, -1.28149986e-06, -1.57079637]
+      Scale: [0.999986291, 0.999994636, 0.99999994]
     SpriteComp:
       Colour: [1, 0, 0, 1]
   - Entity ID: 864872648263
@@ -23,7 +23,7 @@ Entities:
     NameComp:
       Name: Left
     TransformComp:
-      Position: [-0.354999989, 0, 0.349999994]
+      Position: [-0.357340753, -0.00109672546, 0.347628832]
       Rotation: [0, -0.785398245, 0]
       Scale: [1, 1, 1]
     SpriteComp:

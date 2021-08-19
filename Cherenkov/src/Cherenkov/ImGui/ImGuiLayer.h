@@ -12,7 +12,6 @@ namespace Cherenkov {
 
 	class ImGuiLayer : public Layer {
 		bool	m_Blocking = true;
-		float	m_Time = 0.0f;
 	public:
 		struct Theme;
 

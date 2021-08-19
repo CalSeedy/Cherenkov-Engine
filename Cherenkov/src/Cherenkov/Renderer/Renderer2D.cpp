@@ -2,9 +2,9 @@
 #include "Cherenkov/Renderer/Renderer2D.h"
 
 #include "Cherenkov/Renderer/VertexArray.h"
+#include "Cherenkov/Renderer/UniformBuffer.h"
 #include "Cherenkov/Renderer/Shader.h"
 #include "Cherenkov/Renderer/Commands.h"
-
 
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
@@ -22,27 +22,33 @@ namespace Cherenkov {
 	};
 
 	struct Storage {
-		static const uint32_t maxQuads = 10000;
-		static const uint32_t maxVertices  = maxQuads * 4;
-		static const uint32_t maxIndices   = maxQuads * 6;
-		static const uint32_t maxTextures = 32;
+		static const uint32_t					maxQuads = 10000;
+		static const uint32_t					maxVertices  = maxQuads * 4;
+		static const uint32_t					maxIndices   = maxQuads * 6;
+		static const uint32_t					maxTextures = 32;
 		
-		uint32_t quadIndices = 0;
+		uint32_t								quadIndices = 0;
 		
-		Ref<VertexArray> quadVertexArray;
-		Ref<VertexBuffer> quadVertexBuffer;
-		Ref<Shader> textureShader;
-		Ref<Texture2D> Blank;
+		Ref<VertexArray>						quadVertexArray;
+		Ref<VertexBuffer>						quadVertexBuffer;
+		Ref<Shader>								textureShader;
+		Ref<Texture2D>							Blank;
 
-		QuadVertex* quadVertBufferBase = nullptr;
-		QuadVertex* quadVertBufferPtr = nullptr;
+		QuadVertex*								quadVertBufferBase = nullptr;
+		QuadVertex*								quadVertBufferPtr = nullptr;
 
 		std::array<Ref<Texture2D>, maxTextures> boundTextures;
-		uint32_t textureSlotIdx = 1;	// ^^ 0 - blank texture/ colour!
+		uint32_t								textureSlotIdx = 1;	// ^^ 0 - blank texture/ colour!
 
-		glm::vec4 quadVertexPositions[4];
+		glm::vec4								quadVertexPositions[4];
 
-		Renderer2D::Statistics stats;
+		Renderer2D::Statistics					stats;
+
+		struct CameraData {
+			glm::mat4 viewProjection;
+		};
+		CameraData								CameraBuffer;
+		Ref<UniformBuffer>						CameraUniformBuffer;
 	};
 
 	static Storage s_Storage;
@@ -90,13 +96,16 @@ namespace Cherenkov {
 			uint32_t blankData = 0xffffffff;
 			s_Storage.Blank->setData(&blankData, sizeof(blankData));
 		}
+
 		int32_t textures [s_Storage.maxTextures];
 		for (int32_t i = 0; i < s_Storage.maxTextures; i++) textures[i] = i;
+		
 		{
 			CK_PROFILE_SCOPE("Texture Shader");
 			s_Storage.textureShader = Shader::init("assets/Shaders/Texture.glsl");
-			s_Storage.textureShader->bind();
-			s_Storage.textureShader->setIntArray("textures", textures, s_Storage.maxTextures);
+
+			//s_Storage.textureShader->bind();
+			//s_Storage.textureShader->setIntArray("textures", textures, s_Storage.maxTextures);
 
 			s_Storage.boundTextures[0] = s_Storage.Blank;
 		}
@@ -106,6 +115,7 @@ namespace Cherenkov {
 		s_Storage.quadVertexPositions[2] = { 0.5f,  0.5f, 0.0f, 1.0f };
 		s_Storage.quadVertexPositions[3] = { -0.5f,  0.5f, 0.0f, 1.0f };
 
+		s_Storage.CameraUniformBuffer = UniformBuffer::init(sizeof(Storage::CameraData), 0);
 	}
 
 	void Renderer2D::shutdown()	{
@@ -116,28 +126,32 @@ namespace Cherenkov {
 
 	void Renderer2D::beginScene(const OrthographicCamera& camera) {
 		CK_PROFILE_FUNCTION();
-		s_Storage.textureShader->bind();
-		s_Storage.textureShader->setMat4("viewProjection", camera.getViewProjection());
+
+		s_Storage.CameraBuffer.viewProjection = camera.getViewProjection();
+		s_Storage.CameraUniformBuffer->setData(&s_Storage.CameraBuffer, sizeof(Storage::CameraData));
 
 		startBatch();
 	}
 
 	void Renderer2D::beginScene(const Camera& camera, const glm::mat4& transform) {
 		CK_PROFILE_FUNCTION();
-		glm::mat4 viewProj = camera.getProjection() * glm::inverse(transform);
-		s_Storage.textureShader->bind();
-		s_Storage.textureShader->setMat4("viewProjection", viewProj);
+		//glm::mat4 viewProj = camera.getProjection() * glm::inverse(transform);
+		//s_Storage.textureShader->bind();
+		//s_Storage.textureShader->setMat4("viewProjection", viewProj);
 
+		s_Storage.CameraBuffer.viewProjection = camera.getProjection() * glm::inverse(transform);
+		s_Storage.CameraUniformBuffer->setData(&s_Storage.CameraBuffer, sizeof(Storage::CameraData));
 		startBatch();
 	}
 
 	void Renderer2D::beginScene(const EditorCamera& camera)	{
 		CK_PROFILE_FUNCTION();
-		glm::mat4 viewProj = camera.getViewProjection();
+		//glm::mat4 viewProj = camera.getViewProjection();
+		//s_Storage.textureShader->bind();
+		//s_Storage.textureShader->setMat4("viewProjection", viewProj);
 
-		s_Storage.textureShader->bind();
-		s_Storage.textureShader->setMat4("viewProjection", viewProj);
-
+		s_Storage.CameraBuffer.viewProjection = camera.getViewProjection();
+		s_Storage.CameraUniformBuffer->setData(&s_Storage.CameraBuffer, sizeof(Storage::CameraData));
 		startBatch();
 	}
 
@@ -149,6 +163,8 @@ namespace Cherenkov {
 		s_Storage.quadVertexBuffer->loadData(s_Storage.quadVertBufferBase, size);
 
 		for (uint32_t i = 0; i < s_Storage.textureSlotIdx; i++) s_Storage.boundTextures[i]->bind(i);
+
+		s_Storage.textureShader->bind();
 		RenderCommand::drawIndexed(s_Storage.quadVertexArray, s_Storage.quadIndices);
 		s_Storage.stats.draws++;
 	}

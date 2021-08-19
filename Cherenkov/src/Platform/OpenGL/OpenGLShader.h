@@ -9,10 +9,18 @@ namespace Cherenkov {
 	class OpenGLShader : public Shader {
 		uint32_t m_ID;
 		std::string m_Name;
+		std::string m_Filepath;
+		std::unordered_map<GLenum, std::vector<uint32_t>> m_VulkanSPIRV;
+		std::unordered_map<GLenum, std::vector<uint32_t>> m_OpenGLSPIRV;
+		std::unordered_map<GLenum, std::string> m_OpenGLSource;
+
 
 		static std::string readFile(const char* filepath);
-		void compile(const std::unordered_map<GLenum, std::string>& shaders);
 		std::unordered_map<GLenum, std::string> preProcess(const std::string& src);
+		void compileOrGetVulkanBinaries(const std::unordered_map<GLenum, std::string>& shaders);
+		void compileOrGetOpenGLBinaries();
+		void createProgram();
+		void reflect(GLenum stage, const std::vector<uint32_t>& data);
 	public:
 		OpenGLShader(const std::string& name, const std::string& vertexPath, const std::string& fragmentPath);
 		OpenGLShader(const std::string& filepath);

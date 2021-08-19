@@ -27,3 +27,9 @@
 [submodule "Cherenkov/vendor/ImGuizmo"]
 	path = Cherenkov/vendor/ImGuizmo
 	url = https://github.com/CedricGuillemet/ImGuizmo.git
+[submodule "Cherenkov/vendor/shaderc"]
+	path = Cherenkov/vendor/shaderc
+	url = https://github.com/google/shaderc.git
+[submodule "Cherenkov/vendor/SPIRV-Cross"]
+	path = Cherenkov/vendor/SPIRV-Cross
+	url = https://github.com/KhronosGroup/SPIRV-Cross.git

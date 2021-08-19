@@ -15,7 +15,7 @@ namespace Cherenkov {
 	
 	Application* Application::s_Instance = nullptr;
 	 
-	Application::Application(const std::string& title) {
+	Application::Application(const std::string& title, AppCommandlineArgs args) : m_CommandlineArgs{ args } {
 		CK_PROFILE_FUNCTION();
 		CK_CORE_ASSERT(!s_Instance, "Application already running!");
 		s_Instance = this;

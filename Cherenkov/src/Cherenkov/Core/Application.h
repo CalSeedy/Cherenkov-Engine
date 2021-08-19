@@ -9,15 +9,27 @@
 #include "Cherenkov/Core/TimeStep.h"
 
 #include "Cherenkov/ImGui/ImGuiLayer.h"
+#include "Debug/Assert.h"
 
 int main(int argc, char** argv);
 
 namespace Cherenkov {
 
+	struct AppCommandlineArgs {
+		int Count = 0;
+		char** Args = nullptr;
+
+		const char* operator[](int index) const {
+			CK_CORE_ASSERT(index < Count);
+			return Args[index];
+		}
+	};
+
 	class Application
 	{
 		static Application*				s_Instance;
 
+		AppCommandlineArgs				m_CommandlineArgs;
 		float							m_FrameTime = 0.0f;
 		ImGuiLayer*						m_ImGuiLayer;
 		LayerStack						m_LayerStack;
@@ -32,6 +44,7 @@ namespace Cherenkov {
 		friend int ::main(int argc, char** argv);
 	public:
 		Application(const std::string& title = "Cherenkov App");
+		Application(const std::string& title = "Cherenkov App", AppCommandlineArgs args = AppCommandlineArgs());
 		virtual ~Application();
 
 		void onEvent(Event &event);
@@ -41,9 +54,11 @@ namespace Cherenkov {
 		static Application& get() { return *s_Instance; }
 		ImGuiLayer* getImGuiLayer() { return m_ImGuiLayer; }
 		Window& getWindow() { return *m_Window; }
+		AppCommandlineArgs getCommandlineArgs() const { return m_CommandlineArgs; }
 
 		void close();
 	};
 
 	Application* createApplication();
+	Application* createApplication(AppCommandlineArgs args);
 }

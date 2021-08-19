@@ -6,7 +6,7 @@
 
 class Sandbox : public Cherenkov::Application {
 public:
-	Sandbox() {
+	Sandbox(Cherenkov::AppCommandlineArgs args) : Cherenkov::Application("Sandbox", args) {
 		//PushLayer(new ExampleLayer());
 		pushLayer(new Sandbox2D());
 	}
@@ -14,6 +14,6 @@ public:
 	~Sandbox() {}
 };
 
-Cherenkov::Application* Cherenkov::createApplication() {
-	return new Sandbox();
+Cherenkov::Application* Cherenkov::createApplication(Cherenkov::AppCommandlineArgs args) {
+	return new Sandbox(args);
 }

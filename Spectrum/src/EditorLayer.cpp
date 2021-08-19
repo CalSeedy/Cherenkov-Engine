@@ -41,7 +41,7 @@ namespace Cherenkov {
 			Serializer serializer(m_ActiveScene);
 			serializer.deserialize(path);
 		}
-
+		m_EditorCamera = EditorCamera(30.0f, 1.778f, 0.1f, 1000.0f);
 		m_SavePath = path;
 	}
 
@@ -64,6 +64,13 @@ namespace Cherenkov {
 		m_Framebuffer = Framebuffer::init(defaultSpec);
 
 		m_ActiveScene = CreateRef<Scene>();
+
+		auto cmdlineArgs = Application::get().getCommandlineArgs();
+		if (cmdlineArgs.Count > 1) {
+			m_SavePath = cmdlineArgs[1];
+			Serializer serializer(m_ActiveScene);
+			serializer.deserialize(m_SavePath);
+		}
 		m_EditorCamera = EditorCamera(30.0f, 1.778f, 0.1f, 1000.0f);
 
 		m_SceneHierarchy.setContext(m_ActiveScene);
@@ -257,7 +264,6 @@ namespace Cherenkov {
 			ImGuizmo::SetOrthographic(false);
 			ImGuizmo::SetDrawlist();
 			ImGuizmo::SetRect(m_VpBounds[0].x, m_VpBounds[0].y, m_VpBounds[1].x - m_VpBounds[0].x, m_VpBounds[1].y - m_VpBounds[0].y);
-
 
 			/*auto& cameraEnt = m_ActiveScene->getPrimaryCamera();
 			const auto& camera = cameraEnt.get<CameraComp>().Camera;

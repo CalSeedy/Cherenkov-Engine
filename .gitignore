@@ -4,6 +4,8 @@
 !vendor/premake/bin/
 **/bin-int/
 Cherenkov/vendor/
+Spectrum/assets/cache
+**__pycache__
 
 #Files
 *.log
