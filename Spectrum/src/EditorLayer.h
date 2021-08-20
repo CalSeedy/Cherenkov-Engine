@@ -2,6 +2,7 @@
 #include <Cherenkov.h>
 #include "Panels/SceneHierarchy.h"
 #include "Panels/EntityProperties.h"
+#include "Panels/ContentBrowser.h"
 
 namespace Cherenkov {
 	class EditorLayer : public Layer {
@@ -32,6 +33,7 @@ namespace Cherenkov {
 		std::string							m_SavePath{};
 		SceneHierarchy						m_SceneHierarchy;
 		EntityProperties					m_Properties;
+		ContentBrowser						m_Browser;
 
 		bool onKeyPressed(KeyPressedEvent& ev);
 		bool onMouseButtonPressed(MouseButtonPressedEvent& ev);

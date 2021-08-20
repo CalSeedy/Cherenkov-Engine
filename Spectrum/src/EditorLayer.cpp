@@ -303,6 +303,7 @@ namespace Cherenkov {
 
 		m_SceneHierarchy.onImGuiDraw();
 		m_Properties.onImGuiDraw();
+		m_Browser.onImGuiDraw();
 
 		auto stats = Renderer2D::getStats();
 		ImGui::Begin("Stats");
