@@ -15,10 +15,21 @@
 
 namespace Cherenkov {
 
+	float Window::s_DPIFactor = 1.0f;
 	static uint8_t s_GLFWCount = 0;
 
 	static void GLFWErrorCallback(int error, const char* description) {
 		CK_CORE_ERROR("GLFW Error ({0}): {1}", error, description);
+
+		GLFWmonitor* monitor = glfwGetPrimaryMonitor();
+		float xscale, yscale;
+		glfwGetMonitorContentScale(monitor, &xscale, &yscale);
+
+		if (xscale > 1.0f || yscale > 1.0f)
+		{
+			Window::s_DPIFactor = yscale;
+			glfwWindowHint(GLFW_SCALE_TO_MONITOR, GLFW_TRUE);
+		}
 	}
 
 	WindowsWindow::WindowsWindow(const WindowProperties &properties){

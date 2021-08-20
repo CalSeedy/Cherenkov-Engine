@@ -12,6 +12,9 @@
 #include <imguizmo.h>
 
 namespace Cherenkov {
+
+	extern const std::filesystem::path g_AssetDir;
+
 	EditorLayer::EditorLayer() : Layer("EditorLayer") {}
 
 	void EditorLayer::newScene() {
@@ -34,15 +37,18 @@ namespace Cherenkov {
 
 	void EditorLayer::openScene() {
 		std::string path = FileDialogue::open("Cherenkov Scene File (*.cherenkov)\0*.cherenkov\0");
+		if (!path.empty()) openScene(path);
+	}
 
-		if (!path.empty()) {
-			newScene();
+	void EditorLayer::openScene(const std::filesystem::path& path) {
 
-			Serializer serializer(m_ActiveScene);
-			serializer.deserialize(path);
-		}
+		newScene();
+
+		Serializer serializer(m_ActiveScene);
+		serializer.deserialize(path);
+
 		m_EditorCamera = EditorCamera(30.0f, 1.778f, 0.1f, 1000.0f);
-		m_SavePath = path;
+		m_SavePath = path.string();
 	}
 
 	void EditorLayer::saveAs() {
@@ -258,6 +264,15 @@ namespace Cherenkov {
 
 		uint64_t tID = m_Framebuffer->getColourAttachment();
 		ImGui::Image(reinterpret_cast<void*>(tID), ImVec2{ m_VpSize.x, m_VpSize.y }, ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
+
+		if (ImGui::BeginDragDropTarget()) {
+			if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("CK_CONTENT_ITEM")) {
+				const wchar_t* path = (const wchar_t*)payload->Data;
+
+				openScene(g_AssetDir / path);
+			}
+			ImGui::EndDragDropTarget();
+		}
 
 		Entity currentSelection = m_ActiveScene->getSelectedEntity();
 		if (currentSelection && m_GuizmoOp != -1) {

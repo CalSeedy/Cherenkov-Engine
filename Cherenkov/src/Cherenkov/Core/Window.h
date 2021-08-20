@@ -22,6 +22,8 @@ namespace Cherenkov {
 	class Window {
 
 	public:
+		static float_t s_DPIFactor;
+
 		using EventCallbackFn = std::function<void(Event&)>;
 
 		virtual ~Window() {}

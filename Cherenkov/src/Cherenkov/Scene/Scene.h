@@ -15,6 +15,7 @@ namespace Cherenkov {
 		uint32_t m_VpHeight = 0;
 		entt::entity m_PrimaryCamera{ entt::null };
 		entt::entity m_SelectedEntity{ entt::null };
+		std::string	m_Name;
 
 		template<typename T>
 		void onComponentAdded(Entity& entity, T& component);
@@ -26,7 +27,7 @@ namespace Cherenkov {
 		friend class SceneHierarchy;
 		friend class Serializer;
 	public:
-		Scene();
+		Scene(const std::string& name = "Untitled Scene");
 		~Scene();
 
 		size_t cameraCount();

@@ -38,6 +38,7 @@ namespace Cherenkov {
 		bool onKeyPressed(KeyPressedEvent& ev);
 		bool onMouseButtonPressed(MouseButtonPressedEvent& ev);
 		void openScene();
+		void openScene(const std::filesystem::path& path);
 		void saveScene();
 		void saveAs();
 		void newScene();

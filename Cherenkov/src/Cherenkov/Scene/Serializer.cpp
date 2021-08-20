@@ -139,7 +139,7 @@ namespace Cherenkov {
 	void Serializer::serialize(const std::filesystem::path& path)	{
 		YAML::Emitter out;
 		out << YAML::BeginMap;
-		out << YAML::Key << "Scene" << YAML::Value << "Scene Title";
+		out << YAML::Key << "Scene" << YAML::Value << m_Scene->m_Name;
 		std::string primary = (m_Scene->cameraCount() > 0) ? m_Scene->getPrimaryCamera().get<NameComp>().Name : "";
 		out << YAML::Key << "Primary" << YAML::Value << primary;
 		out << YAML::Key << "Entities" << YAML::Value << YAML::BeginSeq;

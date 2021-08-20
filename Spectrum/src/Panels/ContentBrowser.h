@@ -4,8 +4,7 @@
 namespace Cherenkov {
 
 	class ContentBrowser {
-		const std::filesystem::path m_AssetDir = std::filesystem::path("assets");
-		std::filesystem::path		m_CurrentPath{m_AssetDir};
+		std::filesystem::path		m_CurrentPath;
 		std::filesystem::path		m_SelectedFile{""};
 
 		Ref<Texture2D>				m_IconDir;

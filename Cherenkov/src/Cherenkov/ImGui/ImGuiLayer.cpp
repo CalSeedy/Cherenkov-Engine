@@ -38,7 +38,7 @@ namespace Cherenkov {
 		return { (1.0f - s) * first.x + s * second.x, (1.0f - s) * first.y + s * second.y, (1.0f - s) * first.z + s * second.z, a };
 	}
 
-	ImGuiLayer::Font ImGuiLayer::font = { "assets/Fonts/Source Sans Pro/SourceSansPro-", 18.0f };
+	ImGuiLayer::Font ImGuiLayer::font = { "assets/Fonts/Source Sans Pro/SourceSansPro-", Window::s_DPIFactor * 18.0f };
 	bool ImGuiLayer::fontChange = false;
 
 	std::vector<std::vector<ImVec4>> ImGuiLayer::colourStyles = {};
@@ -329,9 +329,9 @@ namespace Cherenkov {
 		io.Fonts->Clear();
 		if (std::strcmp(ImGuiLayer::font.path.c_str(), "") != 0) {
 			io.FontDefault = io.Fonts->AddFontFromFileTTF((ImGuiLayer::font.path + std::string("Regular.ttf")).c_str(), ImGuiLayer::font.size);
-			io.Fonts->AddFontFromFileTTF((ImGuiLayer::font.path + std::string("Bold.ttf")).c_str(), ImGuiLayer::font.size);
-			io.Fonts->AddFontFromFileTTF((ImGuiLayer::font.path + std::string("Italic.ttf")).c_str(), ImGuiLayer::font.size);
-			io.Fonts->AddFontFromFileTTF((ImGuiLayer::font.path + std::string("BoldItalic.ttf")).c_str(), ImGuiLayer::font.size);
+			io.Fonts->AddFontFromFileTTF((ImGuiLayer::font.path + std::string("Bold.ttf")).c_str(), Window::s_DPIFactor * ImGuiLayer::font.size);
+			io.Fonts->AddFontFromFileTTF((ImGuiLayer::font.path + std::string("Italic.ttf")).c_str(), Window::s_DPIFactor * ImGuiLayer::font.size);
+			io.Fonts->AddFontFromFileTTF((ImGuiLayer::font.path + std::string("BoldItalic.ttf")).c_str(), Window::s_DPIFactor * ImGuiLayer::font.size);
 		} else
 			io.FontDefault = io.Fonts->AddFontDefault();
 		io.Fonts->Build();
@@ -339,7 +339,8 @@ namespace Cherenkov {
 	}
 
 	void ImGuiLayer::setTheme(ColourStyle style) {
-		auto& colours = ImGui::GetStyle().Colors;
+		auto& imStyle = ImGui::GetStyle();
+		auto& colours = imStyle.Colors;
 
 		switch (style) {
 		case ColourStyle::Default:
@@ -377,7 +378,7 @@ namespace Cherenkov {
 			colours[c] = col;
 			c++;
 		}
-
+		imStyle.ScaleAllSizes(Window::s_DPIFactor);
 	}
 
 	ImGuiLayer::ImGuiLayer() : Layer("ImGuiLayer") {
