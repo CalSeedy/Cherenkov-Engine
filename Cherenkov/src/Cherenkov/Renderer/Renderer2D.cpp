@@ -253,7 +253,8 @@ namespace Cherenkov {
 
 	void Renderer2D::Sprite(const glm::mat4& transform, SpriteComp& comp, int entityID)	{
 		CK_PROFILE_FUNCTION();
-		Quad(transform, comp.Colour, entityID);
+		if (comp.Texture) Quad(transform, comp.Texture, comp.Colour, comp.TilingFactor, entityID);
+		else Quad(transform, comp.Colour, entityID);
 	}
 
 	void Renderer2D::resetStats() {

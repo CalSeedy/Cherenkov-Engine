@@ -9,6 +9,8 @@ namespace Cherenkov {
 #define BOLD 1
 #define ITALIC 2
 
+	extern const std::filesystem::path g_AssetDir;
+
 	EntityProperties::EntityProperties(const Ref<Scene>& context) {
 		setContext(context);
 	}
@@ -205,6 +207,35 @@ namespace Cherenkov {
 		drawComponent<SpriteComp>("Sprite/Texture", entity, [](Entity& ent) {
 			auto& component = ent.get<SpriteComp>();
 			ImGui::ColorEdit4("Colour", glm::value_ptr(component.Colour));
+			
+			if (!component.Texture) {
+				ImGui::Button("Texture", ImVec2{ 100.0f, 0 });
+				if (ImGui::BeginDragDropTarget()) {
+
+					if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("CK_CONTENT_ITEM")) {
+						const wchar_t* path = (const wchar_t*)payload->Data;
+						std::filesystem::path texturePath = std::filesystem::path(g_AssetDir) / path;
+						component.Texture = Texture2D::init(texturePath.string());
+					}
+
+					ImGui::EndDragDropTarget();
+				}
+
+				ImGui::DragFloat("Tiling factor", &component.TilingFactor, 0.1f, 0.0f, 100.0f);
+			}
+			else {
+				ImGui::Image((ImTextureID)component.Texture->rendererID(), { 128.0f, 128.0f }, { 0, 1 }, { 1, 0 });
+				if (ImGui::BeginDragDropTarget()) {
+
+					if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("CK_CONTENT_ITEM")) {
+						const wchar_t* path = (const wchar_t*)payload->Data;
+						std::filesystem::path texturePath = std::filesystem::path(g_AssetDir) / path;
+						component.Texture = Texture2D::init(texturePath.string());
+					}
+
+					ImGui::EndDragDropTarget();
+				}
+			}
 		});
 		const float availWidth = ImGui::GetContentRegionAvailWidth();
 		drawComponent<TransformComp>("Transform", entity, [&](Entity& ent) {

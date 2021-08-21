@@ -1,7 +1,7 @@
 #pragma once
-#include <filesystem>
 #include "Cherenkov/Scene/SceneCamera.h"
 #include "Cherenkov/Scene/ScriptableEntity.h"
+#include "Cherenkov/Renderer/Texture.h"
 
 #include <glm/glm.hpp>
 #include <glm/ext/matrix_transform.hpp>
@@ -30,11 +30,15 @@ namespace Cherenkov {
 	
 	struct SpriteComp {
 		glm::vec4 Colour{ 1.0f };
+		Ref<Texture2D> Texture;
+		float TilingFactor = 1.0f;
 
 		SpriteComp() = default;
 		SpriteComp(const SpriteComp&) = default;
 		SpriteComp(const glm::vec4 rgba) : Colour{ rgba } {}
+		SpriteComp(const glm::vec4 rgba, const Ref<Texture2D>& texture, float  tilingFactor) : Colour{ rgba }, Texture{ texture }, TilingFactor{ tilingFactor } {}
 		SpriteComp(const glm::vec3 rgb) : Colour{ rgb.r, rgb.g, rgb.b, 1.0f } {}
+		SpriteComp(const glm::vec3 rgb, const Ref<Texture2D>& texture, float  tilingFactor) : Colour{ rgb.r, rgb.g, rgb.b, 1.0f }, Texture{ texture }, TilingFactor{ tilingFactor } {}
 		SpriteComp(float r, float g, float b, float a) : Colour{ r, g, b, a } {}
 		SpriteComp(float r, float g, float b) : Colour{ r, g, b, 1.0f } {}
 
