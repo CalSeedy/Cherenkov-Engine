@@ -20,6 +20,8 @@ namespace Cherenkov {
 	void EditorLayer::newScene() {
 		m_ActiveScene = CreateRef<Scene>();
 		m_ActiveScene->onViewportResize((uint32_t)m_VpSize.x, (uint32_t)m_VpSize.y);
+		m_EditorCamera = EditorCamera(30.0f, 1.778f, 0.1f, 1000.0f);
+		m_EditorCamera.setViewport(m_VpSize.x, m_VpSize.y);
 		m_SceneHierarchy.setContext(m_ActiveScene);
 		m_Properties.setContext(m_ActiveScene);
 		m_SavePath = {};
@@ -47,7 +49,6 @@ namespace Cherenkov {
 		Serializer serializer(m_ActiveScene);
 		serializer.deserialize(path);
 
-		m_EditorCamera = EditorCamera(30.0f, 1.778f, 0.1f, 1000.0f);
 		m_SavePath = path.string();
 	}
 
