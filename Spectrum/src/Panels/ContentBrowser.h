@@ -6,6 +6,7 @@ namespace Cherenkov {
 	class ContentBrowser {
 		std::filesystem::path		m_CurrentPath;
 		std::filesystem::path		m_SelectedFile{""};
+		std::vector<std::string>	m_CachedPath{};
 
 		Ref<Texture2D>				m_IconDir;
 		Ref<Texture2D>				m_IconFile;
